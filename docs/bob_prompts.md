@@ -21,7 +21,7 @@ Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member review
   - Then create and activate a virtual environment and install the dev dependencies into it:
     - macOS, Linux, WSL: `python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r requirements-dev.txt`
     - Windows: skip the virtual environment (a Windows venv has no `python3` command, so Bob would fall back to a Python without the packages) and install into Python 3.12 directly: `python3 -m pip install -r requirements-dev.txt`
-  - In Bob, select `.venv` as the Python interpreter and open a new terminal. Confirm that `python3 -c "import openpyxl, pytest"` exits 0 there before T00; Bob's commands call bare `python3`.
+  - In Bob, select `.venv` (macOS, Linux, WSL) or Python 3.12 (Windows) as the Python interpreter and open a new terminal. Confirm that `python3 -c "import openpyxl, pytest"` exits 0 there before T00; Bob's commands call bare `python3`.
   - On Windows, keep Git from converting line endings: the repo's `.gitattributes` forces LF. If you cloned before that file existed, run `git rm --cached -r . && git reset --hard` once (or re-clone).
 - [ ] **Workspace.** Open the repo folder itself as the Bob workspace (not a parent folder and not a multi-root workspace). The hooks run `python3 .bob/hooks/...` relative to it.
 - [ ] **Bob loads the pack.**
