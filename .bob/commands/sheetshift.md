@@ -1,11 +1,11 @@
 ---
 description: Run the whole SheetShift loop on a workbook, stopping for a person at each gate
-argument-hint: <workbook-path>
+argument-hint: (none: the HO-3 workbook only)
 ---
-Run SheetShift on $1, in this order. Stop and wait for the person at each STOP.
+Run SheetShift on workbook/example_mutual_ho3_rater.xlsx, in this order. If $1 names any other workbook, stop and tell the person it is not supported yet (docs/bob_prompts.md T11). Stop and wait for the person at each STOP.
 
-1. Map: follow /shift-map for $1. Report the lints.
-2. Plan: ask the person to switch to Plan mode and run /shift-plan $1. STOP until the person approves docs/design/service_plan.md.
+1. Map: follow /shift-map. Report the lints.
+2. Plan: ask the person to switch to Plan mode and run /shift-plan. STOP until the person approves docs/design/service_plan.md.
 3. Translate: in sheet-translator mode, follow /shift-translate all.
 4. Verify: follow /shift-verify. STOP and show the person the quoted numbers.
 5. Triage: in sheet-triage mode, follow /shift-triage. Briefs for anomalies go to docs/anomalies/.

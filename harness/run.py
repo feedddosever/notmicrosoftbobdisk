@@ -93,7 +93,7 @@ def status_of(res):
 
 
 def write_reports(res, last_run=True):
-    queue = T.decision_queue(res["groups"], res["run_id"], res["decisions"])
+    queue = T.decision_queue(res["groups"], res["run_id"], res["decisions"], res["oracle"], res["service_rows"])
     mism = {"_about": "Mismatch groups from harness.run (classes fixed by harness/triage.py).",
             "run_id": res["run_id"], "seed": res["seed"], "service": res["service"],
             "tolerance": K.TOLERANCE,

@@ -3,6 +3,10 @@
 How and when the work in this repository was produced. All times are UTC. Nothing here
 is backdated: commit timestamps are the times the work was committed.
 
+The dates embedded in the generated documents (the workbooks' `docProps/core.xml`, 2026-01-01,
+and the manual PDF's creation date, 2026-10-01) are fixed placeholders chosen so that the builds
+are byte-reproducible. They are not authoring dates.
+
 ## Timeline
 
 | When | What | Where |
@@ -20,7 +24,7 @@ is backdated: commit timestamps are the times the work was committed.
   into this repository. The service under `service/` is written by IBM Bob.
 - The spikes used a placeholder carrier name that turned out to match a real insurance
   brand. It was replaced everywhere with **Example Mutual Insurance Co. (FICTIONAL)**.
-  The old name appears nowhere in this repository, and CI fails if it does.
+  The old name appears nowhere in this repository; CI checks a hashed denylist.
 
 ## Repository renames
 

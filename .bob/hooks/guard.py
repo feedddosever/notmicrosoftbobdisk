@@ -1,10 +1,14 @@
 """PreToolUse guard: blocks Bob's writes to protected paths, decide.py, git push and secrets.
 
-Exit 2 blocks the tool call; exit 0 allows it. Fails closed: on any internal error the
-call is blocked if the raw payload mentions a protected path or a secret, else allowed.
-Every decision is appended to audit/<handle>/hook_events.jsonl (repo-relative paths only).
-Honest limit: a shell can always find another way to write a file; CI is the
-authoritative control, this guard is the fast one.
+Exit 2 blocks the tool call; exit 0 allows it. The hook has no tool matcher: every tool is
+checked except the read-only ones in READ_ONLY. Fails closed: if the payload cannot be parsed
+or decided, the call is blocked when the raw text mentions a protected path together with a
+write-like word (or holds a secret), else allowed. Every decision is appended to
+audit/<handle>/hook_events.jsonl (repo-relative paths only); a logging failure never changes
+the decision. Shell commands are checked in POSIX, PowerShell and cmd forms; backslash path
+separators are normalised first.
+Honest limit: this guard is best-effort (a shell can always find another way to write a file);
+CI (tools/check_protected.py) is the enforcing control, this guard is the fast one.
 
 Standard library only; Python 3.8+.
 Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
@@ -19,30 +23,45 @@ import _common as C  # noqa: E402
 
 PROTECTED = re.compile(
     r"^(workbook|harness|golden|decisions|tools|manual|build|audit|\.bob|\.github|\.git)(/|$)"
-    r"|^(AGENTS\.md|\.bobignore|sheetshift\.json|Makefile|ATTRIBUTION\.md|PROVENANCE\.md)$"
+    r"|^(AGENTS\.md|\.bobignore|sheetshift\.json|Makefile|ATTRIBUTION\.md|PROVENANCE\.md"
+    r"|\.gitleaks\.toml|\.gitattributes)$"
     r"|^docs/CONTRACT\.md$"
     r"|^reports/[^/]+\.(json|jsonl|html)$"
     r"|^tests/test_(harness_selfcheck|no_env)\.py$"
     r"|^service/sheetshift_ho3/data/verify_sample_[^/]*$"
-    r"|\.xls[xm]$")
+    r"|\.xls[xm]$", re.I)  # case-insensitive: macOS and Windows file systems ignore case
+_NOT_PATH_CHAR = r"(?<![A-Za-z0-9_.-])"
+PROTECTED_DIR = (r"(workbook|harness|golden|decisions|tools|manual|build|audit|\.bob|\.github)")
+PROTECTED_WORD = re.compile(_NOT_PATH_CHAR + PROTECTED_DIR + r"(?![A-Za-z0-9_.-])", re.I)
 RAW_PROTECTED = re.compile(
-    r"(^|[\s\"'=:/\\(])(workbook|harness|golden|decisions|tools|manual|build|audit|\.bob|\.github)[/\\]"
-    r"|(^|[\s\"'=:/\\(])reports[/\\][^/\\\s\"']+\.(json|jsonl|html)\b"
-    r"|AGENTS\.md|\.bobignore|sheetshift\.json|Makefile|CONTRACT\.md|\.xls[xm]\b|decide\.py")
+    _NOT_PATH_CHAR + PROTECTED_DIR + r"[/\\]"
+    r"|" + _NOT_PATH_CHAR + r"reports[/\\][^/\\\s\"'<>]+\.(json|jsonl|html)\b"
+    r"|AGENTS\.md|\.bobignore|sheetshift\.json|Makefile|CONTRACT\.md|\.gitleaks\.toml|\.xls[xm]\b|decide\.py",
+    re.I)
 SECRET = re.compile(r"BOB_API_KEY|-----BEGIN [A-Z ]*PRIVATE KEY"
                     r"|(?i:api[_-]?key\s*[:=]\s*['\"][A-Za-z0-9_\-]{16,})")
+# Calls in inline Python (python -c, heredocs) that write, move or delete files.
+PY_WRITE = re.compile(r"open\([^)]*(,\s*|mode\s*=\s*)['\"][rb]*[wax]|\.write(_text|_bytes)?\(|shutil\."
+                      r"|\bos\.(rename|replace|remove|unlink|rmdir|makedirs|mkdir)\b|\.(unlink|rename|touch|mkdir)\(")
 CMD_BLOCK = [
-    (re.compile(r"decide\.py|decisions/"), "decisions are made by people"),
+    (re.compile(r"decide\.py|tools[./]decide\b", re.I), "decisions are made by people"),
     (re.compile(r"\bgit\s+push\b"), "git push is done by people"),
-    (re.compile(r"(python[\d.]*\s+-c|open\(|Path\().*"
-                r"(workbook|harness|golden|decisions|tools|\.bob|\.github)/", re.S),
-     "inline Python touching a protected path"),
 ]
+READ_ONLY = C.READ_ONLY  # checked first; every other tool is guarded (no hook matcher)
 EDIT_TOOLS = ("write_file", "apply_diff", "search_and_replace", "insert_content")
+EDIT_LIKE = re.compile(r"write|edit|diff|replace|insert|patch|create|delete|remove|move|rename|append", re.I)
 WRAPPERS = ("sudo", "env", "nohup", "time", "command", "exec", "builtin", "nice")
-DEST_ONLY = ("cp", "install", "ln", "rsync", "scp")
+SHELLS = ("bash", "sh", "zsh", "dash", "ksh", "pwsh", "powershell", "cmd")
+# POSIX and Windows (PowerShell, cmd) writers. DEST_ONLY writes only its last argument.
+DEST_ONLY = ("cp", "install", "ln", "rsync", "scp", "copy-item", "cpi", "copy", "xcopy")
 ALL_ARGS = ("mv", "rm", "rmdir", "unlink", "touch", "truncate", "chmod", "chown", "tee",
-            "shred", "mkdir")
+            "shred", "mkdir", "move-item", "mi", "move", "robocopy", "remove-item", "ri", "del",
+            "erase", "rd", "set-content", "sc", "add-content", "ac", "out-file", "new-item", "ni",
+            "clear-content", "rename-item", "ren", "patch")
+PS_PATH_PARAMS = ("-path", "-literalpath", "-destination", "-filepath", "-target")
+WIN_WRITE_VERB = re.compile(
+    r"(^|[;&|(\n])\s*(copy-item|cpi|xcopy|robocopy|move-item|remove-item|set-content|add-content|out-file|"
+    r"new-item|clear-content|rename-item|copy|move|del|erase|ren)(\.exe)?(?=\s)", re.I)
 GIT_WRITES = ("rm", "mv", "checkout", "restore", "apply")
 SEPARATOR_CHARS = set("();|&\n")
 
@@ -106,55 +125,115 @@ def strip_prefix(argv):
     return argv
 
 
+def prog_name(arg):
+    """'C:/x/Copy-Item.exe' -> 'copy-item'."""
+    name = os.path.basename(arg.replace("\\", "/")).lower()
+    return name[:-4] if name.endswith(".exe") else name
+
+
 def write_targets(argv):
     """Paths a simple command writes to, as far as argv shows."""
     if not argv:
         return []
-    prog = os.path.basename(argv[0])
+    prog = prog_name(argv[0])
     args = argv[1:]
     plain = [a for a in args if not a.startswith("-")]
+    params = []
+    for j, a in enumerate(args):
+        low = a.lower()
+        if low in PS_PATH_PARAMS and j + 1 < len(args):
+            params.append(args[j + 1])
+        elif low.split(":", 1)[0] in PS_PATH_PARAMS and ":" in low:
+            params.append(a.split(":", 1)[1])
     if prog in DEST_ONLY:
         for j, a in enumerate(args):
             if a in ("-t", "--target-directory") and j + 1 < len(args):
                 return [args[j + 1]]
             if a.startswith("--target-directory="):
                 return [a.split("=", 1)[1]]
-        return plain[-1:]
+        dest = [args[j + 1] for j, a in enumerate(args)
+                if a.lower() in ("-destination", "-target") and j + 1 < len(args)]
+        return dest or (plain[-1:] + params)
     if prog in ALL_ARGS:
-        return plain
+        return plain + params
     if prog in ("sed", "perl") and any(re.match(r"^-[A-Za-z]*i", a) or a.startswith("--in-place")
                                        for a in args):
+        return plain
+    if prog == "find" and any(a in ("-delete", "-exec", "-execdir", "-ok", "-okdir", "-fprint") for a in args):
         return plain
     if prog == "dd":
         return [a[3:] for a in args if a.startswith("of=")]
     if prog == "git":
-        rest, skip = [], False
+        rest, skip, cdir = [], None, None
         for a in args:
             if skip:
-                skip = False
+                if skip == "-C":
+                    cdir = a
+                skip = None
             elif a in ("-C", "-c", "--git-dir", "--work-tree", "--namespace"):
-                skip = True
+                skip = a
             elif not a.startswith("-"):
                 rest.append(a)
         if rest and rest[0] == "push":
             raise Blocked("git push is done by people", None)
         if rest and rest[0] in GIT_WRITES:
-            return rest[1:]
+            return [os.path.join(cdir, t) if cdir else t for t in rest[1:]]
     return []
 
 
-def check_command(cmd, base):
-    """Raise Blocked for a protected write, decide.py, git push or inline Python on protected paths."""
+def normalise(cmd):
+    """Backslashes that separate path parts become '/', so `harness\\x.py` is seen as a path
+    (the same on every platform; escapes before whitespace, quotes and shell punctuation stay)."""
+    return re.sub(r"\\(?![\s\"';&|()<>])", "/", cmd)
+
+
+def raw_command_checks(cmd):
+    """Text-level backstops that do not depend on tokenising the command."""
+    for m in re.finditer(r">{1,2}\|?\s*(\S+)", cmd):  # a redirect straight into a protected path
+        if RAW_PROTECTED.search(" " + m.group(1)):
+            raise Blocked("redirect into a protected path", None)
+    if re.search(r"\bpython[\d.]*\b", cmd, re.I) and PY_WRITE.search(cmd) \
+            and re.search(_NOT_PATH_CHAR + PROTECTED_DIR + r"/", cmd, re.I):
+        raise Blocked("inline Python writing a protected path", None)
+
+
+def check_command(cmd, base, depth=0):
+    """Raise Blocked for a protected write, decide.py, git push or inline Python writing protected paths."""
+    cmd = normalise(cmd)
     for rx, why in CMD_BLOCK:
         if rx.search(cmd):
             raise Blocked(why, None)
-    for argv, targets in split_commands(tokenize(cmd)):
+    raw_command_checks(cmd)
+    try:
+        tokens = tokenize(cmd)
+    except ValueError:  # unbalanced quotes (e.g. an apostrophe in a heredoc): text checks decide
+        if WIN_WRITE_VERB.search(cmd) and RAW_PROTECTED.search(cmd):
+            raise Blocked("write command naming a protected path", None)
+        if re.search(r"(^|[;&|(\n])\s*(sudo\s+)?(rm|mv|cp|tee|touch|truncate|sed\s+-i|chmod|ln|install)\b", cmd) \
+                and RAW_PROTECTED.search(cmd):
+            raise Blocked("write command naming a protected path", None)
+        return
+    for argv, targets in split_commands(tokens):
         argv = strip_prefix(argv)
         for t in targets:
             check_path(t, base)
-        if argv and argv[0] == "cd" and len(argv) > 1:
-            base = os.path.join(base, os.path.expanduser(argv[1]))
+        if not argv:
             continue
+        prog = prog_name(argv[0])
+        if prog in ("cd", "pushd", "set-location", "sl", "chdir") and len(argv) > 1:
+            base = os.path.join(base, os.path.expanduser(argv[-1]))
+            continue
+        if prog in SHELLS and depth < 3:
+            for j, a in enumerate(argv[1:-1], 1):
+                if a.lower() in ("-c", "/c", "-command"):
+                    check_command(argv[j + 1], base, depth + 1)
+        if prog == "xargs":
+            inner = [a for a in argv[1:] if not a.startswith("-")]
+            if inner and (write_targets(inner + ["x"]) or prog_name(inner[0]) in ALL_ARGS + DEST_ONLY) \
+                    and (RAW_PROTECTED.search(cmd) or PROTECTED_WORD.search(cmd)):
+                raise Blocked("xargs writer on a protected path", None)
+        if prog == "patch" and RAW_PROTECTED.search(cmd):
+            raise Blocked("patch naming a protected path", None)
         for t in write_targets(argv):
             check_path(t, base)
 
@@ -178,6 +257,8 @@ def decide(payload):
     """Return (decision, reason, rel_path) for one PreToolUse payload."""
     if has_secret(payload.raw, payload.input):
         return "block", "secret in tool input", None
+    if payload.tool in READ_ONLY:
+        return "allow", "read-only tool", None
     base = os.getcwd()
     cwd = payload.input.get("cwd")
     if isinstance(cwd, str) and cwd.strip():
@@ -187,34 +268,37 @@ def decide(payload):
         command = payload.input.get("command") or payload.input.get("cmd")
         if isinstance(command, str):
             check_command(command, base)
-        elif payload.tool in EDIT_TOOLS and not rels:
+        elif not rels and (payload.tool in EDIT_TOOLS or EDIT_LIKE.search(payload.tool or "")):
             raise ValueError("edit tool without a path field")
     except Blocked as b:
         return "block", b.args[0], b.args[1]
     return "allow", "", (rels[0] if rels else None)
 
 
+RAW_WRITE = re.compile(r">|write|edit|diff|replace|insert|content|command|\b(rm|mv|cp|del|move|copy)\b", re.I)
+
+
 def main():
-    raw, who, rel = "", None, None
+    raw, who, rel, payload = "", None, None, None
     try:
         raw = C.read_stdin(sys.stdin)
-        who = C.handle()
         payload = C.Payload(raw)
         decision, reason, rel = decide(payload)
-        C.append_jsonl(C.audit_path("hook_events.jsonl", who), {
-            "ts": C.now(), "handle": who, "event": payload.event or "PreToolUse",
-            "tool": payload.tool, "rel_path": C.loggable(rel), "decision": decision,
-            "reason": reason})
-        C.log_payload_keys(payload, who)
     except Exception as e:  # fail closed on anything that looks dangerous
-        bad = bool(RAW_PROTECTED.search(raw) or has_secret(raw))
+        bad = bool((RAW_PROTECTED.search(raw) and RAW_WRITE.search(raw)) or has_secret(raw))
         decision, reason = ("block" if bad else "allow"), "guard_error: %s" % type(e).__name__
-        try:
-            C.append_jsonl(C.audit_path("hook_events.jsonl", who or "unknown"), {
-                "ts": C.now(), "handle": who or "unknown", "event": "guard_error", "tool": None,
-                "rel_path": None, "decision": decision, "reason": reason})
-        except Exception:
-            pass
+    # Logging never changes the decision computed above.
+    try:
+        who = C.handle()
+        C.append_jsonl(C.audit_path("hook_events.jsonl", who), {
+            "ts": C.now(), "handle": who,
+            "event": (payload.event or "PreToolUse") if payload else "guard_error",
+            "tool": payload.tool if payload else None, "rel_path": C.loggable(rel),
+            "decision": decision, "reason": reason})
+        if payload:
+            C.log_payload_keys(payload, who)
+    except Exception:
+        pass
     if decision == "block":
         where = (" (%s)" % C.loggable(rel)) if rel else ""
         sys.stderr.write("SheetShift guard blocked this call: %s%s\n" % (reason, where))

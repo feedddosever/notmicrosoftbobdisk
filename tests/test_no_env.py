@@ -1,4 +1,4 @@
-"""The deployed code reads no environment variables (plan section 8, "No secrets").
+"""The deployed code reads no environment variables (README: "The app reads no environment variables").
 
 Fails if os.environ, getenv, environ[...] or `from os import environ` appears in any .py file
 under service/ or api/ (comments included, so the rule stays simple and visible).

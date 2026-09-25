@@ -13,7 +13,7 @@ description: Classify harness mismatch groups and fix translation bugs.
 2. Use the harness's class. Never reclassify a group, and never change tolerance or thresholds.
 3. Only for classes `translation-bug` and `translation-bug-rounding`:
    - Fix one group at a time.
-   - Wait for the smoke line in your next context.
+   - After each fix, read `reports/smoke_last.json` (field `line`) with the read tool, or run `python3 -m harness.smoke --unit <U>`. The hook's result only reaches your context at the next prompt.
    - If the result got worse, say so plainly, so that the person can roll back.
 4. For `spreadsheet-anomaly` or `needs-human` groups, do not change code. Point to `reports/decision_queue.json`.
 5. Write `reports/notes/triage_<n>.md` with a table of every group (id, root cell, class, action, result). End it with the command a person runs to re-verify: `python3 -m harness.run --golden --seed 2026`.

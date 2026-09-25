@@ -1,4 +1,4 @@
-"""Optional Excel cross-check (plan decision D5): does real Excel agree with the LibreOffice oracle?
+"""Optional Excel cross-check (README > Limits): does real Excel agree with the LibreOffice oracle?
 
 STATUS: stub. The comparison below runs, but it has not yet been run on a CSV exported
 by real Excel. Until a person with Excel runs it, the certificate keeps

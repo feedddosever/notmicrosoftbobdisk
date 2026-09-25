@@ -66,7 +66,8 @@ def recalc_to_csv(xlsx, outdir, profile=PROFILE, forced=True, timeout=900):
     os.makedirs(outdir, exist_ok=True)
     home = os.path.join(os.path.dirname(profile), "lo_home")
     os.makedirs(home, exist_ok=True)
-    env = dict(os.environ, HOME=home)
+    # C locale: a comma-decimal LANG would export 2.5 as "2,5"
+    env = dict(os.environ, HOME=home, LC_ALL="C.UTF-8", LANG="C.UTF-8", LANGUAGE="")
     subprocess.run([exe, f"-env:UserInstallation=file://{os.path.abspath(profile)}", "--headless",
                     "--convert-to", CSV_FILTER, "--outdir", outdir, os.path.abspath(xlsx)],
                    check=True, env=env, timeout=timeout, capture_output=True)

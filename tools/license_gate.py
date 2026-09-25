@@ -1,4 +1,4 @@
-"""License gate: every runtime dependency must carry a permissive licence (plan section 1, row 7).
+"""License gate: every runtime dependency must carry a permissive licence (hackathon rule: public repo, MIT, permissive dependencies).
 
 usage: python3 tools/license_gate.py                 # clean venv from requirements.txt (needs pypi)
        python3 tools/license_gate.py --from-json F   # check a saved `pip-licenses --format=json`

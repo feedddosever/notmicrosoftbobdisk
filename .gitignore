@@ -20,6 +20,6 @@ __pycache__/
 reports/smoke_last.json
 reports/last_run.json
 
-# Never committed: local planning notes and denylists
+# Never committed: local notes
 plan/
 .local/

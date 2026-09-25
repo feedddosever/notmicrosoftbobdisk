@@ -56,9 +56,11 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `.bobignore` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
 | `.dockerignore` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitattributes` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `.github/denylist.sha256` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.github/workflows/pages.yml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.github/workflows/verify.yml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitignore` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `.gitleaks.toml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.vercelignore` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `AGENTS.md` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
 | `ATTRIBUTION.md` | Claude Code (AI agent), scaffold | – | pending | pending |
@@ -131,6 +133,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `tools/check_protected.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/check_video.sh` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/decide.py` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `tools/denylist_scan.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/depgraph.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/dump_workbook.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/excel_crosscheck.py` | Claude Code (AI agent), scaffold | – | pending | pending |
@@ -138,6 +141,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `tools/license_gate.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/lo_recalc.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/make_manual.py` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `tools/tests/test_check_evidence.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/tests/test_guard.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/units.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `vercel.json` | Claude Code (AI agent), scaffold | – | pending | pending |

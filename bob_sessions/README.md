@@ -22,7 +22,7 @@ Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Members edit
 1. In Bob IDE open Tasks, open the task, and click its header to show the summary.
 2. Screenshot the summary. Crop out any email address, account name or notification.
 3. If the Export button exists, export the task report and scrub it before adding it:
-   `sed -E -i 's#(/Users|/home|C:\\Users)[/\\][^/\\]+#<home>#g' <file>`. Then remove any email address by hand. `check_evidence.py` fails on home paths and on email addresses other than GitHub noreply addresses.
+   `sed -E -i.bak 's#(/Users|/home|[A-Za-z]:(\\){1,2}Users)[/\\]+[^/\\]+#<home>#g' <file> && rm -f <file>.bak` (works with GNU and BSD/macOS sed). Then remove any email address by hand. `check_evidence.py` fails on home paths and on email addresses other than GitHub noreply addresses.
 4. Add a row to `INDEX.md` (below).
 5. Commit Bob's work with the trailer `Bob-Task: TNN (mN)`, for example `Bob-Task: T03 (m1)`. Do not squash Bob commits.
 

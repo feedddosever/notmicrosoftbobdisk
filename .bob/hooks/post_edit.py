@@ -61,6 +61,8 @@ def run_smoke(unit):
 def main():
     try:
         payload = C.Payload(C.read_stdin(sys.stdin))
+        if payload.tool in C.READ_ONLY or isinstance(payload.input.get("command"), str):
+            sys.exit(0)  # the hook has no matcher: reads and shell commands are not edits
         who = C.handle()
         rels = [C.loggable(C.rel_path(p)) for p in C.find_paths(payload.input)]
         for rel in rels:

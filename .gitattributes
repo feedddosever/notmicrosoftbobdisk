@@ -1,6 +1,12 @@
+# Text files are stored and checked out with LF on every platform. The harness tree hash and the
+# decisions hash are computed over raw bytes, so a CRLF checkout (Git for Windows' default
+# core.autocrlf=true) would otherwise turn every certificate RED. After pulling this change, a
+# CRLF clone needs `git rm --cached -r . && git reset --hard` (or a fresh clone).
+* text=auto eol=lf
+
 # Append-only logs written by several members: keep both sides on merge.
-audit/**/*.jsonl merge=union
-reports/run_log.jsonl merge=union
+audit/**/*.jsonl text eol=lf merge=union
+reports/run_log.jsonl text eol=lf merge=union
 
 # Binary artefacts: never diff or normalise line endings.
 *.xlsx binary

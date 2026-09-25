@@ -25,8 +25,10 @@ Interface:
 - Errors are returned as XLError values (.code "#N/A"), never raised.
 - xlsem.py owns XLError, covers and STEPS.
 
-Smoke runs automatically after each service/ edit, and its result appears in your next prompt
-context. Run it yourself only when asked.
+After each service/ edit a hook runs smoke and writes reports/smoke_last.json. Its result does not
+appear in your context until the next prompt. Read that file with the read tool and use its `line`
+field (not cat: the guard blocks shell commands that name reports/*.json). If the file is older
+than your edit, run `python3 -m harness.smoke --unit <U>` (about 0.2 s).
 
 service/sheetshift_ho3/: stdlib only, except api.py (fastapi, pydantic). I/O only in tables.py and api.py.
 

@@ -113,19 +113,42 @@
     });
   }
 
+  /** One banner line about the API, stated only from what this page can check. */
+  function apiStatus(site, line) {
+    if (site && site.mode === "static") {
+      line.textContent = "Precomputed results from commit " + (site.commit_short || "unknown") +
+        "; the API is not connected here.";
+      return;
+    }
+    var unavailable = function () { line.textContent = "The quote API is unavailable right now; results shown are precomputed."; };
+    fetch("/api/health", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (body) {
+        if (!body) { unavailable(); return; }
+        if (body.status === "stub") { line.textContent = "The quote API is not deployed yet; results shown are precomputed."; return; }
+        return fetch("trace.js", { method: "HEAD", cache: "no-cache" })
+          .then(function (r) { return r.ok; }, function () { return false; })
+          .then(function (trace) {
+            line.textContent = "The quote API and spot-check are live" + (trace ? ", and so is traceability." : ".");
+          });
+      })
+      .catch(unavailable);
+  }
+
   function chrome(site, cert) {
     var banner = $("site-banner");
     if (banner) {
+      clear(banner);
       var rec = site && site.recorded;
-      var when = rec && rec.first ? (rec.first === rec.last ? rec.first : rec.first + " to " + rec.last) : "[date not recorded yet]";
-      clear(banner).appendChild(el("p", {}, [
-        "The Bob run was recorded on " + when + " and is replayed from task exports and hook logs. " +
-        "The quote API, spot-check and traceability are live. No Bob key is deployed."
-      ]));
-      if (site && site.mode === "static") {
-        banner.appendChild(el("p", {}, [el("strong", { text: "API offline: " }),
-          "showing precomputed results from commit " + (site.commit_short || "unknown") + "."]));
+      if (rec && rec.first) {
+        var when = rec.first === rec.last ? rec.first : rec.first + " to " + rec.last;
+        var sources = site.exports_available === true ? "task exports and hook logs" : "hook logs";
+        banner.appendChild(el("p", { text: "The Bob run was recorded on " + when + " and is replayed from " + sources + "." }));
       }
+      var line = el("p", { text: "Checking the API..." });
+      banner.appendChild(line);
+      banner.appendChild(el("p", { text: "No Bob key is deployed." }));
+      apiStatus(site, line);
     }
     var standin = $("standin-notice");
     var svc = (cert && cert.service) || (site && site.service && site.service.module);
@@ -318,7 +341,8 @@
           ["Caught using boundary rows", SS.fmtInt(m.caught_using_boundary_rows)],
           ["Caught using random rows", SS.fmtInt(m.caught_using_random_rows)],
           ["Caught only by boundary rows", (m.caught_only_by_boundary_rows || []).length],
-          ["Report matches this service tree", m.stale ? "no (rerun make mutate)" : "yes"]]),
+          ["Report matches this service tree", m.stale ? "no (rerun make mutate)" : "yes"],
+          ["Control run (unmutated copy)", m.status === "ok" ? "matched the service" : "INVALID: the counts above are not meaningful"]]),
         el("h3", { class: "section", text: "Survivors (never hidden)" }),
         survivors.length ? table(["Mutant", "Operator", "Where", "Change", "Label"], survivors.map(function (s) {
           return [s.id, s.op, SS.linkOr(SS.githubUrl(site, s.file, s.line), (s.file || "?") + ":" + (s.line || "?")), s.change, s.label || "unlabelled"];

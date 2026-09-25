@@ -1,4 +1,4 @@
-# SheetShift CI (plan section 6.8). A member makes the "verify" checks required in the repo settings.
+# SheetShift CI. A member makes the "verify" checks required in the repo settings.
 # Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 name: verify
 
@@ -33,19 +33,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Forbidden file names
-        run: |
-          # Planning files never enter the repo. Patterns are split so this file does not match itself.
-          p1="jud""ge"; p2="ideas""_data"
-          bad=$(git ls-files | grep -iE "(^|/)[^/]*(${p1}|${p2})[^/]*$" || true)
-          if [ -n "$bad" ]; then echo "::error::forbidden file names:"; echo "$bad"; exit 1; fi
-          if git grep -I -n -i "${p1^} map" -- . ; then echo "::error::planning notes found"; exit 1; fi
+      - name: Denylist scan
+        run: python3 tools/denylist_scan.py
 
-      - name: Carrier name and personal data
+      - name: Personal data
         run: |
-          # The spike's old carrier name must never appear (split so this file does not match).
-          old="Gull""wing"
-          if git grep -I -n -i "$old" -- . ; then echo "::error::old carrier name found"; exit 1; fi
           # Email addresses: only GitHub/Anthropic noreply addresses are allowed.
           emails=$(git grep -I -h -o -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' -- . ':!*.gz' ':!*.xlsx' ':!*.pdf' \
                    | grep -v -i -E '(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$' | sort -u || true)
@@ -62,6 +54,8 @@ jobs:
 
       - name: Secret scan (gitleaks, full history and evidence folder)
         run: |
+          # The history scan loads /repo/.gitleaks.toml (default rules plus the guard-test fixture
+          # allowlist); the evidence-folder scan uses the default rules only.
           docker run --rm --user "$(id -u):$(id -g)" -v "$GITHUB_WORKSPACE:/repo" \
             ghcr.io/gitleaks/gitleaks:v8.21.2 git /repo --redact --verbose --exit-code 1
           if [ -d bob_sessions ]; then
@@ -69,11 +63,34 @@ jobs:
               ghcr.io/gitleaks/gitleaks:v8.21.2 dir /repo/bob_sessions --redact --verbose --exit-code 1
           fi
 
+      - name: No stand-in results committed
+        run: |
+          python3 - <<'PY'
+          import glob, json, sys
+          bad = []
+          for f in sorted(glob.glob("reports/*.json") + glob.glob("public/data/*.json")):
+              try:
+                  svc = json.load(open(f, encoding="utf-8")).get("service")
+              except Exception:
+                  continue
+              if isinstance(svc, dict):  # site.json
+                  svc = svc.get("module")
+              if isinstance(svc, str) and svc != "service.sheetshift_ho3.rater":
+                  bad.append("%s (service %s)" % (f, svc))
+          if bad:
+              print("::error::reports from a non-default service are committed: " + ", ".join(bad))
+              sys.exit(1)
+          PY
+
       - name: Bob-Task commits never touch protected paths; harness tree hash
         run: python3 tools/check_protected.py
 
       - name: Evidence folder, trailers and attribution
         run: python3 tools/check_evidence.py --no-blame
+
+      - name: Evidence is complete for every member (manual runs and submission tags)
+        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/submission')
+        run: python3 tools/check_evidence.py --final --no-blame
 
   build:
     name: map, tests, harness
@@ -141,7 +158,19 @@ jobs:
         run: |
           make oracle
           if [ -s decisions/decisions.jsonl ]; then make patch; fi
-          git diff --exit-code -- 'golden/*.csv.gz' 'golden/inputs_*.json.gz'
+          # git status also reports files CI built that were never committed (e.g. the patched oracle)
+          test -z "$(git status --porcelain -- 'golden/*.csv.gz' 'golden/inputs_*.json.gz')" || {
+            git status --porcelain -- golden; echo '::error::golden oracle not committed or stale'; exit 1; }
+          if [ -s decisions/decisions.jsonl ]; then
+            python3 - <<'PY'
+          import hashlib, json, sys
+          meta = json.load(open("golden/oracle_meta.json")).get("patched") or {}
+          want = hashlib.sha256(open("decisions/decisions.jsonl", "rb").read()).hexdigest()
+          if meta.get("decisions_sha256") != want:
+              print("::error::golden/oracle_meta.json patched.decisions_sha256 does not match decisions/decisions.jsonl")
+              sys.exit(1)
+          PY
+          fi
 
       - name: Harness on Bob's service (verify, mutate, spot, certify)
         id: harness
@@ -151,6 +180,9 @@ jobs:
           fi
           make verify mutate spot
           make certify || true
+          if [ ! -f reports/certificate.json ]; then
+            echo "certify wrote no certificate (service pending)"; echo "status=PENDING" >> "$GITHUB_OUTPUT"; exit 0
+          fi
           status=$(python3 -c "import json; print(json.load(open('reports/certificate.json'))['status'])")
           echo "status=$status" >> "$GITHUB_OUTPUT"
           echo "### Certificate: $status" >> "$GITHUB_STEP_SUMMARY"

@@ -24,8 +24,8 @@ customModes:
     groups:
       - read
       - - edit
-        - fileRegex: "^(\\./)?(service|tests)/.*\\.(py|json)$"
-          description: Service and test code only
+        - fileRegex: "^(\\./)?((service|tests)/.*\\.(py|json)|docs/notes/HARNESS-[0-9]+\\.md)$"
+          description: Service and test code, plus harness problem notes
       - execute
       - skill
       - subagent
@@ -52,6 +52,6 @@ customModes:
       - read
       - execute
       - - edit
-        - fileRegex: "^(\\./)?((service|tests)/.*\\.(py|json)|docs/anomalies/[^/]+\\.md|reports/notes/[^/]+\\.md)$"
+        - fileRegex: "^(\\./)?((service|tests)/.*\\.(py|json)|docs/anomalies/[^/]+\\.md|reports/notes/[^/]+\\.md|docs/notes/HARNESS-[0-9]+\\.md)$"
           description: Service fixes, briefs and triage notes
       - skill

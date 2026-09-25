@@ -142,6 +142,9 @@ def render_md(uid, unit, columns, layout, names, lints, rows, samples, engine):
     if used or literal:
         L.append("Tables (values in build/rate_tables.json): " +
                  "; ".join([f"{nm} = {names[nm]}" for nm in used] + literal))
+        L.append("Load them only through `service/sheetshift_ho3/tables.py` (API in docs/CONTRACT.md section 4): "
+                 "`tables.table('<Name>')` for a named table, `tables.rows('<ref>')` for any range above, "
+                 "`tables.column('<ref>')` for a one-column range, `tables.scalar('<Name>')` for a one-cell name.")
         L.append("")
     L += ["| Col | output_name | Rule (row %d) | Rule ref |" % first, "|---|---|---|---|"]
     for col in unit["columns"]:

@@ -1,6 +1,6 @@
 # SheetShift: rating spreadsheets to verified code
 
-**SheetShift uses IBM Bob to turn the spreadsheet that prices your policies into code you own, with tests. It then checks, cell by cell, that the code agrees with the spreadsheet, and explains every place it doesn't.** Bob does the translation. A grader that Bob cannot edit does the checking. A person decides every spreadsheet anomaly, citing the filed rating manual.
+**SheetShift uses IBM Bob to turn the spreadsheet that prices your policies into code you own, with tests. It then checks, cell by cell, that the code agrees with the spreadsheet, groups every difference, and traces each one to a signed decision or reports it as unexplained.** Bob does the translation. A grader that Bob's commits cannot change (CI rejects them) does the checking. A person decides every spreadsheet anomaly, citing the filed rating manual.
 
 All data is synthetic. The carrier is **Example Mutual Insurance Co. (FICTIONAL)**, and the three anomalies in the demo workbook were seeded by the team on purpose.
 
@@ -12,7 +12,7 @@ All data is synthetic. The carrier is **Example Mutual Insurance Co. (FICTIONAL)
 | Static mirror | [PAGES_URL] (GitHub Pages, precomputed results) |
 | Demo video | [VIDEO_URL] |
 | Bob task evidence | [`bob_sessions/`](bob_sessions/) and [`bob_sessions/INDEX.md`](bob_sessions/INDEX.md) |
-| Certificate | [`reports/certificate.json`](reports/certificate.json) · [`reports/certificate.html`](reports/certificate.html) |
+| Certificate | `reports/certificate.json` · `reports/certificate.html` (committed after the final run) |
 
 ## The result
 
@@ -33,20 +33,20 @@ How to read it. Seed 2026 gives 10,000 generated policies, including boundary ca
 ## How it works
 
 1. **Map.** `make map` dumps the workbook's formulas into 43 column rules, a dependency graph, four translation units and a lint report (`build/`). The lint finds the three seeded anomalies.
-2. **Plan.** In Plan mode, Bob reads the workbook, the rating-manual PDF and the map, and writes a service plan that flags every place the workbook and the manual disagree. It does not decide them.
+2. **Plan.** In Plan mode, Bob reads the workbook, the rating-manual PDF and the map, and is asked to write a service plan that flags every place the workbook and the manual disagree, without deciding them (`docs/design/service_plan.md`, task T01).
 3. **Translate.** Bob spawns four subagents in parallel, one per unit. Each function is tagged `@covers("Calc!<col>", "<output>")`, so every workbook rule traces to code.
-4. **Verify.** The harness compares the service with the recorded workbook values on 10,000 policies and groups mismatches by root cell. A hook re-runs a smoke check after every edit Bob makes to the service.
+4. **Verify.** The harness compares the service with the recorded workbook values on 10,000 policies and groups mismatches by root cell. A hook is configured to re-run a smoke check after every edit Bob makes to the service; task T00 records whether hooks also fire inside subagents (`docs/notes/probe_*.md`).
 5. **Triage.** Translation bugs go back to Bob. Spreadsheet anomalies go to a decision queue; Bob drafts a brief quoting the manual rule.
 6. **Decide.** A teammate acting as pricing lead decides each anomaly with `tools/decide.py`, which refuses to run without a person at the terminal. Bob implements the decision.
 7. **Certify.** `make certify` writes the certificate: both reconciliations, the mutation self-test, the spot-check odds, traceability, hashes of the workbook, code, grader, inputs and decisions, and the limits.
 
-Custom modes restrict what Bob may edit, a PreToolUse hook blocks edits to the workbook, harness, golden data and decision log, and CI (`tools/check_protected.py`) rejects any Bob commit that touches them.
+Custom modes restrict what Bob may edit, and a PreToolUse hook is configured to block edits and shell writes to the workbook, harness, golden data and decision log. The hook is a best-effort, fast check (T00 records whether it fires inside subagents); the enforcing control is CI (`tools/check_protected.py`), which rejects any Bob commit that touches those paths.
 
 ## Quick start
 
 ```
 python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements-dev.txt
+python -m pip install -r requirements-dev.txt
 make map                  # workbook -> build/ (deterministic)
 make verify               # compare the service with the golden oracle (no LibreOffice needed)
 make mutate spot certify  # mutation self-test, spot check, certificate
@@ -78,7 +78,7 @@ SheetShift separates duties, and this repository records who wrote each file ([A
 
 ## Running it elsewhere
 
-- **Vercel** (primary): `public/` is served statically and `api/index.py` serves the API; `vercel.json` routes `/api/*`, `/docs` and `/openapi.json` to it. Until Bob's `api.py` lands, `api/index.py` serves a stub whose health check reports `"status": "stub"`.
+- **Vercel** (primary): `public/` is served statically and `api/index.py` serves the API. Vercel has no build step, so before each deploy run `make certify site` on Bob's service and commit `reports/certificate.*` and `public/data/*.json` (CI rejects committed results from a stand-in service); `vercel.json` routes `/api/*`, `/docs` and `/openapi.json` to it. Until Bob's `api.py` lands, `api/index.py` serves a stub whose health check reports `"status": "stub"`.
 - **GitHub Pages** (fallback): `.github/workflows/pages.yml` publishes the same pages with precomputed results and an "API offline" banner.
 - **Container / IBM Code Engine** (documented, not deployed): `docker build -t sheetshift .` then `docker run -p 8080:8080 sheetshift`. The image holds only `api/`, `service/` and the published reports, runs as a non-root user and needs no secrets.
 

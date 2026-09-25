@@ -1,4 +1,4 @@
-# Not deployed to Vercel (plan section 3.3). Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
+# Not deployed to Vercel (only public/, api/ and service/ are served). Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 bob_sessions/
 golden/
 workbook/

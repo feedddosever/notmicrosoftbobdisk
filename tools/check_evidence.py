@@ -1,4 +1,4 @@
-"""Check the Bob evidence folder, commit trailers, audit logs and attribution (plan section 1, rows 1-4).
+"""Check the Bob evidence folder, commit trailers, audit logs and attribution (hackathon rules: Bob task evidence, attribution).
 
 usage: python3 tools/check_evidence.py [--final] [--json] [--no-blame]
 
@@ -44,7 +44,11 @@ FIXED_FILES = {"README.md", "INDEX.md", "roster.json", ".gitkeep"}
 
 TRAILER_RE = re.compile(r"^Bob-Task:\s*(.*)$", re.M)
 TRAILER_OK = re.compile(r"^T(\d{2}) \((m[1-4])\)$")
-HOME_RE = re.compile(r"(/Users/|/home/|C:\\\\?Users\\\\?)(?!<home>)[A-Za-z0-9._-]+")
+# /Users/x, /home/x and Windows drive paths (any letter, either case, single or JSON-escaped
+# backslashes or forward slashes), unless already scrubbed to <home>.
+HOME_RE = re.compile(r"(?i)(/Users/|/home/|\b[a-z]:(\\{1,2}|/)Users(\\{1,2}|/))(?!<home>)[^\\/\s]+")
+NAMING_HELP = ("expected <team>_taskNN_<desc>_<mN>_summary.png (or _history.md), e.g. "
+               "teamalpha_task01_login_flow_m1_summary.png: lowercase, two-digit task, handle before _summary")
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 EMAIL_OK = re.compile(r"(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$", re.I)
 
@@ -192,7 +196,7 @@ def check_folder(rep, team, handles):
         elif MISC_RE.match(name):
             pass
         else:
-            rep.error("bob_sessions/%s does not match the naming rule" % name)
+            rep.error("bob_sessions/%s does not match the naming rule; %s%s" % (name, NAMING_HELP, naming_hint(name)))
             continue
         prefix = name.split("_", 1)[0]
         handle = re.search(r"_(m[1-4])(?:_summary\.png|_history\.md|\.png)$", name).group(1)
@@ -201,6 +205,17 @@ def check_folder(rep, team, handles):
         if handles and handle not in handles:
             rep.error("bob_sessions/%s names handle %s, which is not in roster.json" % (name, handle))
     return shots, exports
+
+
+def naming_hint(name):
+    """A suggested fix for a name that almost matches the rule, or ''."""
+    low = name.lower()
+    if low != name and (SCREENSHOT_RE.match(low) or EXPORT_RE.match(low) or MISC_RE.match(low)):
+        return " (hint: use lower case: %s)" % low
+    m = re.match(r"^([a-z0-9]+_task\d{2}_[a-z0-9_]+?)_(summary\.png|history\.md)$", low)
+    if m and not re.search(r"_m[1-4]$", m.group(1)):
+        return " (hint: add your handle: %s_m1_%s)" % (m.group(1), m.group(2))
+    return ""
 
 
 def check_exports(rep, exports):
@@ -293,7 +308,7 @@ def run(final=False, blame=True):
     if not ros:
         rep.error("bob_sessions/roster.json is missing")
     if not team:
-        rep.gate("roster.json team_slug is not set (decision D1)")
+        rep.gate("roster.json team_slug is not set (the registered team name as a lowercase slug)")
     if exports_available is None:
         rep.gate("roster.json exports_available is not set (record the T00 finding)")
 

@@ -22,6 +22,7 @@ import datetime as dt
 import glob
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -29,6 +30,8 @@ import tempfile
 import time
 
 from harness import common as C
+
+LOCALE_NUMBER = re.compile(r"^-?[0-9][0-9.]*,[0-9]+$")
 
 PROFILE_SRC = os.path.join(C.HARNESS, "lo_profile", "registrymodifications.xcu")
 PROFILE_DIR = os.path.join(C.CACHE, "lo_profile")
@@ -79,7 +82,9 @@ def recalc_calc_csv(xlsx, timeout=1800):
         t0 = time.time()
         subprocess.run([exe, "-env:UserInstallation=file://%s" % os.path.abspath(profile), "--headless",
                         "--convert-to", CSV_FILTER, "--outdir", tmp, src],
-                       check=True, env=dict(os.environ, HOME=home), timeout=timeout, capture_output=True)
+                       check=True, timeout=timeout, capture_output=True,
+                       # C locale: a comma-decimal LANG would export 2.5 as "2,5"
+                       env=dict(os.environ, HOME=home, LC_ALL="C.UTF-8", LANG="C.UTF-8", LANGUAGE=""))
         wall = time.time() - t0
         found = glob.glob(os.path.join(tmp, "book-%s.csv" % calc))
         if not found:
@@ -101,6 +106,9 @@ def check_csv(data, n):
         for v in r.values():
             if isinstance(v, C.ErrorValue):
                 errors[v.code] = errors.get(v.code, 0) + 1
+            elif isinstance(v, str) and LOCALE_NUMBER.match(v):
+                raise SystemExit("oracle CSV holds a locale-formatted number %r: LibreOffice ran under a "
+                                 "comma-decimal locale" % v)
     return dict(sorted(errors.items()))
 
 

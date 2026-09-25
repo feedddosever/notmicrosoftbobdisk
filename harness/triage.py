@@ -1,4 +1,4 @@
-"""Root cells, groups, signatures and the fixed classification rules (plan section 6.4).
+"""Root cells, groups, signatures and the fixed classification rules.
 
 usage: python -m harness.triage [--seed 2026] [--service MODULE]
        (same pipeline as harness.run; writes reports/mismatches.json and decision_queue.json)
@@ -27,6 +27,7 @@ Standard library only; Python 3.8+. Bob never edits these rules; Bob fixes the c
 Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 """
 import datetime as dt
+import numbers
 import re
 import sys
 from collections import Counter, defaultdict
@@ -143,7 +144,7 @@ def delta_profile(rows, name, oracle, service):
     d = Counter()
     for i in rows:
         o, s = oracle[i].get(name), service[i].get(name, MISSING)
-        if isinstance(o, float) and isinstance(s, (int, float)) and not isinstance(s, bool):
+        if isinstance(o, float) and isinstance(s, numbers.Number) and not isinstance(s, bool):
             d["%+.6g" % (float(s) - o)] += 1
         else:
             d["%s -> %s" % (C.show(o)[:14], "missing" if s is MISSING else C.show(s)[:14])] += 1
@@ -349,8 +350,29 @@ def account(cell_roots, groups_by_key, gid):
             "cells_by_class": dict(sorted(by_class.items()))}
 
 
-def decision_queue(groups, run_id, decisions=None):
-    """One entry per lint with its allowed options, status and runtime evidence."""
+def total_due_delta(sheet_rows, oracle, service):
+    """{min, median, max, rows, rows_changed} of service - workbook total_due over the given sheet rows."""
+    ds = []
+    for r in sheet_rows:
+        o, s = oracle[r - 2].get("total_due"), service[r - 2].get("total_due", MISSING)
+        if isinstance(o, numbers.Number) and isinstance(s, numbers.Number) \
+                and not isinstance(o, bool) and not isinstance(s, bool):
+            ds.append(round(float(s) - float(o), 2))
+    if not ds:
+        return None
+    ds.sort()
+    n = len(ds)
+    med = ds[n // 2] if n % 2 else round((ds[n // 2 - 1] + ds[n // 2]) / 2.0, 2)
+    return {"min": ds[0], "median": med, "max": ds[-1], "rows": n,
+            "rows_changed": sum(1 for d in ds if abs(d) >= 0.005)}
+
+
+def decision_queue(groups, run_id, decisions=None, oracle=None, service=None):
+    """One entry per lint with its allowed options, status and runtime evidence.
+
+    With the oracle and service rows, runtime.total_due_delta gives the premium impact
+    (service minus workbook total_due) over the rows of the lint's groups.
+    """
     decisions = C.load_decisions() if decisions is None else decisions
     items = []
     for l in C.lints():
@@ -364,6 +386,9 @@ def decision_queue(groups, run_id, decisions=None):
             runtime = {"groups": [g["id"] for g in joined], "rows": sum(g["rows"] for g in joined),
                        "cells": sum(g["cells"] for g in joined),
                        "signature": g0["signature"]["text"], "example": g0["examples"][0]}
+            if oracle is not None and service is not None:
+                rows = sorted({r for g in joined for r in g.get("sheet_rows", [])})
+                runtime["total_due_delta"] = total_due_delta(rows, oracle, service)
         items.append({
             "id": did, "lint": l["id"], "type": l["type"], "cell": l.get("cells") or l["cell"],
             "output_name": l["output_name"], "formula": l.get("formula"),

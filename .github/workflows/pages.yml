@@ -1,4 +1,4 @@
-# Static GitHub Pages mirror (the fallback demo URL, plan section 8). A repo admin enables Pages
+# Static GitHub Pages mirror (the fallback demo URL; see README > Running it elsewhere). A repo admin enables Pages
 # with source "GitHub Actions". The pages show "API offline: showing precomputed results".
 # Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 name: pages

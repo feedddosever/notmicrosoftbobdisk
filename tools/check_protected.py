@@ -1,11 +1,11 @@
-"""Separation of duties in git history: Bob's commits never touch the grader (plan section 6.8).
+"""Separation of duties in git history: Bob's commits never touch the grader (README > Who did what).
 
 usage: python3 tools/check_protected.py [--range BASE..HEAD] [--no-hash]
 
 1. Every commit whose message carries a `Bob-Task:` trailer is checked: it fails if it adds,
    changes, deletes or renames any path under PROTECTED (the workbook, manual, harness, golden
-   data, decisions, tools, the Bob pack, CI, AGENTS.md, sheetshift.json). Default range: the
-   whole history reachable from HEAD.
+   data, decisions, tools, the Bob pack, CI, AGENTS.md, sheetshift.json, .gitleaks.toml,
+   .gitattributes). Default range: the whole history reachable from HEAD.
 2. The harness tree hash (harness/_hash_tree.py) must equal harness/EXPECTED_TREE_SHA256
    (skip with --no-hash). A person updates that file after reviewing a harness change.
 
@@ -21,7 +21,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROTECTED = ("workbook/", "manual/", "harness/", "golden/", "decisions/", "tools/", ".bob/",
-             ".github/", "AGENTS.md", "sheetshift.json")
+             ".github/", "AGENTS.md", "sheetshift.json", ".gitleaks.toml", ".gitattributes")
 TRAILER = re.compile(r"^Bob-Task:", re.M)
 
 

@@ -12,7 +12,9 @@ status_reasons. RED always when the harness/ tree hash differs from harness/EXPE
   harness tree hash matches        original.unexplained_cells == 0
   no decision pending              patched.unexplained_cells == 0 (when a patched oracle exists)
   traceability gate passes         mutation report present for this exact service tree
-Unlabelled mutation survivors are listed under warnings (a person labels them).
+  mutation report status "ok" (its unmutated control copy behaved like the service)
+Unlabelled mutation survivors, and more than half of the mutants killed by a crash, are listed
+under warnings (a person labels survivors).
 
 Standard library only; Python 3.8+.
 
@@ -66,7 +68,7 @@ def _mutation(service_tree):
     m = C.read_json(p)
     keep = ("total", "killed", "killed_by_crash", "catch_rate", "caught_using_boundary_rows",
             "caught_using_random_rows", "caught_only_by_boundary_rows", "caught_only_by_random_rows",
-            "survivors", "sites_found", "seed", "sample_seed", "seconds")
+            "survivors", "sites_found", "seed", "sample_seed", "seconds", "status", "control")
     out = {k: m.get(k) for k in keep}
     out["stale"] = m.get("service_tree_sha256") != service_tree
     return out, m
@@ -113,9 +115,16 @@ def certify(seed, service):
         reasons.append("mutation report missing (make mutate)")
     elif mutation["stale"]:
         reasons.append("mutation report is for a different service tree (re-run make mutate)")
-    elif any(s["label"] == "unlabeled" for s in mutation["survivors"]):
-        warnings.append("unlabelled mutation survivors: %s" % ", ".join(
-            s["id"] for s in mutation["survivors"] if s["label"] == "unlabeled"))
+    elif mutation.get("status") != "ok":
+        reasons.append("mutation report status is %s: the unmutated control copy failed in the worker "
+                       "(see mutation_report.json control)" % (mutation.get("status") or "missing"))
+    else:
+        if any(s["label"] == "unlabeled" for s in mutation["survivors"]):
+            warnings.append("unlabelled mutation survivors: %s" % ", ".join(
+                s["id"] for s in mutation["survivors"] if s["label"] == "unlabeled"))
+        if (mutation.get("killed_by_crash") or 0) * 2 > (mutation.get("total") or 0):
+            warnings.append("more than half of the mutants were killed by a crash (%s of %s); the catch "
+                            "rate may overstate the grader" % (mutation["killed_by_crash"], mutation["total"]))
     meta = res["meta"]
     o = gmeta.get("original", {})
     cert = {
@@ -186,8 +195,10 @@ def render_html(c):
           ("Unexplained cells", "{:,}".format(o["unexplained_cells"])),
           ("Traceability", "%d/%d rules" % (c["traceability"]["counts"]["covered"] + c["traceability"]["counts"]["out_of_scope"],
                                             c["traceability"]["total_rules"]))]
+    mut_ok = bool(c["mutation"]) and c["mutation"].get("status") == "ok"
     if c["mutation"]:
-        kp.append(("Mutants killed", "%d/%d" % (c["mutation"]["killed"], c["mutation"]["total"])))
+        kp.append(("Mutants killed", "%d/%d" % (c["mutation"]["killed"], c["mutation"]["total"]) if mut_ok
+                   else "invalid (%s)" % (c["mutation"].get("status") or "old report")))
     if c["patched"]:
         kp.append(("Patched unexplained", "{:,}".format(c["patched"]["unexplained_cells"])))
     groups = [(g["id"], cls, g["cell"], g["rows"], g["cells"], g["lint"] or "", g["signature"])
@@ -218,7 +229,11 @@ def render_html(c):
             ["Operator", "Rows affected", "p_detect_20"],
             [(k, v if k == "any_rows" else v.get("rows_affected"),
               c["spotcheck"]["naive_baseline"].get(k, {}).get("p_detect_20")) for k, v in nb.items()]))
-    if c["mutation"]:
+    if c["mutation"] and not mut_ok:
+        parts.append("<h2>Mutation self-test</h2><p>Not valid: status %s; the unmutated control copy did not "
+                     "behave like the service (%s).</p>" % (_e(c["mutation"].get("status") or "missing"),
+                                                             _e((c["mutation"].get("control") or {}).get("error") or "see report")))
+    elif c["mutation"]:
         m = c["mutation"]
         parts.append("<h2>Mutation self-test</h2><p>%d of %d mutants killed (%d by crash); caught using boundary rows %d, "
                      "random rows %d; only by boundary rows: %s.</p>" % (

@@ -3,7 +3,7 @@
 One invalid fileRegex can stop .bob/custom_modes.yaml from loading, so this runs in CI:
 - every mode has the documented fields, a valid unique slug and known tool groups;
 - every fileRegex compiles and avoids Python-only syntax that JavaScript would reject;
-- each Bob task's output paths match its mode's edit regex (plan section 4.2 table), and
+- each Bob task's output paths match its mode's edit regex (docs/bob_prompts.md), and
   no protected path matches any mode's edit regex;
 - .bob/settings.json uses only documented hook keys, and each hook script exists;
 - every skill has `name` and `description` front matter; command names start with `shift-`
@@ -32,7 +32,7 @@ BUILTIN = {"agent", "plan", "ask"}
 SLUG = re.compile(r"^[A-Za-z0-9-]+$")
 NOT_JS = re.compile(r"\(\?P|\(\?#|\(\?>|\\[AZz]|\(\?[aiLmsux]+\)|[*+?}]\+")
 
-# Plan section 4.2: which mode each task runs in, and files that task writes.
+# docs/bob_prompts.md: which mode each task runs in, and files that task writes.
 TASKS = {
     "T02": ("sheet-translator", ["service/sheetshift_ho3/__init__.py", "service/sheetshift_ho3/xlsem.py",
                                  "service/sheetshift_ho3/tables.py",
@@ -62,7 +62,8 @@ PROTECTED = ["harness/run.py", "harness/tests/test_x.py", "tools/decide.py",
              "golden/oracle_meta.json", "decisions/decisions.jsonl", ".bob/custom_modes.yaml",
              ".bob/hooks/guard.py", ".github/workflows/verify.yml", "AGENTS.md", "sheetshift.json",
              "Makefile", "build/graph.json", "reports/certificate.json", "reports/certificate.html",
-             "service/sheetshift_ho3/data/verify_sample_2026.json.gz", "public/trace.html"]
+             "service/sheetshift_ho3/data/verify_sample_2026.json.gz", "public/trace.html",
+             ".gitleaks.toml", ".gitattributes"]
 HOOK_EVENTS = {"SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "Stop"}
 
 
@@ -120,8 +121,16 @@ def check_modes(errors):
     return by_slug
 
 
+# Modes that meet harness problems must be able to write the escape-hatch note (AGENTS.md).
+ESCAPE_HATCH = ("docs/notes/HARNESS-1.md", ("sheet-translator", "sheet-triage", "sheet-analyst"))
+
+
 def check_tasks(modes, errors):
     """Each task's outputs match its mode; no protected path matches any mode."""
+    note, slugs = ESCAPE_HATCH
+    for slug in slugs:
+        if slug in modes and not any(rx.search(note) for rx in edit_regexes(modes[slug])):
+            errors.append("mode %s cannot write %s (the AGENTS.md escape hatch)" % (slug, note))
     for task, (slug, paths) in sorted(TASKS.items()):
         if slug not in modes:
             errors.append("%s: mode %s is not defined" % (task, slug))
@@ -161,7 +170,7 @@ def check_settings(errors):
                     errors.append("settings.json %s: unknown hook key %s" % (event, k))
                 if h.get("type") != "command":
                     errors.append("settings.json %s: type must be command" % event)
-                script = h.get("command", "").split()[-1]
+                script = next((w for w in h.get("command", "").split() if w.endswith(".py")), "")
                 if not os.path.isfile(os.path.join(ROOT, script)):
                     errors.append("settings.json %s: missing script %s" % (event, script))
 

@@ -263,3 +263,43 @@ def test_service_steps_resolves_function_names(tmp_path, monkeypatch):
     bad = C.service_steps(xl, "bobpkg_selfcheck.sheetshift_ho3.xlsem")[1]
     with pytest.raises(LookupError):
         bad["fn"]({}, {})
+
+
+def test_decision_queue_total_due_delta():
+    _, _, groups = _triage()
+    policies, oracle, service = _scenario()
+    q = T.decision_queue(groups, "run-x", decisions={}, oracle=oracle, service=service)
+    a1 = {i["lint"]: i for i in q["items"]}["A1"]["runtime"]
+    d = a1["total_due_delta"]
+    assert d is None or set(d) == {"min", "median", "max", "rows", "rows_changed"}
+    rows = [{"total_due": 100.0}, {"total_due": 200.0}, {"total_due": 300.0}]
+    svc = [{"total_due": 101.0}, {"total_due": 200.0}, {"total_due": 297.5}]
+    assert T.total_due_delta([2, 3, 4], rows, svc) == {"min": -2.5, "median": 0.0, "max": 1.0,
+                                                       "rows": 3, "rows_changed": 2}
+
+
+def test_delta_profile_accepts_decimal():
+    from decimal import Decimal
+    oracle = [{"x": 4.123}, {"x": 4.123}]
+    service = [{"x": Decimal("4.122")}, {"x": 4.122}]
+    text, counter = T.delta_profile([0, 1], "x", oracle, service)
+    assert all("->" not in k for k in counter), text
+    assert T.is_rounding_delta(counter, ("ROUND", 3))
+
+
+def test_partial_service_import_is_pending(tmp_path, monkeypatch):
+    """`from .units import u3_x` while u3_x is not written yet: pending, not a traceback."""
+    pkg = tmp_path / "pendpkg_selfcheck"
+    (pkg / "units").mkdir(parents=True)
+    (pkg / "__init__.py").write_text("")
+    (pkg / "units" / "__init__.py").write_text("")
+    (pkg / "rater.py").write_text("from .units import u3_x\n")
+    (pkg / "third.py").write_text("import no_such_third_party_module_selfcheck\n")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    with pytest.raises(C.ServiceMissing):
+        C.import_service("pendpkg_selfcheck.rater")
+    with pytest.raises(C.ServiceMissing):
+        C.import_service("pendpkg_selfcheck.not_written")
+    with pytest.raises(ImportError) as e:
+        C.import_service("pendpkg_selfcheck.third")
+    assert not isinstance(e.value, C.ServiceMissing)

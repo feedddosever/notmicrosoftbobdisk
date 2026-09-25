@@ -18,7 +18,14 @@ REPORTS = os.path.join(ROOT, "reports")
 SMOKE_LAST = os.path.join(REPORTS, "smoke_last.json")
 PATH_KEYS = ("path", "file_path", "filePath", "target_file", "file", "destination")
 OUTSIDE = "<outside-repo>"
+# Tools that only read or talk. The PreToolUse and PostToolUse hooks have no matcher, so they see
+# every tool; these are skipped. Names follow the Roo lineage; T00 records the real tool names
+# (audit/<handle>/hook_payload_sample.json, keyed "event:tool") and a person corrects this list.
+READ_ONLY = ("read_file", "list_files", "search_files", "list_code_definition_names", "codebase_search",
+             "ask_followup_question", "attempt_completion", "switch_mode", "new_task",
+             "update_todo_list", "fetch_instructions", "access_mcp_resource")
 _HANDLE_OK = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
+XML_PATH = re.compile(r"<path>\s*([^<]+?)\s*</path>")
 
 
 def now():
@@ -75,6 +82,8 @@ def find_paths(obj, depth=0):
                 found.append(v)
             elif isinstance(v, (dict, list)):
                 found.extend(find_paths(v, depth + 1))
+            elif isinstance(v, str) and "<path>" in v:  # XML-style args, e.g. multi-file apply_diff
+                found.extend(x for x in XML_PATH.findall(v) if x.strip())
     elif isinstance(obj, list):
         for v in obj:
             found.extend(find_paths(v, depth + 1))
@@ -134,7 +143,7 @@ def audit_path(name, who=None):
 
 
 def log_payload_keys(payload, who=None):
-    """Record the payload's key names (never values) per event, to confirm field names."""
+    """Record the payload's key names (never values) per event and tool, to confirm field and tool names."""
     path = audit_path("hook_payload_sample.json", who)
     try:
         with open(path, encoding="utf-8") as f:
@@ -143,7 +152,7 @@ def log_payload_keys(payload, who=None):
         sample = {}
     entry = {"top_keys": sorted(payload.data.keys()), "tool": payload.tool or None,
              "input_keys": sorted(payload.input.keys())}
-    key = payload.event or "unknown"
+    key = "%s:%s" % (payload.event or "unknown", payload.tool or "-")
     if sample.get(key) != entry:
         sample[key] = entry
         write_json_atomic(path, sample)

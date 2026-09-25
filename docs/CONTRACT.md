@@ -109,7 +109,7 @@ zone `T09`, so `#N/A` propagates to `total_due`.
 - **Service output:** a dict with every one of the 43 output names. Numbers are `int`/`float`,
   dates are `datetime.date`, text is `str`. An error is either an
   object with attribute `.code` (for example `"#N/A"`) or a `str` starting with `"#"`.
-- **Comparison tolerance (plan §6.3):** numbers within absolute 1e-6; dates exact; text exact and
+- **Comparison tolerance (section 2):** numbers within absolute 1e-6; dates exact; text exact and
   case-sensitive; errors by code; blank, 0 and "" are different.
 - **JSON encodings in build/:** numbers and text as-is, blank `null`, dates `{"date": "YYYY-MM-DD"}`,
   errors `{"error": "#N/A"}` (`build/workbook_values.json`). In markdown briefs errors are bare
@@ -150,7 +150,19 @@ A unit reads only policy inputs `p`, its own earlier columns, and outputs of ear
 - Units live in `service/sheetshift_ho3/units/uN_<desc>.py` (N = 1..4); the unit smoke
   (`harness.smoke --unit UN`) imports that file alone and calls each tagged function as `fn(p, c)`,
   with the upstream outputs `c` taken from the oracle, so a unit can be checked before `rater.py` exists.
-- Tables: `service/sheetshift_ho3/data/rate_tables.json`, a byte copy of `build/rate_tables.json`.
+- Tables: `service/sheetshift_ho3/data/rate_tables.json`, a byte copy of `build/rate_tables.json`,
+  loaded only by `service/sheetshift_ho3/tables.py`, whose API is fixed so that parallel unit
+  translations agree on it:
+  - `table(key) -> {"ref", "header", "rows"}`, where `key` is exactly a key of the JSON's `tables`
+    object (a defined name such as `BaseRates`, or a literal ref such as `RateTables!$A$13:$C$16`);
+  - `rows(ref) -> list of row lists` for any rectangular range inside one table, e.g.
+    `RateTables!$A$31:$B$35` (the first 5 rows of `DedBands`), resolved through each table's `ref`;
+  - `column(ref) -> list` for a one-column range such as `RateTables!$B$13:$B$16`;
+  - `scalar(name) -> value` for a one-cell defined name such as `MinPremium`.
+  The unit briefs (`build/units/U*.md`) list the names and ranges each unit needs.
+- The covered file path in `STEPS` (`file`) is computed from the package's own location (for
+  example `Path(__file__).resolve().parents[2]`), never from the current directory: the mutation
+  self-test runs a copy of the service from a temporary folder.
 
 ## 5. Harness entry points (`python -m ...`, written by Claude Code)
 
@@ -182,23 +194,23 @@ fixed by lint order: A1 -> D-001, A2 -> D-002, A3 -> D-003. Triage classes inclu
 (counted as unexplained). Mutation survivors are labelled by people in `reports/mutation_labels.json`
 (keyed by fingerprint); `harness.mutate` needs Python 3.9+, the rest of the Bob-side path is 3.8+.
 
-**`reports/certificate.json`** (plan §6.7): run identity (`run_id`, `seed`, `policies`,
+**`reports/certificate.json`** (written by `harness.certify`): run identity (`run_id`, `seed`, `policies`,
 `boundary_policies`, `lint_guided_rows`); `original {cells_compared, cells_equal, decided_cells,
 unexplained_cells, root_cells_explaining_all_diffs}`; `patched {cells_compared, cells_equal,
 unexplained_cells}`; `groups_by_class`; `static_only_anomalies`; `mutation`; `naive_baseline`;
 `spotcheck`; `oracle`; `excel_crosscheck` (null unless run); `hashes`; `git_commit`; `seconds`;
 `limits`; `status` (`GREEN`/`RED`).
 
-**`decisions/decisions.jsonl`** (plan §6.5; written by people only via `tools/decide.py`): one
+**`decisions/decisions.jsonl`** (written by people only via `tools/decide.py`): one
 record per line `{"id", "cell", "lint", "option", "rule", "by", "at", "why", "evidence_run",
 "workbook_sha256", "service_commit"}`; `by` is a handle (`m1`..`m4`), never an email.
 
-## 6. Recorded deviations from the plan text
+## 6. Recorded deviations from the original design
 
-- Plan §5.1 says A1 of every sheet reads FICTIONAL; on `Policies` and `Calc` it is a cell comment
+- The original design had A1 of every sheet read FICTIONAL; on `Policies` and `Calc` it is a cell comment
   plus the `About` sheet, so the header row stays row 1 (section 1).
-- Plan §5.1's function list includes COUNTIF (from the spike's 6-cell Summary). The Summary is now
-  the 5 cells B2..B6 the plan specifies, so COUNTIF is not used; all other listed functions are.
+- The original function list included COUNTIF (from the spike's 6-cell Summary). The Summary is now
+  the 5 cells B2..B6, so COUNTIF is not used; all other listed functions are.
 - `build/workbook_values.json` is an extra committed file so the map runs without LibreOffice.
 
 ## 7. Site DOM contract (for IBM Bob's `public/verify.js` and `public/trace.js`, task T10)
@@ -219,7 +231,9 @@ script is missing it shows `#verify-pending` / `#trace-pending`; the scripts nee
 Promise of `data/<name>` parsed or `null`; `el(tag, attrs, children)`; `fmtInt(n)`;
 `fmtPct(x, digits)`; `githubUrl(site, path, line)` → `<repo_url>/blob/<commit>/<path>#L<line>` or
 `null`; `linkOr(url, text)`; `empty(msg)`. `data/site.json` has `repo_url` (may be `null`),
-`commit`, `mode` (`"live"` or `"static"`) and `service.standin`.
+`commit`, `mode` (`"live"` or `"static"`), `service.standin`, `recorded` (`{first, last}` or `null`)
+and `exports_available` (copied from `bob_sessions/roster.json`). The site banner states only what
+it can check: the API is called live only when `/api/health` answers and is not the stub.
 
 ### 7.1 `verify.html` element ids
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Check the demo video against the submission rules (plan section 1, row 12).
+# Check the demo video against the submission rules (hackathon rules: video length and format).
 #
 # usage: tools/check_video.sh demo.mp4 [presentation/video_script.md]
 #

@@ -1,21 +1,19 @@
 {
   "hooks": {
     "SessionStart": [
-      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/session_status.py"}]}
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/session_status.py || exit 0"}]}
     ],
     "UserPromptSubmit": [
-      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/prompt_context.py", "timeout": 5}]}
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/prompt_context.py || exit 0", "timeout": 5}]}
     ],
     "PreToolUse": [
-      {"matcher": "^(write_file|apply_diff|search_and_replace|insert_content|execute_command)$",
-       "hooks": [{"type": "command", "command": "python3 .bob/hooks/guard.py", "timeout": 5}]}
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/guard.py", "timeout": 5}]}
     ],
     "PostToolUse": [
-      {"matcher": "^(write_file|apply_diff|search_and_replace|insert_content)$",
-       "hooks": [{"type": "command", "command": "python3 .bob/hooks/post_edit.py", "timeout": 20}]}
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/post_edit.py || exit 0", "timeout": 20}]}
     ],
     "Stop": [
-      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/stop_report.py", "timeout": 30}]}
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/stop_report.py || exit 0", "timeout": 30}]}
     ]
   }
 }

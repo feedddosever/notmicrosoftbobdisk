@@ -2,7 +2,7 @@
 
 usage: python -m harness.mutate [--seed 2026] [--service MODULE] [--max 60] [--jobs 4]
 
-Generic AST operators (plan section 6.6), applied one site at a time:
+Generic AST operators, applied one site at a time:
   round_mode    ROUND_HALF_UP -> ROUND_HALF_EVEN; ROUND_UP -> ROUND_HALF_UP
   band_lookup   bisect_right -> bisect_left
   comparison    <= <-> <, >= <-> >
@@ -12,9 +12,17 @@ Generic AST operators (plan section 6.6), applied one site at a time:
   iferror       an `except ...: return default` handler re-raises; iferror(x, d) -> x
   blank         `is None` / `== None` / `in (None, ...)` handling compares with 0 instead
 At most --max mutants, chosen by seeded round-robin sampling across operators. A mutant is
-killed when its set of mismatching cells (vs the original golden oracle) differs from the
-unmutated service's set, or when it crashes on import. Each mutant runs in its own process
-on a private copy of the source; the repo is never modified.
+killed when its set of mismatching cells differs from the unmutated service's set, or when it
+crashes on import. The sets are compared against the original golden oracle AND, when it exists,
+the decision-patched oracle; a cell counts as changed if it changed against either (so a bug
+that only moves cells that already mismatch the original oracle, e.g. rows covered by an
+adopt-manual decision, is still caught). Each mutant runs in its own process on a private copy
+of the source; the repo is never modified.
+
+Control run: before any mutant, an unmutated copy goes through the same copy-to-temp worker.
+If it crashes or its mismatch set differs from the in-repo baseline (e.g. the service computes
+paths relative to the current directory), the report is written with status "invalid", no
+mutant is run, and the command exits 1; certify treats any status other than "ok" as RED.
 
 Named naive operators (reported under naive_baseline, with the rows each one affects):
   naive_round          the Excel-rounding helper's body becomes Python round()
@@ -294,23 +302,37 @@ def worker(spec_path):
         oracle = C.load_oracle(spec["seed"])
         rows = K.run_service(mod.quote, policies)
     except BaseException as e:  # noqa: B902  import-time crash = killed
-        res.update(crashed=True, error="%s: %s" % (type(e).__name__, str(e)[:200]),
+        msg = str(e).replace(spec["path"], "<copy>").replace(C.ROOT, "<repo>")  # no absolute paths in reports
+        res.update(crashed=True, error="%s: %s" % (type(e).__name__, msg[:200]),
                    rows_flagged=None, seconds=round(time.time() - t0, 2))
         print(json.dumps(res))
         return 0
-    base = {(i, n) for i, n in C.read_json(spec["baseline"])}
-    mism = K.compare(oracle, rows)
-    cells = {(i, n) for i, mm in mism.items() for n in mm}
-    changed = cells ^ base
-    flagged = sorted({i for i, _ in changed})
     cols = T.column_info()
     order = C.graph()["topo_order"]
+    # (mismatch map, changed set) against the original oracle and, if present, the patched one
+    checks = []
+    for patched, bkey in ((False, "baseline"), (True, "baseline_patched")):
+        if not spec.get(bkey):
+            continue
+        orc = oracle if not patched else C.load_oracle(spec["seed"], patched=True)
+        if orc is None:
+            continue
+        base = {(i, n) for i, n in C.read_json(spec[bkey])}
+        mism = K.compare(orc, rows)
+        cells = {(i, n) for i, mm in mism.items() for n in mm}
+        checks.append((mism, cells ^ base))
+    changed = set()
+    for _, ch in checks:
+        changed |= ch
+    flagged = sorted({i for i, _ in changed})
     roots = {}
     for i in flagged:
-        rs, _ = T.roots_of_row(mism.get(i, {}), cols, order)
-        for r in rs:
-            if (i, r) in changed:
-                roots[r] = roots.get(r, 0) + 1
+        row_roots = set()
+        for mism, ch in reversed(checks):  # patched map first
+            rs, _ = T.roots_of_row(mism.get(i, {}), cols, order)
+            row_roots |= {r for r in rs if (i, r) in ch}
+        for r in row_roots:
+            roots[r] = roots.get(r, 0) + 1
     fixed = meta.get("fixed_rows", 0)
     res.update(changed_cells=len(changed), rows_flagged=len(flagged),
                boundary_rows_flagged=sum(1 for i in flagged if i < fixed),
@@ -413,6 +435,8 @@ def mutate(service, seed, max_n, jobs, sample_seed):
     mod = C.import_service(service)
     base_rows = K.run_service(mod.quote, policies)
     base_mism = K.compare(oracle, base_rows)
+    patched = C.load_oracle(seed, patched=True)
+    base_mism_p = K.compare(patched, base_rows) if patched is not None else None
     copy_src, name, root = source_layout(service)
     files = target_files(root)
     sites = enumerate_sites(files, root)
@@ -422,17 +446,42 @@ def mutate(service, seed, max_n, jobs, sample_seed):
     try:
         bpath = os.path.join(tmp, "baseline.json")
         C.write_json(bpath, sorted([i, n] for i, mm in base_mism.items() for n in mm))
+        bpath_p = None
+        if base_mism_p is not None:
+            bpath_p = os.path.join(tmp, "baseline_patched.json")
+            C.write_json(bpath_p, sorted([i, n] for i, mm in base_mism_p.items() for n in mm))
+
+        def spec_for(vid, path):
+            return {"id": vid, "path": path, "service": service, "seed": seed, "baseline": bpath,
+                    "baseline_patched": bpath_p}
+
+        # Control: the unmutated copy must behave exactly like the in-repo service.
+        ctrl = run_worker(spec_for("control", prepare_variant(copy_src, name, root, tmp, "control", {})), tmp)
+        ctrl.pop("flagged", None)
+        control = {"crashed": bool(ctrl.get("crashed")), "changed_cells": ctrl.get("changed_cells"),
+                   "error": ctrl.get("error"), "seconds": ctrl.get("seconds")}
+        if control["crashed"] or control["changed_cells"]:
+            return {
+                "_about": "Mutation self-test of the service (harness/mutate.py). INVALID: the unmutated "
+                          "copy does not behave like the service in the worker, so no mutant was run.",
+                "status": "invalid", "control": control,
+                "service": service, "service_tree_sha256": C.tree_sha256(root), "seed": seed,
+                "sample_seed": sample_seed, "policies": len(policies), "fixed_rows": meta.get("fixed_rows"),
+                "patched_oracle": patched is not None, "total": 0, "killed": None, "killed_by_crash": None,
+                "catch_rate": None, "caught_using_boundary_rows": None, "caught_using_random_rows": None,
+                "caught_only_by_boundary_rows": [], "caught_only_by_random_rows": [], "survivors": [],
+                "naive_baseline": {}, "mutants": [], "seconds": round(time.time() - t_all, 2)}
         tasks = []
         for k, s in enumerate(chosen, 1):
             s["id"] = "M%02d" % k
             src = mutated_source(s["path"], Mutator(target=(s["op"], s["k"])))
             d = prepare_variant(copy_src, name, root, tmp, s["id"], {s["path"]: src})
-            tasks.append((s, {"id": s["id"], "path": d, "service": service, "seed": seed, "baseline": bpath}))
+            tasks.append((s, spec_for(s["id"], d)))
         naive = naive_variants(files)
         for op, (edits, applied, extra) in naive.items():
             if applied:
                 d = prepare_variant(copy_src, name, root, tmp, op, edits)
-                spec = {"id": op, "path": d, "service": service, "seed": seed, "baseline": bpath}
+                spec = spec_for(op, d)
                 spec.update(extra)
                 tasks.append(({"id": op, "naive": True, "applied": applied}, spec))
         with cf.ThreadPoolExecutor(max_workers=jobs) as ex:
@@ -481,6 +530,7 @@ def mutate(service, seed, max_n, jobs, sample_seed):
     report = {
         "_about": "Mutation self-test of the service (harness/mutate.py). Survivors are listed, "
                   "never hidden; people label them in reports/mutation_labels.json.",
+        "status": "ok", "control": control, "patched_oracle": patched is not None,
         "service": service, "service_tree_sha256": C.tree_sha256(root), "seed": seed,
         "sample_seed": sample_seed, "policies": n_all, "fixed_rows": meta.get("fixed_rows"),
         "files": [os.path.relpath(f, root).replace("\\", "/") for f in files],
@@ -531,6 +581,10 @@ def main(argv=None):
         print("mutate: pending (%s)" % e)
         return 0
     C.write_json(a.out, rep)
+    if rep["status"] != "ok":
+        print("mutate: INVALID - unmutated copy fails in worker: %s" % (
+            rep["control"].get("error") or "%s cells differ from the in-repo run" % rep["control"].get("changed_cells")))
+        return 1
     print("mutation: %d/%d killed (%d by crash); boundary %d, random %d; only-boundary %s; survivors %s; %.1fs" % (
         rep["killed"], rep["total"], rep["killed_by_crash"], rep["caught_using_boundary_rows"],
         rep["caught_using_random_rows"], rep["caught_only_by_boundary_rows"],

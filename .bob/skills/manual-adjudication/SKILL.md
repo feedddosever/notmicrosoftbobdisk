@@ -14,7 +14,7 @@ For each PENDING item in `reports/decision_queue.json`, write `docs/anomalies/<i
 | Workbook formula | Quoted exactly, next to the column rule |
 | Manual rule | Rule number, verbatim quote, page |
 | Rows affected | From the queue's `runtime` (or "static only") |
-| Premium impact | Minimum, median and maximum difference in `total_due` |
+| Premium impact | From the queue's `runtime.total_due_delta` (min, median, max, rows changed) if present; otherwise write "not computed (static brief)". Never estimate. |
 | Options allowed | Only those listed in the queue item |
 | Recommendation | One option, with the reason |
 | Confidence | High, medium or low, with the reason |

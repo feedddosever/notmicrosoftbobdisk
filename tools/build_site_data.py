@@ -11,14 +11,15 @@ Copies or derives, never invents:
   mutation.json            reports/mutation_report.json (byte copy)
   spotcheck.json           reports/spotcheck.json (byte copy)
   graph.json, lints.json   build/graph.json, build/lints.json (byte copies)
-  baseline.json            reports/baseline.json, if a person recorded the D4 timing
+  baseline.json            reports/baseline.json, if a person recorded the hand-translation timing
   decisions.json           {queue: reports/decision_queue.json items, log: decisions/decisions.jsonl}
   replay.json              timeline from audit/<handle>/*.jsonl, reports/run_log.jsonl,
                            bob_sessions/INDEX.md, decisions and Bob-Task commits
   quote_examples.json      a few golden policies with their recorded workbook values
   verify_sample_results.json  the service run over the whole verification sample (static
                            fallback for /verify); only when the service imports
-  site.json                commit, repo URL, mode, recorded dates, source hashes, missing files
+  site.json                commit, repo URL, mode, recorded dates, exports_available (from
+                           bob_sessions/roster.json), source hashes, missing files
 A missing source is listed in site.json "missing" and the page says "not generated yet".
 --readme rewrites the block between the headline markers in README.md from the certificate;
 it refuses a certificate produced by a stand-in service (only Bob's service goes in the README).
@@ -427,11 +428,13 @@ def build(out_dir, reports_dir, service, sample_path, static, explicit_repo_url,
 
     cert = read_json(os.path.join(out_dir, "certificate.json")) or {}
     site_service = cert.get("service") or service
+    roster = read_json(os.path.join(ROOT, "bob_sessions", "roster.json")) or {}
     site = {
         "_about": "Site metadata written by tools/build_site_data.py. Synthetic data; %s." % CARRIER,
         "schema": 1, "carrier": CARRIER, "mode": "static" if static else "live",
         "commit": commit, "commit_short": commit[:7] if commit else None,
         "repo_url": repo_url(explicit_repo_url), "recorded": recorded,
+        "exports_available": roster.get("exports_available") if isinstance(roster, dict) else None,
         "service": {"module": site_service, "standin": site_service != DEFAULT_SERVICE},
         "files": dict(sorted(files.items())), "missing": sorted(missing),
         "notes": ([why] if why else []),

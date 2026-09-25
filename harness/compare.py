@@ -3,7 +3,7 @@
 usage: python -m harness.compare [--seed 2026] [--service MODULE] [--patched]
        (prints a JSON summary; harness.run writes the reports)
 
-TOLERANCE is a constant in a protected file (plan section 6.3). Changing it takes a human
+TOLERANCE is a constant in a protected file (docs/CONTRACT.md section 2). Changing it takes a human
 commit with the reason recorded in PROVENANCE.md.
 
 Standard library only; Python 3.8+.

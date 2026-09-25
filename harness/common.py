@@ -355,10 +355,15 @@ def import_service(modname):
     """Import the service module; raises ServiceMissing if it does not exist yet."""
     if ROOT not in sys.path:
         sys.path.insert(0, ROOT)
+    top = modname.split(".")[0]
     try:
         return importlib.import_module(modname)
-    except ModuleNotFoundError as e:
-        raise ServiceMissing(str(e))
+    except ImportError as e:
+        # A missing service module, or a partial service ("cannot import name u3_x" while a unit
+        # is not written yet), is pending; an ImportError about a third-party module is re-raised.
+        if e.name is None or e.name == top or e.name.startswith(top + "."):
+            raise ServiceMissing(str(e))
+        raise
 
 
 def service_package(modname):

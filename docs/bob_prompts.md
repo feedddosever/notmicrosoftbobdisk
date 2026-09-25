@@ -16,7 +16,12 @@ Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member review
   ```
 - [ ] **Python.** `python3 --version` must be 3.8 or later on PATH; the service and harness target 3.11.
   - On Windows, install python.org Python with `python3` on PATH, or run Bob in WSL. The Microsoft Store stub exits 9009, and then the guard does not run at all.
-  - Then run `python3 -m venv .venv && pip install -r requirements-dev.txt`.
+  - Then create and activate a virtual environment and install the dev dependencies into it:
+    - macOS, Linux, WSL: `python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r requirements-dev.txt`
+    - Windows (PowerShell): `py -3 -m venv .venv; .venv\Scripts\Activate.ps1; python -m pip install -r requirements-dev.txt`
+  - In Bob, select `.venv` as the Python interpreter and open a new terminal. Confirm that `python3 -c "import openpyxl, pytest"` exits 0 there before T00; Bob's commands call bare `python3`.
+  - On Windows, keep Git from converting line endings: the repo's `.gitattributes` forces LF. If you cloned before that file existed, run `git rm --cached -r . && git reset --hard` once (or re-clone).
+- [ ] **Workspace.** Open the repo folder itself as the Bob workspace (not a parent folder and not a multi-root workspace). The hooks run `python3 .bob/hooks/...` relative to it.
 - [ ] **Bob loads the pack.**
   - Settings → Modes lists Sheet Analyst, Sheet Translator, Sheet Verifier and Sheet Triage.
   - Settings → Hooks lists 5 hooks.
@@ -35,9 +40,10 @@ Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member review
 2. Click the **task header**. The task session consumption summary appears.
 3. Take a **PNG** screenshot of the summary and crop out any email address.
 4. Save it as `bob_sessions/<team>_taskNN_<desc>_<handle>_summary.png`. `<team>` is the registered team name as a lowercase slug, and `<handle>` is `m1`..`m4`. Example: `bob_sessions/<team>_task03_translate_m1_summary.png`.
-5. If an Export button exists, save the export as `bob_sessions/<team>_taskNN_<desc>_<handle>_history.md`. Then scrub home paths and run gitleaks:
+5. If an Export button exists, save the export as `bob_sessions/<team>_taskNN_<desc>_<handle>_history.md`. Then scrub home paths and check the folder:
    ```sh
-   sed -E -i 's#(/Users/|/home/|C:\\Users\\)[^/\\]+#<home>#g' bob_sessions/*_history.md
+   sed -E -i.bak 's#(/Users|/home|[A-Za-z]:(\\){1,2}Users)[/\\]+[^/\\]+#<home>#g' bob_sessions/*_history.md && rm -f bob_sessions/*_history.md.bak
+   python3 tools/check_evidence.py --no-blame
    ```
 6. Add one row to `bob_sessions/INDEX.md`, with the fields below.
 
@@ -52,7 +58,7 @@ Coin figures below are estimates. Recalibrate them after T00 and T01 from the ga
 
 ## T00 — probes (every member)
 
-- **Mode:** Ask for steps 1–3, Agent for steps 4–6, Sheet Translator for step 7. **Branch:** `bob/t00-probes-<handle>`. **Est.** 0.3–0.8 coins.
+- **Mode:** Ask for steps 1–3, Agent for steps 4–6, Sheet Translator for step 7, Sheet Analyst for step 8. **Branch:** `bob/t00-probes-<handle>`. **Est.** 0.3–0.8 coins.
 - **Screenshot:** `bob_sessions/<team>_task00_probes_<handle>_summary.png`
 
 Paste one at a time. Log the gauge before and after step 2.
@@ -62,23 +68,29 @@ Paste one at a time. Log the gauge before and after step 2.
 (2) Ask: @workbook/example_mutual_ho3_rater.xlsx How many rows does Calc have?
 (3) Ask: @manual/example_mutual_ho3_rating_manual.pdf Quote rule R-205's row for a $10,000 deductible.
 (4) Agent: Create harness/_probe.txt containing x.
+(4b) Agent: In harness/common.py, change the first docstring line to x by editing it, not rewriting the file.
+(4c) Agent: Run the shell command: echo x > harness/_probe3.txt
 (5) Agent: Spawn one general subagent that creates harness/_probe2.txt containing x.
 (6) Agent: Create service/_probe_ok.txt containing x, then delete it.
 (7) Sheet Translator: Create tests/_probe_mode.json containing {} and then delete it. Then create docs/_probe_mode.md containing x.
+(8) Sheet Analyst: Write docs/notes/probe_<handle>.md recording the answers to steps 1–3, the gauge difference (<paste it>), the tool you used in each of steps 4–7 and whether it was blocked (and by what message), whether the subagent's write in step 5 was blocked, and the step 7 result.
 ```
 
 Also check:
 - that the 4 modes and 5 hooks load;
 - whether an Export button exists;
+- in steps 4b and 4c, that the diff edit and the shell write are both blocked (they exercise the edit and shell tools, not only `write_file`);
 - in step 5, whether the hook and the mode's fileRegex fire inside the subagent;
 - in step 7, that the JSON edit is allowed and the `.md` edit is refused by the mode (not by the hook).
+
+If any of steps 4, 4b, 4c or 5 is not blocked, stop, restore the file with `git checkout -- harness/` (and delete any `harness/_probe*`), and tell the lead before any other task runs.
 
 If the step 7 JSON edit is refused, a person changes `^(\./)?` to `(^|/)` in `.bob/custom_modes.yaml` and re-checks.
 
 - **Expected output:**
-  - `docs/notes/probe_<handle>.md` records every answer, the gauge difference, whether the hook and fileRegex fired in the subagent, and the step 7 result.
-  - The keys in `audit/<handle>/hook_payload_sample.json` are recorded.
-  - `audit/<handle>/hook_events.jsonl` shows 2 blocks and 1 allow (only 1 block if hooks do not fire in subagents).
+  - `docs/notes/probe_<handle>.md` (step 8) records every answer, the gauge difference, the tool names, whether the hook and fileRegex fired in the subagent, and the step 7 result. (`audit/` is in `.bobignore`, so a person, not Bob, reads the audit files below.)
+  - `audit/<handle>/hook_payload_sample.json` holds one entry per `event:tool`, so every tool name Bob used and its input key names are recorded. A person checks the read-only tool names against `READ_ONLY` in `.bob/hooks/_common.py` (the hooks have no matcher, so every other tool is guarded) and corrects the list if needed.
+  - `audit/<handle>/hook_events.jsonl` shows exactly 4 blocks (steps 4, 4b, 4c and 5, all `harness/`, reason protected path or redirect into a protected path; only 3 if hooks do not fire in subagents). Every other line is an allow.
 
 ## T01 — plan (*record*)
 
@@ -100,10 +112,10 @@ You are onboarding onto SheetShift. Read @AGENTS.md, @build/sheets/Calc.md, @bui
 Using @.bob/rules/20-excel-semantics.md, @.bob/rules/10-cell-traceability.md, @docs/CONTRACT.md (section 4) and @docs/design/service_plan.md, write service/sheetshift_ho3/__init__.py (empty) and service/sheetshift_ho3/xlsem.py containing:
 (1) class XLError(Exception) with attribute .code (for example "#N/A", "#NUM!", "#DIV/0!"); two XLError values are equal when their codes are equal, and repr shows the code;
 (2) STEPS = [], the traceability registry;
-(3) a decorator covers(cell, output_name) that appends {"cell": cell, "name": output_name, "fn": f.__name__, "file": <path of the defining file relative to the repo root (two directories above xlsem.py), forward slashes>, "line": f.__code__.co_firstlineno} to STEPS and returns f unchanged;
-(4) the helpers xround, xroundup, band, exact, text_eq, n0, edate, yearfrac_basis3, datedif_y, iferror; every helper returns an XLError argument unchanged.
+(3) a decorator covers(cell, output_name) that appends {"cell": cell, "name": output_name, "fn": f.__name__, "file": <path of the defining file relative to the repo root, computed from xlsem.py's own location (two directories above it), never from the current directory; forward slashes>, "line": f.__code__.co_firstlineno} to STEPS and returns f unchanged;
+(4) the helpers xround, xroundup, band, exact, text_eq, n0, edate, yearfrac_basis3, datedif_y, iferror; every helper except iferror returns an XLError argument unchanged; iferror(x, alt) returns alt when x is an XLError.
 Write tests/test_xlsem.py with every probe value in the rules file, plus a test that one @covers-decorated function adds exactly one STEPS entry with those five keys and a repo-relative file.
-Copy build/rate_tables.json to service/sheetshift_ho3/data/rate_tables.json with a shell cp, write tables.py to load it, and tests/test_tables.py asserting the copy is byte-identical to build/rate_tables.json. Run pytest -q and show the result.
+Copy build/rate_tables.json to service/sheetshift_ho3/data/rate_tables.json with a shell cp. Write service/sheetshift_ho3/tables.py with exactly the API in @docs/CONTRACT.md section 4: table(key) -> {"ref","header","rows"} with keys exactly as in the JSON's "tables" object; rows(ref) for any rectangular range inside one table (resolved through each table's "ref"); column(ref) for a one-column range such as 'RateTables!$B$13:$B$16'; scalar(name). Write tests/test_tables.py asserting the copy is byte-identical to build/rate_tables.json and testing each of the four functions on one range from build/units/U1.md. Run python3 -m pytest -q and show the result.
 ```
 
 - **Expected output:** `xlsem.py` (XLError, covers, STEPS and helpers), `tables.py`, `data/rate_tables.json`, and passing `tests/test_xlsem.py` and `tests/test_tables.py`.
@@ -114,7 +126,7 @@ Copy build/rate_tables.json to service/sheetshift_ho3/data/rate_tables.json with
 - **Screenshot:** `bob_sessions/<team>_task03_translate_<handle>_summary.png`. Also capture 5 s of the subagent panel with its cost header.
 
 ```
-/shift-translate all — Spawn four general subagents in parallel, one per unit. Each subagent reads only @build/units/<U>.md and @service/sheetshift_ho3/xlsem.py, uses the translate-sheet skill, writes service/sheetshift_ho3/units/<u>.py in one write_file call and tests/test_<u>.py in one call, tags every function @covers with the canonical output names, runs python3 -m harness.smoke --unit <U>, and stops after at most 2 fix iterations, listing remaining failures. When all four finish, write service/sheetshift_ho3/rater.py with ORDER as a literal tuple copied from build/graph.json topo_order (rater.py must not read build/ at runtime), quote(policy), and tests/test_rater_order.py. Then run python3 -m harness.smoke --n 200 and paste the table. Do not edit harness/, golden/, workbook/, decisions/, tools/ or .bob/.
+/shift-translate all
 ```
 
 - **Expected output:** 4 unit modules with tests, `rater.py` and `tests/test_rater_order.py`. Never re-run T03 just for footage.
@@ -136,7 +148,7 @@ Write service/sheetshift_ho3/api.py (FastAPI; the only non-stdlib file): GET /ap
 - **Screenshot:** `bob_sessions/<team>_task05_triage_<handle>_summary.png`
 
 ```
-/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read the smoke line in your next context. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.
+/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.
 ```
 
 - **Expected output:** fixes, `reports/notes/triage_1.md`, and possibly a rollback (show it on video).
@@ -168,7 +180,7 @@ Claude Code then runs `make patch` to produce the patched oracle. There is no sc
 - **Screenshot:** `bob_sessions/<team>_task07_decisions_<handle>_summary.png`
 
 ```
-Read @decisions/decisions.jsonl. Implement each decision (adopt-manual → the manual rule; keep-workbook → keep the column rule; escalate → no code change, add to OUT_OF_SCOPE.json with the decision ID) with one test per decision. Then /shift-verify and quote original.unexplained_cells, original.decided_cells and patched.unexplained_cells from reports/last_run.json.
+Read @decisions/decisions.jsonl. Implement each decision (adopt-manual → the manual rule; keep-workbook → keep the column rule; escalate → no code change; add {"cell": "Calc!<col>" (the column key from build/graph.json rule_order, not the queue cell), "reason": "...", "decision": "D-00N"} to service/sheetshift_ho3/OUT_OF_SCOPE.json) with one test per decision. Then /shift-verify and quote original.unexplained_cells, original.decided_cells and patched.unexplained_cells from reports/last_run.json.
 ```
 
 - **Expected output:** unexplained cells `[U]` = 0 is the target.
@@ -213,11 +225,9 @@ Write public/trace.js and public/verify.js for the existing public/trace.html an
 - **Mode:** Agent for map and plan, Sheet Translator for translation. **Branch:** `bob/t11-secondbook`. **Est.** 4–7 coins.
 - **Screenshot:** `bob_sessions/<team>_task11_secondbook_<handle>_summary.png`
 
-```
-/sheetshift workbook/second/example_mutual_im_mini.xlsx
-```
+**Not ready to run.** The command pack is built for the HO-3 workbook: `/shift-map` writes the committed `build/`, `/shift-plan` names the HO-3 manual and `/shift-translate` writes `service/sheetshift_ho3/`. Before T11 starts, Claude Code prepares `build/<name>/`, the layout file `sheetshift.second.json` and an empty package `service/<package>/`, and checks that `harness.smoke` and `harness.run` can point at them. Bob then runs only the plan and translate steps against those paths, with a prompt written at that time. Do not run `/sheetshift` on a second workbook: it overwrites `build/` (CI's `make map && git diff --exit-code build/` then fails) and the HO-3 service.
 
-- **Expected output:** a second certificate. Claude Code generates the workbook and its `sheetshift.second.json`.
+- **Expected output:** a second certificate. Claude Code generates the workbook, `sheetshift.second.json` and the second build folder.
 
 ## T12 — FLAG gap check (team of 4)
 

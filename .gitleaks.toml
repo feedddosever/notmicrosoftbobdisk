@@ -1,0 +1,9 @@
+# gitleaks configuration for the full-history scan in .github/workflows/verify.yml.
+# Harness/scaffold-owned: Bob-Task commits may not change it (tools/check_protected.py).
+# Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
+[extend]
+useDefault = true
+
+[allowlist]
+description = "guard-hook test fixtures (synthetic fake keys)"
+paths = ['''tools/tests/test_guard\.py''']
