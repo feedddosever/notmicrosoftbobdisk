@@ -18,12 +18,24 @@ REPORTS = os.path.join(ROOT, "reports")
 SMOKE_LAST = os.path.join(REPORTS, "smoke_last.json")
 PATH_KEYS = ("path", "file_path", "filePath", "target_file", "file", "destination")
 OUTSIDE = "<outside-repo>"
-# Tools that only read or talk. The PreToolUse and PostToolUse hooks have no matcher, so they see
-# every tool; these are skipped. Names follow the Roo lineage; T00 records the real tool names
-# (audit/<handle>/hook_payload_sample.json, keyed "event:tool") and a person corrects this list.
-READ_ONLY = ("read_file", "list_files", "search_files", "list_code_definition_names", "codebase_search",
-             "ask_followup_question", "attempt_completion", "switch_mode", "new_task",
-             "update_todo_list", "fetch_instructions", "access_mcp_resource")
+# The PreToolUse and PostToolUse hooks have no matcher, so they see every tool. The tool ids below
+# come from the installed Bob IDE 2.0 (extension bob-code), where every tool declares a permission
+# class; T00 also records the names Bob actually sends (audit/<handle>/hook_payload_sample.json).
+# READ_ONLY: permission "read" (they take a path, but only read it) plus older Roo-lineage names.
+READ_ONLY = ("read_file", "list_files", "office_read", "grep", "glob", "list_ibm_doc_libraries",
+             "search_ibm_docs", "web_fetch",
+             "search_files", "list_code_definition_names", "codebase_search", "fetch_instructions",
+             "access_mcp_resource")
+# NO_FILE_WRITE: tools whose inputs name no workspace file: chat, modes, todos, skills, subagent
+# spawns (the subagent's own tool calls reach the hooks one by one) and Bob's in-app HTML page and
+# chart artifacts (fields id/title/description/html or type/title/props; no path).
+NO_FILE_WRITE = ("ask_followup_question", "attempt_completion", "switch_mode", "new_task",
+                 "update_todo_list", "use_skill", "spawn_subagent", "create_html_artifact", "create_chart")
+
+
+def never_writes(tool):
+    """True for tools that cannot write a workspace file (skipped by the guard and post_edit)."""
+    return tool in READ_ONLY or tool in NO_FILE_WRITE
 _HANDLE_OK = re.compile(r"^[A-Za-z0-9_-]{1,32}$")
 XML_PATH = re.compile(r"<path>\s*([^<]+?)\s*</path>")
 

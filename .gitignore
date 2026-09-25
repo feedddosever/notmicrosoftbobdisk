@@ -23,3 +23,6 @@ reports/last_run.json
 # Never committed: local notes
 plan/
 .local/
+
+# Office lock files (a workbook open in Excel)
+~$*

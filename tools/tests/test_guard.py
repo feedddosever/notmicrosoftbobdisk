@@ -129,6 +129,19 @@ CASES = [
     ("unknown edit tool on harness", ("edit_file", {"path": "harness/common.py", "content": "x"}), 2),
     ("unknown edit tool on service", ("edit_file", {"path": "service/sheetshift_ho3/x.py"}), 0),
     ("xml args path", ("apply_diff", {"args": "<file><path>harness/common.py</path><diff>x</diff></file>"}), 2),
+    # Bob 2.0 tools, with the parameters the installed Bob IDE declares
+    ("office_read on the workbook allowed", ("office_read", {"path": "workbook/probe/stale_cache.xlsx", "mode": "text", "query": ""}), 0),
+    ("office_read on the manual allowed", ("office_read", {"path": "manual/example_mutual_ho3_rating_manual.pdf", "mode": "text"}), 0),
+    ("grep in harness allowed", ("grep", {"pattern": "def compare", "path": "harness"}), 0),
+    ("glob in build allowed", ("glob", {"pattern": "**/*.md", "path": "build"}), 0),
+    ("list_files on golden allowed", ("list_files", {"path": "golden", "recursive": False}), 0),
+    ("office_edit on the workbook", ("office_edit", {"path": "workbook/example_mutual_ho3_rater.xlsx", "operation": "set", "query": "/Calc/A2", "props": "{}"}), 2),
+    ("office_edit on any xlsx", ("office_edit", {"path": "service/sheetshift_ho3/data/x.xlsx", "operation": "set"}), 2),
+    ("html artifact quoting reports allowed", ("create_html_artifact", {"id": "run", "title": "Run", "description": "summary", "html": "<p>write reports/certificate.json values; harness/ untouched</p>"}), 0),
+    ("chart artifact allowed", ("create_chart", {"type": "bar", "title": "cells", "props": "{}"}), 0),
+    ("subagent spawn naming protected dirs allowed", ("spawn_subagent", {"description": "Translate U2. Do not edit harness/, golden/ or .bob/.", "name": "U2"}), 0),
+    ("use_skill allowed", ("use_skill", {"skill_name": "translate-sheet"}), 0),
+    ("execute_command with cwd into harness", ("execute_command", {"command": "echo x > common.py", "cwd": "harness"}), 2),
 ]
 
 

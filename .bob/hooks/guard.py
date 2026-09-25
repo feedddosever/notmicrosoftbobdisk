@@ -1,7 +1,8 @@
 """PreToolUse guard: blocks Bob's writes to protected paths, decide.py, git push and secrets.
 
 Exit 2 blocks the tool call; exit 0 allows it. The hook has no tool matcher: every tool is
-checked except the read-only ones in READ_ONLY. Fails closed: if the payload cannot be parsed
+checked except the ones that cannot write a workspace file (_common.never_writes: Bob's read tools
+such as read_file, office_read, grep and glob, and path-less tools). Fails closed: if the payload cannot be parsed
 or decided, the call is blocked when the raw text mentions a protected path together with a
 write-like word (or holds a secret), else allowed. Every decision is appended to
 audit/<handle>/hook_events.jsonl (repo-relative paths only); a logging failure never changes
@@ -47,8 +48,7 @@ CMD_BLOCK = [
     (re.compile(r"decide\.py|tools[./]decide\b", re.I), "decisions are made by people"),
     (re.compile(r"\bgit\s+push\b"), "git push is done by people"),
 ]
-READ_ONLY = C.READ_ONLY  # checked first; every other tool is guarded (no hook matcher)
-EDIT_TOOLS = ("write_file", "apply_diff", "search_and_replace", "insert_content")
+EDIT_TOOLS = ("write_file", "apply_diff", "search_and_replace", "insert_content", "office_edit")
 EDIT_LIKE = re.compile(r"write|edit|diff|replace|insert|patch|create|delete|remove|move|rename|append", re.I)
 WRAPPERS = ("sudo", "env", "nohup", "time", "command", "exec", "builtin", "nice")
 SHELLS = ("bash", "sh", "zsh", "dash", "ksh", "pwsh", "powershell", "cmd")
@@ -257,8 +257,8 @@ def decide(payload):
     """Return (decision, reason, rel_path) for one PreToolUse payload."""
     if has_secret(payload.raw, payload.input):
         return "block", "secret in tool input", None
-    if payload.tool in READ_ONLY:
-        return "allow", "read-only tool", None
+    if C.never_writes(payload.tool):
+        return "allow", "tool writes no workspace file", None
     base = os.getcwd()
     cwd = payload.input.get("cwd")
     if isinstance(cwd, str) and cwd.strip():
