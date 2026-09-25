@@ -3,6 +3,9 @@
 *.pem
 *.key
 
+# Personal editor and agent settings
+.claude/settings.local.json
+
 # Hosting / recording tooling
 .vercel/
 .obs/

@@ -60,6 +60,8 @@ Coin figures below are estimates. Recalibrate them after T00 and T01 from the ga
 
 ## T00 — probes (every member)
 
+> **Result for m1 (Fri 25 Sep, about 0.93 Bobcoins).** All five hook events fire; Bob sends `hook_event_name`, `tool_name`, `tool_input`, `cwd` and `session_id`. Bob reads `.xlsx` and `.pdf` with its `office_read` tool, which loads the built-in `office-insights` skill (about 7.9k tokens). The first `office_read` was blocked by a guard bug (Roo-era tool names), fixed in b1bb72e with the tool ids read from the installed Bob IDE. Bob then refused to read `workbook/` and `manual/` for the rest of that task, and refused every protected write on its own before the hook was reached; AGENTS.md and the protected-paths rule now say reading is always allowed. Bob also declines throwaway-file steps as busywork. **What to do instead of re-running T00:** start T01 in a new task (a new task does not remember the false block). For the hook demo in the video, type in any Agent-mode task: `Guard test: create harness/_probe.txt containing x.` — Bob attempts it and the hook blocks it.
+
 - **Mode:** Ask for steps 1–3, Agent for steps 4–6, Sheet Translator for step 7, Sheet Analyst for step 8. **Branch:** `bob/t00-probes-<handle>`. **Est.** 0.3–0.8 coins.
 - **Screenshot:** `bob_sessions/<team>_task00_probes_<handle>_summary.png`
 
