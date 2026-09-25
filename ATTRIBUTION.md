@@ -53,6 +53,10 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `.bob/skills/traceability-report/SKILL.md` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
 | `.bob/skills/translate-sheet/SKILL.md` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
 | `.bob/skills/xlsx-dependency-map/SKILL.md` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
+| `.bob/skills/shift-report/SKILL.md` | IBM Bob IDE, automatic migration of `.bob/commands/shift-report.md` on first load (body unchanged) | – | m1 | pending |
+| `.bob/skills/shift-translate/SKILL.md` | IBM Bob IDE, automatic migration of `.bob/commands/shift-translate.md` on first load (body unchanged) | – | m1 | pending |
+| `.bob/skills/shift-triage/SKILL.md` | IBM Bob IDE, automatic migration of `.bob/commands/shift-triage.md` on first load (body unchanged) | – | m1 | pending |
+| `.bob/skills/shift-verify/SKILL.md` | IBM Bob IDE, automatic migration of `.bob/commands/shift-verify.md` on first load (body unchanged) | – | m1 | pending |
 | `.bobignore` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
 | `.dockerignore` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitattributes` | Claude Code (AI agent), scaffold | – | pending | pending |
