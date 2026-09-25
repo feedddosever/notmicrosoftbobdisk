@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="SheetShift uses IBM Bob to turn an insurance rating spreadsheet into owned, tested code, then verifies it cell by cell.">
+<title>SheetShift</title>
+<link rel="stylesheet" href="app.css">
+<script src="site.js" defer></script>
+</head>
+<!-- Page shell by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Element ids used by
+     Bob's scripts are listed in docs/CONTRACT.md, section "Site DOM contract". -->
+<body data-page="index">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html">SheetShift <span>· rating spreadsheets to verified code</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" data-page="index">Overview</a>
+      <a href="verify.html" data-page="verify">Verify</a>
+      <a href="trace.html" data-page="trace">Trace</a>
+      <a href="certificate.html" data-page="certificate">Certificate</a>
+      <a href="replay.html" data-page="replay">Replay</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div id="site-banner" class="notice info" role="note">
+  <p>The Bob run was recorded on [date not recorded yet] and is replayed from task exports and hook logs. The quote API, spot-check and traceability are live. No Bob key is deployed.</p>
+</div>
+<div id="standin-notice" class="notice warn" role="note" hidden></div>
+<section aria-labelledby="pitch">
+  <h1 id="pitch">Your rating spreadsheet, as code you own, checked cell by cell</h1>
+  <p class="lede">SheetShift uses IBM Bob to translate the workbook that prices your policies into a tested Python service.
+  A grader that Bob cannot edit compares every output cell with the original workbook, and a person decides every
+  place where the workbook disagrees with the filed rating manual.</p>
+</section>
+
+<section class="section" aria-labelledby="recon-title">
+  <div class="card">
+    <h2 id="recon-title">Reconciliation</h2>
+    <div id="headline" aria-live="polite"><p class="status-line">Loading the certificate…</p></div>
+    <p class="status-line"><a href="certificate.html">Full certificate</a> · <a href="data/certificate.json">certificate.json</a></p>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="measures-title">
+  <h2 id="measures-title">Measured next to the headline</h2>
+  <div class="grid cols-4">
+    <div class="card"><h3>Harness sensitivity</h3><div id="measure-mutation"></div></div>
+    <div class="card"><h3>What a spot check misses</h3><div id="measure-spotcheck"></div></div>
+    <div class="card"><h3>Traceability</h3><div id="measure-trace"></div></div>
+    <div class="card"><h3>Time</h3><div id="measure-time"></div></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="path-title">
+  <h2 id="path-title">See it in three clicks</h2>
+  <div class="card">
+    <ol class="steps">
+      <li><a href="verify.html">Verify</a>: run Bob's service live on up to 500 recorded policies and compare every output with the recorded workbook values.</li>
+      <li><a href="trace.html">Trace</a>: pick a workbook column and see the function that computes it, with its tests; or pick a function and see its cells.</li>
+      <li><a href="certificate.html">Certificate</a>: the hashes, the signed decisions, the mutation self-test and the limits.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="how-title">
+  <h2 id="how-title">How it works</h2>
+  <div class="grid cols-3">
+    <div class="card"><h3>Map</h3><p>A deterministic tool dumps the workbook's formulas into column rules, splits them into four units and lints the anomalies.</p></div>
+    <div class="card"><h3>Translate</h3><p>IBM Bob plans from the workbook and the manual, then translates each unit in parallel, tagging every function with the cells it covers.</p></div>
+    <div class="card"><h3>Verify</h3><p>The service and a recorded LibreOffice recalculation of the workbook are compared on 10,000 policies, including boundary cases.</p></div>
+    <div class="card"><h3>Triage</h3><p>Mismatches are grouped by root cell. Translation bugs go back to Bob; spreadsheet anomalies go to a person.</p></div>
+    <div class="card"><h3>Decide</h3><p>A teammate acting as pricing lead decides each anomaly, citing the filed manual rule. The decision is logged, never made by Bob.</p></div>
+    <div class="card"><h3>Certify</h3><p>The certificate hashes the workbook, code, grader and inputs, and lists everything that is not verified.</p></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="limits-title">
+  <div class="card">
+    <h2 id="limits-title">Limits</h2>
+    <ul id="limits-static" class="plain-list">
+      <li>Evidence over sampled and boundary inputs, not a formal proof.</li>
+      <li>The oracle is LibreOffice 24.2 with full recalculation forced, not Excel; Excel parity is unverified unless the optional cross-check runs.</li>
+      <li>Macros and VBA are not supported; .xlsm files are never opened.</li>
+      <li>Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are reported as unsupported.</li>
+      <li>External links, array and dynamic-array formulas, data tables and iterative calculation are out of scope.</li>
+      <li>The three anomalies in the demo workbook were seeded by the team, and all data is synthetic.</li>
+    </ul>
+    <ul id="limits-from-certificate" class="plain-list" hidden></ul>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    <p>All data is synthetic. The carrier is Example Mutual Insurance Co. (FICTIONAL), and the three workbook anomalies were seeded on purpose.
+    IBM Bob writes the service and the trace and verify scripts; Claude Code (an AI agent) wrote the harness and these page shells; people decide every anomaly.
+    Commit <span id="build-commit">not recorded yet</span>. <a href="data/site.json">Site data</a>.</p>
+  </div>
+</footer>
+</body>
+</html>

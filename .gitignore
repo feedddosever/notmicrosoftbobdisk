@@ -1,0 +1,25 @@
+# Secrets and credentials
+.env*
+*.pem
+*.key
+
+# Hosting / recording tooling
+.vercel/
+.obs/
+*.mkv
+*.mp4
+
+# Local caches and environments
+build/cache/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Volatile run outputs (the certificate and golden data are committed)
+reports/smoke_last.json
+reports/last_run.json
+
+# Never committed: local planning notes and denylists
+plan/
+.local/

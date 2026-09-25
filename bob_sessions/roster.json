@@ -1,0 +1,11 @@
+{
+ "_about": "Team roster for tools/check_evidence.py: handles only, never names or emails. M1 fills team_slug (decision D1, the registered lablab team name as a lowercase slug of [a-z0-9]) and exports_available (the T00 finding). Delete the members who are not on the team. Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md.",
+ "team_slug": null,
+ "exports_available": null,
+ "members": [
+  {"handle": "m1", "role": "lead; submits"},
+  {"handle": "m2", "role": "member"},
+  {"handle": "m3", "role": "member"},
+  {"handle": "m4", "role": "member"}
+ ]
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Run IBM Bob's rating service live on recorded policies and compare every output with the workbook.">
+<title>Verify · SheetShift</title>
+<link rel="stylesheet" href="app.css">
+<script src="site.js" defer></script>
+<script src="verify.js" defer></script>
+</head>
+<!-- Page shell by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Element ids used by
+     Bob's scripts are listed in docs/CONTRACT.md, section "Site DOM contract". -->
+<body data-page="verify">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html">SheetShift <span>· rating spreadsheets to verified code</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" data-page="index">Overview</a>
+      <a href="verify.html" data-page="verify">Verify</a>
+      <a href="trace.html" data-page="trace">Trace</a>
+      <a href="certificate.html" data-page="certificate">Certificate</a>
+      <a href="replay.html" data-page="replay">Replay</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div id="site-banner" class="notice info" role="note">
+  <p>The Bob run was recorded on [date not recorded yet] and is replayed from task exports and hook logs. The quote API, spot-check and traceability are live. No Bob key is deployed.</p>
+</div>
+<div id="standin-notice" class="notice warn" role="note" hidden></div>
+<h1>Verify live</h1>
+<p class="lede">Bob's service rates up to 500 policies sampled from the recorded verification set, and every one of the
+43 outputs is compared with the value the original workbook produced (LibreOffice, forced full recalculation, recorded).</p>
+
+<div id="verify-pending" class="notice warn" role="note" hidden>
+  <p>The live check script (<code>verify.js</code>, written by IBM Bob in task T10) is not deployed yet.</p>
+</div>
+<div id="verify-offline-banner" class="notice bad" role="status" hidden>
+  <p>API offline: showing precomputed results.</p>
+</div>
+
+<section class="card" aria-labelledby="verify-form-title">
+  <h2 id="verify-form-title">Run a check</h2>
+  <form id="verify-form" class="inline" novalidate>
+    <div><label for="verify-n">Policies (1–500)</label>
+      <input id="verify-n" name="n" type="number" min="1" max="500" step="1" value="200"></div>
+    <div><label for="verify-seed">Sample seed</label>
+      <input id="verify-seed" name="sample_seed" type="number" min="0" step="1" value="7"></div>
+    <div><button id="verify-run" type="submit">Run check</button></div>
+  </form>
+  <p id="verify-status" class="status-line" role="status" aria-live="polite"></p>
+</section>
+
+<section class="section" aria-labelledby="verify-results-title">
+  <h2 id="verify-results-title">Result</h2>
+  <div id="verify-summary" class="card"><p class="empty">No check run yet.</p></div>
+  <div class="grid cols-2">
+    <div class="card"><h3>Oracle</h3><div id="verify-oracle">–</div></div>
+    <div class="card"><h3>Tolerance</h3><div id="verify-tolerance">–</div></div>
+  </div>
+  <h3 class="section">Mismatches</h3>
+  <div id="verify-mismatches"><p class="empty">None to show.</p></div>
+</section>
+
+<section class="section" aria-labelledby="quote-title">
+  <h2 id="quote-title">Rate one policy</h2>
+  <div class="card">
+    <form id="quote-form" novalidate>
+      <label for="quote-input">Policy (JSON with the 14 inputs; nothing is stored)</label>
+      <textarea id="quote-input" name="policy" spellcheck="false"></textarea>
+      <div class="controls"><button id="quote-submit" type="submit">Quote</button>
+        <button id="quote-example" type="button" class="secondary">Load an example</button></div>
+    </form>
+    <p id="quote-status" class="status-line" role="status" aria-live="polite"></p>
+    <div id="quote-output"></div>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    <p>All data is synthetic. The carrier is Example Mutual Insurance Co. (FICTIONAL), and the three workbook anomalies were seeded on purpose.
+    IBM Bob writes the service and the trace and verify scripts; Claude Code (an AI agent) wrote the harness and these page shells; people decide every anomaly.
+    Commit <span id="build-commit">not recorded yet</span>. <a href="data/site.json">Site data</a>.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="A replay of the recorded IBM Bob run behind SheetShift, built from task exports, hook logs and commits.">
+<title>Replay · SheetShift</title>
+<link rel="stylesheet" href="app.css">
+<script src="site.js" defer></script>
+</head>
+<!-- Page shell by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Element ids used by
+     Bob's scripts are listed in docs/CONTRACT.md, section "Site DOM contract". -->
+<body data-page="replay">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html">SheetShift <span>· rating spreadsheets to verified code</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" data-page="index">Overview</a>
+      <a href="verify.html" data-page="verify">Verify</a>
+      <a href="trace.html" data-page="trace">Trace</a>
+      <a href="certificate.html" data-page="certificate">Certificate</a>
+      <a href="replay.html" data-page="replay">Replay</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div id="site-banner" class="notice info" role="note">
+  <p>The Bob run was recorded on [date not recorded yet] and is replayed from task exports and hook logs. The quote API, spot-check and traceability are live. No Bob key is deployed.</p>
+</div>
+<div id="standin-notice" class="notice warn" role="note" hidden></div>
+<p><span class="replay-label">Replay of a recorded run</span></p>
+<h1>Replay of the recorded Bob run</h1>
+<p class="lede">Nothing on this page runs Bob. It replays what happened during the recorded run, built only from the
+hook audit logs, the run log, <code>bob_sessions/INDEX.md</code>, task exports and commits. Each event links to its commit
+and screenshot.</p>
+
+<section class="card controls" id="replay-controls" aria-label="Replay controls">
+  <div><button id="replay-play" type="button">Play from start</button></div>
+  <div><button id="replay-prev" type="button" class="secondary" aria-label="Previous event">Back</button></div>
+  <div><button id="replay-next" type="button" class="secondary" aria-label="Next event">Forward</button></div>
+  <div><button id="replay-end" type="button" class="secondary">Show all</button></div>
+  <div><label for="replay-speed">Speed</label>
+    <select id="replay-speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></div>
+  <div><label for="replay-member">Member</label>
+    <select id="replay-member"><option value="">Everyone</option></select></div>
+  <p id="replay-status" class="status-line" role="status" aria-live="polite"></p>
+</section>
+
+<section class="section" aria-labelledby="replay-tasks-title">
+  <h2 id="replay-tasks-title">Tasks</h2>
+  <div id="replay-tasks"><p class="status-line">Loading…</p></div>
+</section>
+
+<section class="section" aria-labelledby="replay-events-title">
+  <h2 id="replay-events-title">Timeline</h2>
+  <ol id="replay-timeline" class="timeline"></ol>
+  <div id="replay-sources"></div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    <p>All data is synthetic. The carrier is Example Mutual Insurance Co. (FICTIONAL), and the three workbook anomalies were seeded on purpose.
+    IBM Bob writes the service and the trace and verify scripts; Claude Code (an AI agent) wrote the harness and these page shells; people decide every anomaly.
+    Commit <span id="build-commit">not recorded yet</span>. <a href="data/site.json">Site data</a>.</p>
+  </div>
+</footer>
+</body>
+</html>

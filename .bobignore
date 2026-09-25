@@ -1,0 +1,9 @@
+golden/
+build/cache/
+public/data/
+bob_sessions/
+presentation/
+audit/
+*.csv.gz
+.env*
+spikes/

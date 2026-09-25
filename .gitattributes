@@ -1,0 +1,9 @@
+# Append-only logs written by several members: keep both sides on merge.
+audit/**/*.jsonl merge=union
+reports/run_log.jsonl merge=union
+
+# Binary artefacts: never diff or normalise line endings.
+*.xlsx binary
+*.gz binary
+*.pdf binary
+*.png binary

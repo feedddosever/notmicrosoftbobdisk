@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="SheetShift equivalence certificate: reconciliation, decisions, mutation self-test, spot check and hashes.">
+<title>Certificate · SheetShift</title>
+<link rel="stylesheet" href="app.css">
+<script src="site.js" defer></script>
+</head>
+<!-- Page shell by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Element ids used by
+     Bob's scripts are listed in docs/CONTRACT.md, section "Site DOM contract". -->
+<body data-page="certificate">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html">SheetShift <span>· rating spreadsheets to verified code</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" data-page="index">Overview</a>
+      <a href="verify.html" data-page="verify">Verify</a>
+      <a href="trace.html" data-page="trace">Trace</a>
+      <a href="certificate.html" data-page="certificate">Certificate</a>
+      <a href="replay.html" data-page="replay">Replay</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div id="site-banner" class="notice info" role="note">
+  <p>The Bob run was recorded on [date not recorded yet] and is replayed from task exports and hook logs. The quote API, spot-check and traceability are live. No Bob key is deployed.</p>
+</div>
+<div id="standin-notice" class="notice warn" role="note" hidden></div>
+<h1>Certificate</h1>
+<p class="lede">Written by the harness (<code>python -m harness.certify</code>), never by Bob. Raw files:
+<a href="data/certificate.json">certificate.json</a> · <a href="data/certificate_report.html">harness HTML report</a> ·
+<a href="data/traceability.json">traceability.json</a> · <a href="data/mutation.json">mutation.json</a> ·
+<a href="data/spotcheck.json">spotcheck.json</a> · <a href="data/decisions.json">decisions.json</a>.</p>
+
+<section class="card" aria-labelledby="c-id"><h2 id="c-id">Run</h2><div id="cert-identity"><p class="status-line">Loading…</p></div></section>
+<section class="card" aria-labelledby="c-orig"><h2 id="c-orig">Reconciliation</h2><div id="cert-original"></div></section>
+<section class="card" aria-labelledby="c-groups"><h2 id="c-groups">Mismatch groups</h2><div id="cert-groups"></div></section>
+<section class="card" aria-labelledby="c-dec"><h2 id="c-dec">Decisions</h2><div id="cert-decisions"></div></section>
+<section class="card" aria-labelledby="c-lints"><h2 id="c-lints">Seeded workbook anomalies (static lints)</h2><div id="cert-lints"></div></section>
+<section class="card" aria-labelledby="c-mut"><h2 id="c-mut">Mutation self-test</h2><div id="cert-mutation"></div></section>
+<section class="card" aria-labelledby="c-spot"><h2 id="c-spot">Spot check</h2><div id="cert-spotcheck"></div></section>
+<section class="card" aria-labelledby="c-hash"><h2 id="c-hash">Hashes</h2><div id="cert-hashes"></div></section>
+<section class="card" aria-labelledby="c-lim"><h2 id="c-lim">Limits</h2><div id="cert-limits"></div></section>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    <p>All data is synthetic. The carrier is Example Mutual Insurance Co. (FICTIONAL), and the three workbook anomalies were seeded on purpose.
+    IBM Bob writes the service and the trace and verify scripts; Claude Code (an AI agent) wrote the harness and these page shells; people decide every anomaly.
+    Commit <span id="build-commit">not recorded yet</span>. <a href="data/site.json">Site data</a>.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+ "_about": "Provenance of the recorded LibreOffice oracle (the only golden file with timestamps). Written by harness/oracle_lo.py.",
+ "original": {
+  "engine": "LibreOffice",
+  "version": "24.2.7.2",
+  "version_string": "LibreOffice 24.2.7.2 420(Build:2)",
+  "label": "LibreOffice 24.2.7.2, recorded, golden seed 2026",
+  "recalc": "forced full recalculation on load (OOXMLRecalcMode=0, ODFRecalcMode=0)",
+  "profile": "harness/lo_profile/registrymodifications.xcu",
+  "profile_sha256": "02812278eb685eda79207833194d1f07b36acabdfc465c0a707a1a50063363d5",
+  "seed": 2026,
+  "rows": 10000,
+  "columns": 43,
+  "inputs_sha256": "8334d8a2c55902797826c0b77171a7b002dc925db8087039e8ec33a7298b1e94",
+  "workbook": "workbook/example_mutual_ho3_rater.xlsx",
+  "workbook_sha256": "7fb6363ba5136e18596506d29a95026548af9d883942edeae54f33214b1e83c4",
+  "expanded_sha256": "76de499b1fb18a992ff9cfaa36a40e455f2b7002f5942ec4849a7e1c59429588",
+  "csv": "golden/oracle_2026_Calc.csv.gz",
+  "csv_gz_sha256": "6e8e2764d0908ce9dbf01a5bb138d4f987fed31dc88a513528382e78640ad5f7",
+  "csv_sha256": "623743e660aaf5b598609235442e1358e7af330f5ebd1e706206c6c52398fd8d",
+  "error_cells": {
+   "#N/A": 16
+  },
+  "seconds_recalc": 6.28,
+  "generated_at": "2026-09-25T18:13:09+00:00"
+ }
+}

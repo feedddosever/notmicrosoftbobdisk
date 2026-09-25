@@ -1,0 +1,173 @@
+# SheetShift CI (plan section 6.8). A member makes the "verify" checks required in the repo settings.
+# Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
+name: verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      require_green:
+        description: "Fail unless the certificate status is GREEN"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hygiene:
+    name: secrets, names and separation of duties
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Forbidden file names
+        run: |
+          # Planning files never enter the repo. Patterns are split so this file does not match itself.
+          p1="jud""ge"; p2="ideas""_data"
+          bad=$(git ls-files | grep -iE "(^|/)[^/]*(${p1}|${p2})[^/]*$" || true)
+          if [ -n "$bad" ]; then echo "::error::forbidden file names:"; echo "$bad"; exit 1; fi
+          if git grep -I -n -i "${p1^} map" -- . ; then echo "::error::planning notes found"; exit 1; fi
+
+      - name: Carrier name and personal data
+        run: |
+          # The spike's old carrier name must never appear (split so this file does not match).
+          old="Gull""wing"
+          if git grep -I -n -i "$old" -- . ; then echo "::error::old carrier name found"; exit 1; fi
+          # Email addresses: only GitHub/Anthropic noreply addresses are allowed.
+          emails=$(git grep -I -h -o -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' -- . ':!*.gz' ':!*.xlsx' ':!*.pdf' \
+                   | grep -v -i -E '(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$' | sort -u || true)
+          if [ -n "$emails" ]; then echo "::error::email addresses in tracked files:"; echo "$emails" | sed -E 's/^(.).*@/\1***@/'; exit 1; fi
+          # North American phone numbers in text (data files excluded).
+          if git grep -I -n -E '(\+1[ .-]?)?\(?\b[2-9][0-9]{2}\)?[ .-][2-9][0-9]{2}[ .-][0-9]{4}\b' -- . ':!golden/**' ':!build/**' ':!*.gz'; then
+            echo "::error::phone-number pattern found"; exit 1; fi
+
+      - name: Commit author emails are noreply addresses
+        run: |
+          bad=$(git log --all --format='%ae%n%ce' | sort -u \
+                | grep -v -i -E '(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$' || true)
+          if [ -n "$bad" ]; then echo "::error::non-noreply author or committer emails:"; echo "$bad" | sed -E 's/^(.).*@/\1***@/'; exit 1; fi
+
+      - name: Secret scan (gitleaks, full history and evidence folder)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -v "$GITHUB_WORKSPACE:/repo" \
+            ghcr.io/gitleaks/gitleaks:v8.21.2 git /repo --redact --verbose --exit-code 1
+          if [ -d bob_sessions ]; then
+            docker run --rm --user "$(id -u):$(id -g)" -v "$GITHUB_WORKSPACE:/repo" \
+              ghcr.io/gitleaks/gitleaks:v8.21.2 dir /repo/bob_sessions --redact --verbose --exit-code 1
+          fi
+
+      - name: Bob-Task commits never touch protected paths; harness tree hash
+        run: python3 tools/check_protected.py
+
+      - name: Evidence folder, trailers and attribution
+        run: python3 tools/check_evidence.py --no-blame
+
+  build:
+    name: map, tests, harness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install LibreOffice Calc (the oracle) and poppler
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends libreoffice-calc poppler-utils
+          soffice --version
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Map is deterministic and committed
+        run: |
+          make map
+          git diff --exit-code build/
+
+      - name: Brief size limits
+        run: |
+          test "$(wc -c < build/sheets/Calc.md)" -lt 15000
+          for f in build/units/U*.md; do test "$(wc -c < "$f")" -lt 5000 || { echo "::error::$f is 5000+ chars"; exit 1; }; done
+
+      - name: Manual PDF is readable
+        run: test "$(pdftotext manual/example_mutual_ho3_rating_manual.pdf - | grep -c R-205)" -ge 1
+
+      - name: Tests (service tests, harness self-check, guard, no-env)
+        run: python -m pytest -q tests tools/tests
+
+      - name: Bob pack (modes, hooks, skills, commands)
+        run: python3 tools/check_modes.py
+
+      - name: License gate (runtime dependencies)
+        run: python3 tools/license_gate.py
+
+      - name: Did workbook/ or decisions/ change?
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then base=$(git rev-list --max-parents=0 HEAD | tail -n1); fi
+          if git diff --name-only "$base" HEAD | grep -qE '^(workbook|decisions)/'; then
+            echo "oracle=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "oracle=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Recompute the oracle (make oracle patch) and compare with the committed golden data
+        if: steps.changes.outputs.oracle == 'true'
+        run: |
+          make oracle
+          if [ -s decisions/decisions.jsonl ]; then make patch; fi
+          git diff --exit-code -- 'golden/*.csv.gz' 'golden/inputs_*.json.gz'
+
+      - name: Harness on Bob's service (verify, mutate, spot, certify)
+        id: harness
+        run: |
+          if [ ! -f service/sheetshift_ho3/rater.py ]; then
+            echo "service not written yet; harness stages skipped"; echo "status=PENDING" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          make verify mutate spot
+          make certify || true
+          status=$(python3 -c "import json; print(json.load(open('reports/certificate.json'))['status'])")
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          echo "### Certificate: $status" >> "$GITHUB_STEP_SUMMARY"
+          python3 -c "import json; c=json.load(open('reports/certificate.json')); o=c['original']; print('cells compared %s, equal %s, unexplained %s' % (o['cells_compared'], o['cells_equal'], o['unexplained_cells']))" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Require a GREEN certificate (manual runs only)
+        if: github.event_name == 'workflow_dispatch' && inputs.require_green
+        run: test "${{ steps.harness.outputs.status }}" = "GREEN"
+
+      - name: Site data builds
+        run: python3 -m tools.build_site_data --out "$RUNNER_TEMP/site-data"
+
+      - name: Import smoke from a clean checkout without build/ and golden/
+        run: |
+          tmp="$RUNNER_TEMP/clean"; mkdir -p "$tmp"
+          git archive HEAD | tar -x -C "$tmp"
+          rm -rf "$tmp/build" "$tmp/golden"
+          cd "$tmp"
+          python -c "import api.index as m; print('api entry point:', type(m.app).__name__)"
+          if [ -f service/sheetshift_ho3/api.py ]; then python -c "import service.sheetshift_ho3.api"; fi

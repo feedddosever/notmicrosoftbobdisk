@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/session_status.py"}]}
+    ],
+    "UserPromptSubmit": [
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/prompt_context.py", "timeout": 5}]}
+    ],
+    "PreToolUse": [
+      {"matcher": "^(write_file|apply_diff|search_and_replace|insert_content|execute_command)$",
+       "hooks": [{"type": "command", "command": "python3 .bob/hooks/guard.py", "timeout": 5}]}
+    ],
+    "PostToolUse": [
+      {"matcher": "^(write_file|apply_diff|search_and_replace|insert_content)$",
+       "hooks": [{"type": "command", "command": "python3 .bob/hooks/post_edit.py", "timeout": 20}]}
+    ],
+    "Stop": [
+      {"hooks": [{"type": "command", "command": "python3 .bob/hooks/stop_report.py", "timeout": 30}]}
+    ]
+  }
+}

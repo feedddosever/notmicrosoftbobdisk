@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="Workbook cell to service code traceability for the SheetShift rating service.">
+<title>Trace · SheetShift</title>
+<link rel="stylesheet" href="app.css">
+<script src="site.js" defer></script>
+<script src="trace.js" defer></script>
+</head>
+<!-- Page shell by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Element ids used by
+     Bob's scripts are listed in docs/CONTRACT.md, section "Site DOM contract". -->
+<body data-page="trace">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="index.html">SheetShift <span>· rating spreadsheets to verified code</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html" data-page="index">Overview</a>
+      <a href="verify.html" data-page="verify">Verify</a>
+      <a href="trace.html" data-page="trace">Trace</a>
+      <a href="certificate.html" data-page="certificate">Certificate</a>
+      <a href="replay.html" data-page="replay">Replay</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<div id="site-banner" class="notice info" role="note">
+  <p>The Bob run was recorded on [date not recorded yet] and is replayed from task exports and hook logs. The quote API, spot-check and traceability are live. No Bob key is deployed.</p>
+</div>
+<div id="standin-notice" class="notice warn" role="note" hidden></div>
+<h1>Trace a cell to its code</h1>
+<p class="lede">Every workbook rule is tagged in the service with <code>@covers("Calc!&lt;col&gt;", "&lt;output&gt;")</code>.
+Pick a column to see the function that computes it and the tests that exercise it, or pick a function to see the cells it covers.</p>
+
+<div id="trace-pending" class="notice warn" role="note" hidden>
+  <p>The trace script (<code>trace.js</code>, written by IBM Bob in task T10) is not deployed yet. The raw data is in
+  <a href="data/traceability.json">traceability.json</a>.</p>
+</div>
+
+<div id="trace-coverage" class="card"><p class="status-line">Coverage appears here.</p></div>
+
+<section class="section" aria-labelledby="trace-pick-title">
+  <h2 id="trace-pick-title">Pick</h2>
+  <div class="card controls">
+    <div><label for="trace-search">Filter</label>
+      <input id="trace-search" type="search" placeholder="column, output name or function" autocomplete="off"></div>
+    <div><label for="trace-cell-picker">Workbook rule</label>
+      <select id="trace-cell-picker"><option value="">Choose a cell…</option></select></div>
+    <div><label for="trace-function-picker">Service function</label>
+      <select id="trace-function-picker"><option value="">Choose a function…</option></select></div>
+  </div>
+  <p id="trace-status" class="status-line" role="status" aria-live="polite"></p>
+</section>
+
+<section class="grid cols-2" aria-label="Details">
+  <div class="card"><h3>Cell</h3><div id="trace-cell-detail"><p class="empty">No cell selected.</p></div></div>
+  <div class="card"><h3>Function</h3><div id="trace-function-detail"><p class="empty">No function selected.</p></div></div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="inner">
+    <p>All data is synthetic. The carrier is Example Mutual Insurance Co. (FICTIONAL), and the three workbook anomalies were seeded on purpose.
+    IBM Bob writes the service and the trace and verify scripts; Claude Code (an AI agent) wrote the harness and these page shells; people decide every anomaly.
+    Commit <span id="build-commit">not recorded yet</span>. <a href="data/site.json">Site data</a>.</p>
+  </div>
+</footer>
+</body>
+</html>

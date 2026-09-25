@@ -1,0 +1,4 @@
+# Runtime dependencies (permissive licences only: fastapi MIT, pydantic MIT).
+# Only service/sheetshift_ho3/api.py imports these; the rater itself is stdlib-only.
+fastapi>=0.115,<0.142
+pydantic>=2.9,<3

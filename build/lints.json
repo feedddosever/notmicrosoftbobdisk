@@ -1,0 +1,58 @@
+{
+ "_about": "Spreadsheet-anomaly lints; a person decides each.",
+ "workbook_sha256": "7fb6363ba5136e18596506d29a95026548af9d883942edeae54f33214b1e83c4",
+ "count": 3,
+ "lints": [
+  {
+   "id": "A1",
+   "type": "range_short_of_table",
+   "sheet": "Calc",
+   "column": "O",
+   "output_name": "ded_factor",
+   "cell": "Calc!O",
+   "cells": "Calc!O2:O41",
+   "row": null,
+   "formula": "=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)",
+   "column_rule": "=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)",
+   "range": "RateTables!$A$31:$B$35",
+   "table_block": "RateTables!A31:B36",
+   "rows_missing": 1,
+   "missing_keys": [10000],
+   "named_ranges_covering_block": ["DedBands"],
+   "manual_rule": "R-205",
+   "options": ["keep-workbook", "adopt-manual", "escalate"],
+   "status": "open"
+  },
+  {
+   "id": "A2",
+   "type": "hardcoded_value_in_formula_column",
+   "sheet": "Calc",
+   "column": "AM",
+   "output_name": "tax",
+   "cell": "Calc!AM17",
+   "cells": "Calc!AM17",
+   "row": 17,
+   "formula": "48.17",
+   "column_rule": "=ROUND((AJ17+AK17)*G17,2)",
+   "value": 48.17,
+   "manual_rule": "R-510",
+   "options": ["adopt-manual", "escalate"],
+   "status": "open"
+  },
+  {
+   "id": "A3",
+   "type": "inconsistent_formula",
+   "sheet": "Calc",
+   "column": "X",
+   "output_name": "credit_pct",
+   "cell": "Calc!X31",
+   "cells": "Calc!X31",
+   "row": 31,
+   "formula": "=W31",
+   "column_rule": "=MIN(W31,CreditCap)",
+   "manual_rule": "R-310",
+   "options": ["adopt-manual", "escalate"],
+   "status": "open"
+  }
+ ]
+}

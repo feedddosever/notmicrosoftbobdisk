@@ -1,0 +1,57 @@
+# SheetShift project modes. Drafted by Claude Code (AI agent); reviewed by a member; see ATTRIBUTION.md.
+# Checked by tools/check_modes.py (every fileRegex compiles; each task's outputs match its mode).
+# fileRegex is anchored to the workspace-relative path; "(\./)?" tolerates a leading "./".
+# allowedSubagents is added in a separate commit after T00 confirms these 4 modes load.
+customModes:
+  - slug: sheet-analyst
+    name: Sheet Analyst
+    description: Reads workbook, manual and harness output; writes notes only
+    roleDefinition: You analyse a rating workbook against its filed manual. You never change code or decide anomalies.
+    whenToUse: Anomaly briefs, manual adjudication, design review.
+    customInstructions: Quote manual rule numbers verbatim with page. Never touch decisions/.
+    groups:
+      - read
+      - - edit
+        - fileRegex: "^(\\./)?docs/(anomalies|notes|design)/[^/]+\\.md$"
+          description: Notes, briefs and design docs only
+      - skill
+  - slug: sheet-translator
+    name: Sheet Translator
+    description: Writes tagged Python for workbook formula columns
+    roleDefinition: You translate spreadsheet formulas into small pure Python functions tagged with the cells they cover.
+    whenToUse: Translating units, fixing translation bugs, applying human decisions.
+    customInstructions: Follow .bob/rules. Read only the unit files you are given.
+    groups:
+      - read
+      - - edit
+        - fileRegex: "^(\\./)?(service|tests)/.*\\.(py|json)$"
+          description: Service and test code only
+      - execute
+      - skill
+      - subagent
+  - slug: sheet-verifier
+    name: Sheet Verifier
+    description: Runs the harness and reports results verbatim
+    roleDefinition: You run the equivalence harness and report results exactly as produced.
+    whenToUse: /shift-verify, /shift-report, run summaries.
+    customInstructions: Never paraphrase numbers; quote reports/*.json fields.
+    groups:
+      - read
+      - execute
+      - - edit
+        - fileRegex: "^(\\./)?(reports/notes/[^/]+\\.md|docs/bob_run_summary\\.html|docs/architecture\\.md|docs/how_it_works\\.md)$"
+          description: Run notes and run summary only
+      - skill
+  - slug: sheet-triage
+    name: Sheet Triage
+    description: Classifies mismatches and fixes translation bugs
+    roleDefinition: You classify each mismatch group and fix only translation bugs.
+    whenToUse: After /shift-verify reports mismatches.
+    customInstructions: A group joined to a lint is never a translation bug. Never change tolerance.
+    groups:
+      - read
+      - execute
+      - - edit
+        - fileRegex: "^(\\./)?((service|tests)/.*\\.(py|json)|docs/anomalies/[^/]+\\.md|reports/notes/[^/]+\\.md)$"
+          description: Service fixes, briefs and triage notes
+      - skill

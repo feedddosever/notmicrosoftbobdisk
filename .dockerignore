@@ -1,0 +1,10 @@
+# Docker build context for the API container: allow-list only what the API needs at runtime.
+# Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
+*
+!requirements.txt
+!sheetshift.json
+!api/
+!service/
+!reports/*.json
+**/__pycache__
+**/*.pyc

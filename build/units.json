@@ -1,0 +1,38 @@
+{
+ "U1": {
+  "columns": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
+  "outputs": ["policy_id", "home_age", "roof_age_used", "aoi_units", "base_rate", "hurr_rate", "tax_rate", "base_premium", "constr_factor", "constr_hurr_factor"],
+  "inputs": ["policy_id", "zone", "construction", "year_built", "roof_age", "coverage_a", "effective_date"],
+  "upstream": [],
+  "cells": ["Calc!A", "Calc!B", "Calc!C", "Calc!D", "Calc!E", "Calc!F", "Calc!G", "Calc!H", "Calc!I", "Calc!J"],
+  "range": "Calc!A:J",
+  "lints": []
+ },
+ "U2": {
+  "columns": ["K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"],
+  "outputs": ["pc_factor", "age_factor", "roof_factor", "aoi_factor", "ded_factor", "claims_factor", "aop_premium", "alarm_flag", "claims_free_flag", "new_home_flag"],
+  "inputs": ["construction", "protection_class", "coverage_a", "deductible", "alarm", "claims_3yr"],
+  "upstream": ["home_age", "roof_age_used", "base_premium", "constr_factor"],
+  "cells": ["Calc!K", "Calc!L", "Calc!M", "Calc!N", "Calc!O", "Calc!P", "Calc!Q", "Calc!R", "Calc!S", "Calc!T"],
+  "range": "Calc!K:T",
+  "lints": ["A1"]
+ },
+ "U3": {
+  "columns": ["U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD"],
+  "outputs": ["mit_basic_flag", "mit_fort_flag", "credit_raw", "credit_pct", "aop_net", "hurr_pct_used", "hurr_ded_factor", "wind_mit_factor", "hurr_premium", "hurr_capped"],
+  "inputs": ["coverage_a", "hurr_ded_pct", "wind_mit"],
+  "upstream": ["aoi_units", "hurr_rate", "constr_hurr_factor", "aop_premium", "alarm_flag", "claims_free_flag", "new_home_flag"],
+  "cells": ["Calc!U", "Calc!V", "Calc!W", "Calc!X", "Calc!Y", "Calc!Z", "Calc!AA", "Calc!AB", "Calc!AC", "Calc!AD"],
+  "range": "Calc!U:AD",
+  "lints": ["A3"]
+ },
+ "U4": {
+  "columns": ["AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ"],
+  "outputs": ["subtotal", "exp_date", "term_factor", "term_premium", "min_applied", "premium_rounded", "policy_fee", "assessment", "tax", "total_due", "refer_flag", "rate_per_1000", "rate_class"],
+  "inputs": ["zone", "construction", "protection_class", "coverage_a", "claims_3yr", "effective_date", "term_months"],
+  "upstream": ["roof_age_used", "aoi_units", "tax_rate", "aop_net", "hurr_capped"],
+  "cells": ["Calc!AE", "Calc!AF", "Calc!AG", "Calc!AH", "Calc!AI", "Calc!AJ", "Calc!AK", "Calc!AL", "Calc!AM", "Calc!AN", "Calc!AO", "Calc!AP", "Calc!AQ"],
+  "range": "Calc!AE:AQ",
+  "lints": ["A2"]
+ }
+}

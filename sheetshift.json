@@ -1,0 +1,61 @@
+{
+  "_about": "Workbook layout for the SheetShift harness and mapping tools. FICTIONAL carrier; all data synthetic. Protected: edited by people only.",
+  "carrier": "Example Mutual Insurance Co. (FICTIONAL)",
+  "workbook": "workbook/example_mutual_ho3_rater.xlsx",
+  "sheets": {
+    "inputs": "Policies",
+    "tables": "RateTables",
+    "calc": "Calc",
+    "summary": "Summary",
+    "about": "About"
+  },
+  "id_column": "policy_id",
+  "id_column_letter": "A",
+  "header_row": 1,
+  "first_data_row": 2,
+  "n_rows": 40,
+  "last_data_row": 41,
+  "inputs": [
+    "policy_id", "zone", "construction", "protection_class", "year_built", "roof_age",
+    "coverage_a", "deductible", "hurr_ded_pct", "alarm", "wind_mit", "claims_3yr",
+    "effective_date", "term_months"
+  ],
+  "input_columns": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"],
+  "outputs": [
+    "policy_id", "home_age", "roof_age_used", "aoi_units", "base_rate", "hurr_rate", "tax_rate",
+    "base_premium", "constr_factor", "constr_hurr_factor", "pc_factor", "age_factor", "roof_factor",
+    "aoi_factor", "ded_factor", "claims_factor", "aop_premium", "alarm_flag", "claims_free_flag",
+    "new_home_flag", "mit_basic_flag", "mit_fort_flag", "credit_raw", "credit_pct", "aop_net",
+    "hurr_pct_used", "hurr_ded_factor", "wind_mit_factor", "hurr_premium", "hurr_capped", "subtotal",
+    "exp_date", "term_factor", "term_premium", "min_applied", "premium_rounded", "policy_fee",
+    "assessment", "tax", "total_due", "refer_flag", "rate_per_1000", "rate_class"
+  ],
+  "output_columns": [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
+    "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ",
+    "AK", "AL", "AM", "AN", "AO", "AP", "AQ"
+  ],
+  "date_outputs": ["exp_date"],
+  "summary_cells": ["B2", "B3", "B4", "B5", "B6"],
+  "service": {"module": "service.sheetshift_ho3.rater", "function": "quote"},
+  "units": {"count": 4, "target_starts": ["A", "K", "U", "AE"]},
+  "manual": "manual/example_mutual_ho3_rating_manual.pdf",
+  "manual_rules": {
+    "base_rate": "R-900", "hurr_rate": "R-900", "tax_rate": "R-900",
+    "base_premium": "R-100", "aop_premium": "R-100", "aop_net": "R-100", "subtotal": "R-100",
+    "ded_factor": "R-205",
+    "alarm_flag": "R-310", "claims_free_flag": "R-320", "new_home_flag": "R-310",
+    "mit_basic_flag": "R-310", "mit_fort_flag": "R-310", "credit_raw": "R-310", "credit_pct": "R-310",
+    "hurr_pct_used": "R-410", "hurr_ded_factor": "R-410", "wind_mit_factor": "R-410",
+    "hurr_premium": "R-410", "hurr_capped": "R-410",
+    "exp_date": "R-420", "term_factor": "R-420", "term_premium": "R-420", "min_applied": "R-420",
+    "premium_rounded": "R-110",
+    "policy_fee": "R-510", "assessment": "R-510", "tax": "R-510", "total_due": "R-510",
+    "refer_flag": "R-520"
+  },
+  "anomaly_options": {
+    "range_short_of_table": ["keep-workbook", "adopt-manual", "escalate"],
+    "hardcoded_value_in_formula_column": ["adopt-manual", "escalate"],
+    "inconsistent_formula": ["adopt-manual", "escalate"]
+  }
+}

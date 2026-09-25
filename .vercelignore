@@ -1,0 +1,19 @@
+# Not deployed to Vercel (plan section 3.3). Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
+bob_sessions/
+golden/
+workbook/
+manual/
+presentation/
+harness/lo_profile/
+build/
+audit/
+tests/
+tools/tests/
+.bob/
+.github/
+.venv/
+.env*
+*.mp4
+*.mkv
+__pycache__/
+*.pyc
