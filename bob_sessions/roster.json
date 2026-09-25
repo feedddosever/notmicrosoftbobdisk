@@ -1,11 +1,11 @@
 {
- "_about": "Team roster for tools/check_evidence.py: handles only, never names or emails. M1 fills team_slug (decision D1, the registered lablab team name as a lowercase slug of [a-z0-9]) and exports_available (the T00 finding). Delete the members who are not on the team. Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md.",
- "team_slug": null,
+ "_about": "Team roster for tools/check_evidence.py: handles only, never names or emails. SheetShift is built by one person (handle m1), who runs every Bob task, acts as pricing lead for the anomaly decisions and submits. team_slug is the registered lablab team name as a lowercase slug of [a-z0-9]; exports_available is the T00 finding. Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md.",
+ "team_slug": "sheetshift",
  "exports_available": null,
  "members": [
-  {"handle": "m1", "role": "lead; submits"},
-  {"handle": "m2", "role": "member"},
-  {"handle": "m3", "role": "member"},
-  {"handle": "m4", "role": "member"}
+  {
+   "handle": "m1",
+   "role": "solo builder; runs every Bob task; pricing lead for decisions; submits"
+  }
  ]
 }

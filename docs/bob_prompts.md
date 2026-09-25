@@ -3,6 +3,8 @@
 These are the prompts members paste into IBM Bob, one task at a time. Each task lists its mode, prompt, expected output, screenshot name and INDEX row.
 Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member reviews it before T00.
 
+> **Solo build (one person, handle `m1`).** Run the tasks in this order: T00, T01, T02, T03, then T05 and T06 as two Bob tasks running at the same time (start T05, open a new task for T06 while T05 works), then your own decisions, T07, T04, T08, T09, and T10 only if you have used fewer than 24 Bobcoins after T09. You act as pricing lead in the decision step. Per-task branches are optional when solo: commit each task on the integration branch with a `Bob-Task: TNN (m1)` trailer.
+
 ## Pre-flight checklist (every member, before T00)
 
 - [ ] **Bob IDE 2.0.2 or later.** 2.0.3 is recommended. Versions 1.0.3 and 2.0.0 stop working on 30 Sep 2026.
@@ -166,7 +168,7 @@ For each PENDING entry in @reports/decision_queue.json, use the manual-adjudicat
 
 ## People step — decisions (no Bob)
 
-A teammate acting as pricing lead runs `tools/decide.py` in a terminal for each anomaly, for example:
+A person acting as pricing lead (when solo, you) runs `tools/decide.py` in a terminal for each anomaly, for example:
 
 ```
 python3 tools/decide.py D-001 --option adopt-manual --by m1 --rule R-205 --why "Manual includes $10,000 band; workbook range truncated"
