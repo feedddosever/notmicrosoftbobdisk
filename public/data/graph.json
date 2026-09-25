@@ -1,0 +1,1160 @@
+{
+ "_about": "Example Mutual Insurance Co. (FICTIONAL): dependency graph of the synthetic workbook. Generated; do not edit.",
+ "workbook": "workbook/example_mutual_ho3_rater.xlsx",
+ "workbook_sha256": "7fb6363ba5136e18596506d29a95026548af9d883942edeae54f33214b1e83c4",
+ "sheets": ["Policies", "RateTables", "Calc", "Summary", "About"],
+ "layout": {
+  "header_row": 1,
+  "first_data_row": 2,
+  "last_data_row": 41,
+  "n_rows": 40
+ },
+ "inputs": [
+  {
+   "name": "policy_id",
+   "col": "A"
+  },
+  {
+   "name": "zone",
+   "col": "B"
+  },
+  {
+   "name": "construction",
+   "col": "C"
+  },
+  {
+   "name": "protection_class",
+   "col": "D"
+  },
+  {
+   "name": "year_built",
+   "col": "E"
+  },
+  {
+   "name": "roof_age",
+   "col": "F"
+  },
+  {
+   "name": "coverage_a",
+   "col": "G"
+  },
+  {
+   "name": "deductible",
+   "col": "H"
+  },
+  {
+   "name": "hurr_ded_pct",
+   "col": "I"
+  },
+  {
+   "name": "alarm",
+   "col": "J"
+  },
+  {
+   "name": "wind_mit",
+   "col": "K"
+  },
+  {
+   "name": "claims_3yr",
+   "col": "L"
+  },
+  {
+   "name": "effective_date",
+   "col": "M"
+  },
+  {
+   "name": "term_months",
+   "col": "N"
+  }
+ ],
+ "columns": [
+  {
+   "col": "A",
+   "cell": "Calc!A",
+   "output_name": "policy_id",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=Policies!R[0]C[0]",
+   "template_a1": "=Policies!A2",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["policy_id"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": [],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 0,
+   "unit": "U1"
+  },
+  {
+   "col": "B",
+   "cell": "Calc!B",
+   "output_name": "home_age",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IFERROR(DATEDIF(DATE(Policies!R[0]C[3],1,1),Policies!R[0]C[11],\"y\"),0)",
+   "template_a1": "=IFERROR(DATEDIF(DATE(Policies!E2,1,1),Policies!M2,\"y\"),0)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["year_built", "effective_date"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["DATE", "DATEDIF", "IFERROR"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 1,
+   "unit": "U1"
+  },
+  {
+   "col": "C",
+   "cell": "Calc!C",
+   "output_name": "roof_age_used",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=Policies!R[0]C[3]*1",
+   "template_a1": "=Policies!F2*1",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["roof_age"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": [],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 2,
+   "unit": "U1"
+  },
+  {
+   "col": "D",
+   "cell": "Calc!D",
+   "output_name": "aoi_units",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=Policies!R[0]C[3]/1000",
+   "template_a1": "=Policies!G2/1000",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["coverage_a"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": [],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 3,
+   "unit": "U1"
+  },
+  {
+   "col": "E",
+   "cell": "Calc!E",
+   "output_name": "base_rate",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-3],BaseRates,2,FALSE)",
+   "template_a1": "=VLOOKUP(Policies!B2,BaseRates,2,FALSE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["zone"],
+   "tables": [
+    {
+     "operand": "BaseRates",
+     "ref": "RateTables!A3:D10",
+     "name": "BaseRates"
+    }
+   ],
+   "named_ranges": ["BaseRates"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-900",
+   "topo_index": 4,
+   "unit": "U1"
+  },
+  {
+   "col": "F",
+   "cell": "Calc!F",
+   "output_name": "hurr_rate",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-4],BaseRates,3,FALSE)",
+   "template_a1": "=VLOOKUP(Policies!B2,BaseRates,3,FALSE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["zone"],
+   "tables": [
+    {
+     "operand": "BaseRates",
+     "ref": "RateTables!A3:D10",
+     "name": "BaseRates"
+    }
+   ],
+   "named_ranges": ["BaseRates"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-900",
+   "topo_index": 5,
+   "unit": "U1"
+  },
+  {
+   "col": "G",
+   "cell": "Calc!G",
+   "output_name": "tax_rate",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-5],BaseRates,4,FALSE)",
+   "template_a1": "=VLOOKUP(Policies!B2,BaseRates,4,FALSE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["zone"],
+   "tables": [
+    {
+     "operand": "BaseRates",
+     "ref": "RateTables!A3:D10",
+     "name": "BaseRates"
+    }
+   ],
+   "named_ranges": ["BaseRates"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-900",
+   "topo_index": 6,
+   "unit": "U1"
+  },
+  {
+   "col": "H",
+   "cell": "Calc!H",
+   "output_name": "base_premium",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-3]*R[0]C[-4],2)",
+   "template_a1": "=ROUND(E2*D2,2)",
+   "precedents": ["aoi_units", "base_rate"],
+   "precedent_cols": ["D", "E"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-100",
+   "topo_index": 7,
+   "unit": "U1"
+  },
+  {
+   "col": "I",
+   "cell": "Calc!I",
+   "output_name": "constr_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=INDEX(RateTables!R13C2:R16C2,MATCH(Policies!R[0]C[-6],RateTables!R13C1:R16C1,0))",
+   "template_a1": "=INDEX(RateTables!$B$13:$B$16,MATCH(Policies!C2,RateTables!$A$13:$A$16,0))",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["construction"],
+   "tables": [
+    {
+     "operand": "RateTables!$B$13:$B$16",
+     "ref": "RateTables!B13:B16",
+     "name": null
+    },
+    {
+     "operand": "RateTables!$A$13:$A$16",
+     "ref": "RateTables!A13:A16",
+     "name": null
+    }
+   ],
+   "named_ranges": [],
+   "functions": ["INDEX", "MATCH"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 8,
+   "unit": "U1"
+  },
+  {
+   "col": "J",
+   "cell": "Calc!J",
+   "output_name": "constr_hurr_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=INDEX(RateTables!R13C3:R16C3,MATCH(Policies!R[0]C[-7],RateTables!R13C1:R16C1,0))",
+   "template_a1": "=INDEX(RateTables!$C$13:$C$16,MATCH(Policies!C2,RateTables!$A$13:$A$16,0))",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["construction"],
+   "tables": [
+    {
+     "operand": "RateTables!$C$13:$C$16",
+     "ref": "RateTables!C13:C16",
+     "name": null
+    },
+    {
+     "operand": "RateTables!$A$13:$A$16",
+     "ref": "RateTables!A13:A16",
+     "name": null
+    }
+   ],
+   "named_ranges": [],
+   "functions": ["INDEX", "MATCH"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 9,
+   "unit": "U1"
+  },
+  {
+   "col": "K",
+   "cell": "Calc!K",
+   "output_name": "pc_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=INDEX(RateTables!R19C2:R28C3,MATCH(Policies!R[0]C[-7],RateTables!R19C1:R28C1,0),IF(Policies!R[0]C[-8]=\"Frame\",1,2))",
+   "template_a1": "=INDEX(RateTables!$B$19:$C$28,MATCH(Policies!D2,RateTables!$A$19:$A$28,0),IF(Policies!C2=\"Frame\",1,2))",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["construction", "protection_class"],
+   "tables": [
+    {
+     "operand": "RateTables!$B$19:$C$28",
+     "ref": "RateTables!B19:C28",
+     "name": null
+    },
+    {
+     "operand": "RateTables!$A$19:$A$28",
+     "ref": "RateTables!A19:A28",
+     "name": null
+    }
+   ],
+   "named_ranges": [],
+   "functions": ["IF", "INDEX", "MATCH"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 10,
+   "unit": "U2"
+  },
+  {
+   "col": "L",
+   "cell": "Calc!L",
+   "output_name": "age_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(R[0]C[-10],AgeBands,2,TRUE)",
+   "template_a1": "=VLOOKUP(B2,AgeBands,2,TRUE)",
+   "precedents": ["home_age"],
+   "precedent_cols": ["B"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "AgeBands",
+     "ref": "RateTables!E12:F18",
+     "name": "AgeBands"
+    }
+   ],
+   "named_ranges": ["AgeBands"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 11,
+   "unit": "U2"
+  },
+  {
+   "col": "M",
+   "cell": "Calc!M",
+   "output_name": "roof_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(R[0]C[-10],RoofBands,2,TRUE)",
+   "template_a1": "=VLOOKUP(C2,RoofBands,2,TRUE)",
+   "precedents": ["roof_age_used"],
+   "precedent_cols": ["C"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "RoofBands",
+     "ref": "RateTables!H12:I16",
+     "name": "RoofBands"
+    }
+   ],
+   "named_ranges": ["RoofBands"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 12,
+   "unit": "U2"
+  },
+  {
+   "col": "N",
+   "cell": "Calc!N",
+   "output_name": "aoi_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-7],AOIBands,2,TRUE)",
+   "template_a1": "=VLOOKUP(Policies!G2,AOIBands,2,TRUE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["coverage_a"],
+   "tables": [
+    {
+     "operand": "AOIBands",
+     "ref": "RateTables!K12:L18",
+     "name": "AOIBands"
+    }
+   ],
+   "named_ranges": ["AOIBands"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 13,
+   "unit": "U2"
+  },
+  {
+   "col": "O",
+   "cell": "Calc!O",
+   "output_name": "ded_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-7],RateTables!R31C1:R35C2,2,TRUE)",
+   "template_a1": "=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["deductible"],
+   "tables": [
+    {
+     "operand": "RateTables!$A$31:$B$35",
+     "ref": "RateTables!A31:B35",
+     "name": null
+    }
+   ],
+   "named_ranges": [],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-205",
+   "topo_index": 14,
+   "unit": "U2"
+  },
+  {
+   "col": "P",
+   "cell": "Calc!P",
+   "output_name": "claims_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(MIN(Policies!R[0]C[-4],3),ClaimsTable,2,FALSE)",
+   "template_a1": "=VLOOKUP(MIN(Policies!L2,3),ClaimsTable,2,FALSE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["claims_3yr"],
+   "tables": [
+    {
+     "operand": "ClaimsTable",
+     "ref": "RateTables!E31:F34",
+     "name": "ClaimsTable"
+    }
+   ],
+   "named_ranges": ["ClaimsTable"],
+   "functions": ["MIN", "VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 15,
+   "unit": "U2"
+  },
+  {
+   "col": "Q",
+   "cell": "Calc!Q",
+   "output_name": "aop_premium",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-9]*R[0]C[-8]*R[0]C[-6]*R[0]C[-5]*R[0]C[-4]*R[0]C[-3]*R[0]C[-2]*R[0]C[-1],2)",
+   "template_a1": "=ROUND(H2*I2*K2*L2*M2*N2*O2*P2,2)",
+   "precedents": ["base_premium", "constr_factor", "pc_factor", "age_factor", "roof_factor", "aoi_factor", "ded_factor", "claims_factor"],
+   "precedent_cols": ["H", "I", "K", "L", "M", "N", "O", "P"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-100",
+   "topo_index": 16,
+   "unit": "U2"
+  },
+  {
+   "col": "R",
+   "cell": "Calc!R",
+   "output_name": "alarm_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(Policies!R[0]C[-8]=\"Y\",1,0)",
+   "template_a1": "=IF(Policies!J2=\"Y\",1,0)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["alarm"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF"],
+   "exceptions": [],
+   "manual_rule": "R-310",
+   "topo_index": 17,
+   "unit": "U2"
+  },
+  {
+   "col": "S",
+   "cell": "Calc!S",
+   "output_name": "claims_free_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(AND(Policies!R[0]C[-7]=0,R[0]C[-17]>=3),1,0)",
+   "template_a1": "=IF(AND(Policies!L2=0,B2>=3),1,0)",
+   "precedents": ["home_age"],
+   "precedent_cols": ["B"],
+   "inputs": ["claims_3yr"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["AND", "IF"],
+   "exceptions": [],
+   "manual_rule": "R-320",
+   "topo_index": 18,
+   "unit": "U2"
+  },
+  {
+   "col": "T",
+   "cell": "Calc!T",
+   "output_name": "new_home_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(R[0]C[-18]<=5,1,0)",
+   "template_a1": "=IF(B2<=5,1,0)",
+   "precedents": ["home_age"],
+   "precedent_cols": ["B"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF"],
+   "exceptions": [],
+   "manual_rule": "R-310",
+   "topo_index": 19,
+   "unit": "U2"
+  },
+  {
+   "col": "U",
+   "cell": "Calc!U",
+   "output_name": "mit_basic_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(Policies!R[0]C[-10]=\"Basic\",1,0)",
+   "template_a1": "=IF(Policies!K2=\"Basic\",1,0)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["wind_mit"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF"],
+   "exceptions": [],
+   "manual_rule": "R-310",
+   "topo_index": 20,
+   "unit": "U3"
+  },
+  {
+   "col": "V",
+   "cell": "Calc!V",
+   "output_name": "mit_fort_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(Policies!R[0]C[-11]=\"Fortified\",1,0)",
+   "template_a1": "=IF(Policies!K2=\"Fortified\",1,0)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["wind_mit"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF"],
+   "exceptions": [],
+   "manual_rule": "R-310",
+   "topo_index": 21,
+   "unit": "U3"
+  },
+  {
+   "col": "W",
+   "cell": "Calc!W",
+   "output_name": "credit_raw",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=SUMPRODUCT(R[0]C[-5]:R[0]C[-1],CreditPcts)",
+   "template_a1": "=SUMPRODUCT(R2:V2,CreditPcts)",
+   "precedents": ["alarm_flag", "claims_free_flag", "new_home_flag", "mit_basic_flag", "mit_fort_flag"],
+   "precedent_cols": ["R", "S", "T", "U", "V"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "CreditPcts",
+     "ref": "RateTables!B40:F40",
+     "name": "CreditPcts"
+    }
+   ],
+   "named_ranges": ["CreditPcts"],
+   "functions": ["SUMPRODUCT"],
+   "exceptions": [],
+   "manual_rule": "R-310",
+   "topo_index": 22,
+   "unit": "U3"
+  },
+  {
+   "col": "X",
+   "cell": "Calc!X",
+   "output_name": "credit_pct",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=MIN(R[0]C[-1],CreditCap)",
+   "template_a1": "=MIN(W2,CreditCap)",
+   "precedents": ["credit_raw"],
+   "precedent_cols": ["W"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "CreditCap",
+     "ref": "RateTables!B42",
+     "name": "CreditCap"
+    }
+   ],
+   "named_ranges": ["CreditCap"],
+   "functions": ["MIN"],
+   "exceptions": ["Calc!X31"],
+   "manual_rule": "R-310",
+   "topo_index": 23,
+   "unit": "U3"
+  },
+  {
+   "col": "Y",
+   "cell": "Calc!Y",
+   "output_name": "aop_net",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-8]*(1-R[0]C[-1]),2)",
+   "template_a1": "=ROUND(Q2*(1-X2),2)",
+   "precedents": ["aop_premium", "credit_pct"],
+   "precedent_cols": ["Q", "X"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-100",
+   "topo_index": 24,
+   "unit": "U3"
+  },
+  {
+   "col": "Z",
+   "cell": "Calc!Z",
+   "output_name": "hurr_pct_used",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(Policies!R[0]C[-17]=\"\",0.02,Policies!R[0]C[-17])",
+   "template_a1": "=IF(Policies!I2=\"\",0.02,Policies!I2)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["hurr_ded_pct"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF"],
+   "exceptions": [],
+   "manual_rule": "R-410",
+   "topo_index": 25,
+   "unit": "U3"
+  },
+  {
+   "col": "AA",
+   "cell": "Calc!AA",
+   "output_name": "hurr_ded_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IFERROR(VLOOKUP(R[0]C[-1],HurrDedTable,2,FALSE),1)",
+   "template_a1": "=IFERROR(VLOOKUP(Z2,HurrDedTable,2,FALSE),1)",
+   "precedents": ["hurr_pct_used"],
+   "precedent_cols": ["Z"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "HurrDedTable",
+     "ref": "RateTables!H31:I33",
+     "name": "HurrDedTable"
+    }
+   ],
+   "named_ranges": ["HurrDedTable"],
+   "functions": ["IFERROR", "VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-410",
+   "topo_index": 26,
+   "unit": "U3"
+  },
+  {
+   "col": "AB",
+   "cell": "Calc!AB",
+   "output_name": "wind_mit_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IFERROR(INDEX(RateTables!R31C12:R33C12,MATCH(Policies!R[0]C[-17],RateTables!R31C11:R33C11,0)),1)",
+   "template_a1": "=IFERROR(INDEX(RateTables!$L$31:$L$33,MATCH(Policies!K2,RateTables!$K$31:$K$33,0)),1)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["wind_mit"],
+   "tables": [
+    {
+     "operand": "RateTables!$L$31:$L$33",
+     "ref": "RateTables!L31:L33",
+     "name": null
+    },
+    {
+     "operand": "RateTables!$K$31:$K$33",
+     "ref": "RateTables!K31:K33",
+     "name": null
+    }
+   ],
+   "named_ranges": [],
+   "functions": ["IFERROR", "INDEX", "MATCH"],
+   "exceptions": [],
+   "manual_rule": "R-410",
+   "topo_index": 27,
+   "unit": "U3"
+  },
+  {
+   "col": "AC",
+   "cell": "Calc!AC",
+   "output_name": "hurr_premium",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-23]*R[0]C[-25]*R[0]C[-19]*R[0]C[-2]*R[0]C[-1],2)",
+   "template_a1": "=ROUND(F2*D2*J2*AA2*AB2,2)",
+   "precedents": ["aoi_units", "hurr_rate", "constr_hurr_factor", "hurr_ded_factor", "wind_mit_factor"],
+   "precedent_cols": ["D", "F", "J", "AA", "AB"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-410",
+   "topo_index": 28,
+   "unit": "U3"
+  },
+  {
+   "col": "AD",
+   "cell": "Calc!AD",
+   "output_name": "hurr_capped",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=MIN(R[0]C[-1],Policies!R[0]C[-23]*HurrCapPct)",
+   "template_a1": "=MIN(AC2,Policies!G2*HurrCapPct)",
+   "precedents": ["hurr_premium"],
+   "precedent_cols": ["AC"],
+   "inputs": ["coverage_a"],
+   "tables": [
+    {
+     "operand": "HurrCapPct",
+     "ref": "RateTables!B45",
+     "name": "HurrCapPct"
+    }
+   ],
+   "named_ranges": ["HurrCapPct"],
+   "functions": ["MIN"],
+   "exceptions": [],
+   "manual_rule": "R-410",
+   "topo_index": 29,
+   "unit": "U3"
+  },
+  {
+   "col": "AE",
+   "cell": "Calc!AE",
+   "output_name": "subtotal",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=R[0]C[-6]+R[0]C[-1]",
+   "template_a1": "=Y2+AD2",
+   "precedents": ["aop_net", "hurr_capped"],
+   "precedent_cols": ["Y", "AD"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": [],
+   "exceptions": [],
+   "manual_rule": "R-100",
+   "topo_index": 30,
+   "unit": "U4"
+  },
+  {
+   "col": "AF",
+   "cell": "Calc!AF",
+   "output_name": "exp_date",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=EDATE(Policies!R[0]C[-19],Policies!R[0]C[-18])",
+   "template_a1": "=EDATE(Policies!M2,Policies!N2)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["effective_date", "term_months"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["EDATE"],
+   "exceptions": [],
+   "manual_rule": "R-420",
+   "topo_index": 31,
+   "unit": "U4"
+  },
+  {
+   "col": "AG",
+   "cell": "Calc!AG",
+   "output_name": "term_factor",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(YEARFRAC(Policies!R[0]C[-20],R[0]C[-1],3),4)",
+   "template_a1": "=ROUND(YEARFRAC(Policies!M2,AF2,3),4)",
+   "precedents": ["exp_date"],
+   "precedent_cols": ["AF"],
+   "inputs": ["effective_date"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND", "YEARFRAC"],
+   "exceptions": [],
+   "manual_rule": "R-420",
+   "topo_index": 32,
+   "unit": "U4"
+  },
+  {
+   "col": "AH",
+   "cell": "Calc!AH",
+   "output_name": "term_premium",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-3]*R[0]C[-1],2)",
+   "template_a1": "=ROUND(AE2*AG2,2)",
+   "precedents": ["subtotal", "term_factor"],
+   "precedent_cols": ["AE", "AG"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-420",
+   "topo_index": 33,
+   "unit": "U4"
+  },
+  {
+   "col": "AI",
+   "cell": "Calc!AI",
+   "output_name": "min_applied",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=MAX(R[0]C[-1],MinPremium)",
+   "template_a1": "=MAX(AH2,MinPremium)",
+   "precedents": ["term_premium"],
+   "precedent_cols": ["AH"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "MinPremium",
+     "ref": "RateTables!B43",
+     "name": "MinPremium"
+    }
+   ],
+   "named_ranges": ["MinPremium"],
+   "functions": ["MAX"],
+   "exceptions": [],
+   "manual_rule": "R-420",
+   "topo_index": 34,
+   "unit": "U4"
+  },
+  {
+   "col": "AJ",
+   "cell": "Calc!AJ",
+   "output_name": "premium_rounded",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUNDUP(R[0]C[-1],0)",
+   "template_a1": "=ROUNDUP(AI2,0)",
+   "precedents": ["min_applied"],
+   "precedent_cols": ["AI"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUNDUP"],
+   "exceptions": [],
+   "manual_rule": "R-110",
+   "topo_index": 35,
+   "unit": "U4"
+  },
+  {
+   "col": "AK",
+   "cell": "Calc!AK",
+   "output_name": "policy_fee",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=VLOOKUP(Policies!R[0]C[-23],FeeTable,2,FALSE)",
+   "template_a1": "=VLOOKUP(Policies!N2,FeeTable,2,FALSE)",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["term_months"],
+   "tables": [
+    {
+     "operand": "FeeTable",
+     "ref": "RateTables!N31:O32",
+     "name": "FeeTable"
+    }
+   ],
+   "named_ranges": ["FeeTable"],
+   "functions": ["VLOOKUP"],
+   "exceptions": [],
+   "manual_rule": "R-510",
+   "topo_index": 36,
+   "unit": "U4"
+  },
+  {
+   "col": "AL",
+   "cell": "Calc!AL",
+   "output_name": "assessment",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-2]*AssessRate,2)",
+   "template_a1": "=ROUND(AJ2*AssessRate,2)",
+   "precedents": ["premium_rounded"],
+   "precedent_cols": ["AJ"],
+   "inputs": [],
+   "tables": [
+    {
+     "operand": "AssessRate",
+     "ref": "RateTables!B44",
+     "name": "AssessRate"
+    }
+   ],
+   "named_ranges": ["AssessRate"],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": "R-510",
+   "topo_index": 37,
+   "unit": "U4"
+  },
+  {
+   "col": "AM",
+   "cell": "Calc!AM",
+   "output_name": "tax",
+   "rows": [2, 41],
+   "n_cells": 39,
+   "template_r1c1": "=ROUND((R[0]C[-3]+R[0]C[-2])*R[0]C[-32],2)",
+   "template_a1": "=ROUND((AJ2+AK2)*G2,2)",
+   "precedents": ["tax_rate", "premium_rounded", "policy_fee"],
+   "precedent_cols": ["G", "AJ", "AK"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": ["Calc!AM17"],
+   "manual_rule": "R-510",
+   "topo_index": 38,
+   "unit": "U4"
+  },
+  {
+   "col": "AN",
+   "cell": "Calc!AN",
+   "output_name": "total_due",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=R[0]C[-4]+R[0]C[-3]+R[0]C[-2]+R[0]C[-1]",
+   "template_a1": "=AJ2+AK2+AL2+AM2",
+   "precedents": ["premium_rounded", "policy_fee", "assessment", "tax"],
+   "precedent_cols": ["AJ", "AK", "AL", "AM"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": [],
+   "exceptions": [],
+   "manual_rule": "R-510",
+   "topo_index": 39,
+   "unit": "U4"
+  },
+  {
+   "col": "AO",
+   "cell": "Calc!AO",
+   "output_name": "refer_flag",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=IF(OR(Policies!R[0]C[-34]>1000000,R[0]C[-38]>20,Policies!R[0]C[-29]>=3),\"REFER\",\"OK\")",
+   "template_a1": "=IF(OR(Policies!G2>1000000,C2>20,Policies!L2>=3),\"REFER\",\"OK\")",
+   "precedents": ["roof_age_used"],
+   "precedent_cols": ["C"],
+   "inputs": ["coverage_a", "claims_3yr"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["IF", "OR"],
+   "exceptions": [],
+   "manual_rule": "R-520",
+   "topo_index": 40,
+   "unit": "U4"
+  },
+  {
+   "col": "AP",
+   "cell": "Calc!AP",
+   "output_name": "rate_per_1000",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=ROUND(R[0]C[-8]/R[0]C[-38],3)",
+   "template_a1": "=ROUND(AH2/D2,3)",
+   "precedents": ["aoi_units", "term_premium"],
+   "precedent_cols": ["D", "AH"],
+   "inputs": [],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["ROUND"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 41,
+   "unit": "U4"
+  },
+  {
+   "col": "AQ",
+   "cell": "Calc!AQ",
+   "output_name": "rate_class",
+   "rows": [2, 41],
+   "n_cells": 40,
+   "template_r1c1": "=Policies!R[0]C[-41]&\"-\"&LEFT(Policies!R[0]C[-40],1)&TEXT(Policies!R[0]C[-39],\"00\")",
+   "template_a1": "=Policies!B2&\"-\"&LEFT(Policies!C2,1)&TEXT(Policies!D2,\"00\")",
+   "precedents": [],
+   "precedent_cols": [],
+   "inputs": ["zone", "construction", "protection_class"],
+   "tables": [],
+   "named_ranges": [],
+   "functions": ["LEFT", "TEXT"],
+   "exceptions": [],
+   "manual_rule": null,
+   "topo_index": 42,
+   "unit": "U4"
+  }
+ ],
+ "cells": [
+  {
+   "cell": "Summary!B2",
+   "sheet": "Summary",
+   "label": "Policies",
+   "formula": "=COUNTA(Calc!A2:A41)",
+   "template_r1c1": "=COUNTA(Calc!R[0]C[-1]:R[39]C[-1])",
+   "row": 2,
+   "precedents": ["policy_id"],
+   "precedent_cols": ["A"],
+   "inputs": [],
+   "named_ranges": [],
+   "functions": ["COUNTA"],
+   "topo_index": 43
+  },
+  {
+   "cell": "Summary!B3",
+   "sheet": "Summary",
+   "label": "Written premium",
+   "formula": "=SUM(Calc!AJ2:AJ41)",
+   "template_r1c1": "=SUM(Calc!R[-1]C[34]:R[38]C[34])",
+   "row": 3,
+   "precedents": ["premium_rounded"],
+   "precedent_cols": ["AJ"],
+   "inputs": [],
+   "named_ranges": [],
+   "functions": ["SUM"],
+   "topo_index": 44
+  },
+  {
+   "cell": "Summary!B4",
+   "sheet": "Summary",
+   "label": "Total due",
+   "formula": "=SUM(Calc!AN2:AN41)",
+   "template_r1c1": "=SUM(Calc!R[-2]C[38]:R[37]C[38])",
+   "row": 4,
+   "precedents": ["total_due"],
+   "precedent_cols": ["AN"],
+   "inputs": [],
+   "named_ranges": [],
+   "functions": ["SUM"],
+   "topo_index": 45
+  },
+  {
+   "cell": "Summary!B5",
+   "sheet": "Summary",
+   "label": "Avg rate/1000",
+   "formula": "=AVERAGE(Calc!AP2:AP41)",
+   "template_r1c1": "=AVERAGE(Calc!R[-3]C[40]:R[36]C[40])",
+   "row": 5,
+   "precedents": ["rate_per_1000"],
+   "precedent_cols": ["AP"],
+   "inputs": [],
+   "named_ranges": [],
+   "functions": ["AVERAGE"],
+   "topo_index": 46
+  },
+  {
+   "cell": "Summary!B6",
+   "sheet": "Summary",
+   "label": "Hurricane share",
+   "formula": "=SUMPRODUCT(Calc!AD2:AD41)/SUM(Calc!AE2:AE41)",
+   "template_r1c1": "=SUMPRODUCT(Calc!R[-4]C[28]:R[35]C[28])/SUM(Calc!R[-4]C[29]:R[35]C[29])",
+   "row": 6,
+   "precedents": ["hurr_capped", "subtotal"],
+   "precedent_cols": ["AD", "AE"],
+   "inputs": [],
+   "named_ranges": [],
+   "functions": ["SUM", "SUMPRODUCT"],
+   "topo_index": 47
+  }
+ ],
+ "topo_order": ["policy_id", "home_age", "roof_age_used", "aoi_units", "base_rate", "hurr_rate", "tax_rate", "base_premium", "constr_factor", "constr_hurr_factor", "pc_factor", "age_factor", "roof_factor", "aoi_factor", "ded_factor", "claims_factor", "aop_premium", "alarm_flag", "claims_free_flag", "new_home_flag", "mit_basic_flag", "mit_fort_flag", "credit_raw", "credit_pct", "aop_net", "hurr_pct_used", "hurr_ded_factor", "wind_mit_factor", "hurr_premium", "hurr_capped", "subtotal", "exp_date", "term_factor", "term_premium", "min_applied", "premium_rounded", "policy_fee", "assessment", "tax", "total_due", "refer_flag", "rate_per_1000", "rate_class"],
+ "rule_order": ["Calc!A", "Calc!B", "Calc!C", "Calc!D", "Calc!E", "Calc!F", "Calc!G", "Calc!H", "Calc!I", "Calc!J", "Calc!K", "Calc!L", "Calc!M", "Calc!N", "Calc!O", "Calc!P", "Calc!Q", "Calc!R", "Calc!S", "Calc!T", "Calc!U", "Calc!V", "Calc!W", "Calc!X", "Calc!Y", "Calc!Z", "Calc!AA", "Calc!AB", "Calc!AC", "Calc!AD", "Calc!AE", "Calc!AF", "Calc!AG", "Calc!AH", "Calc!AI", "Calc!AJ", "Calc!AK", "Calc!AL", "Calc!AM", "Calc!AN", "Calc!AO", "Calc!AP", "Calc!AQ", "Summary!B2", "Summary!B3", "Summary!B4", "Summary!B5", "Summary!B6"],
+ "named_ranges": {
+  "AOIBands": "RateTables!$K$12:$L$18",
+  "AgeBands": "RateTables!$E$12:$F$18",
+  "AssessRate": "RateTables!$B$44",
+  "BaseRates": "RateTables!$A$3:$D$10",
+  "ClaimsTable": "RateTables!$E$31:$F$34",
+  "CreditCap": "RateTables!$B$42",
+  "CreditPcts": "RateTables!$B$40:$F$40",
+  "DedBands": "RateTables!$A$31:$B$36",
+  "FeeTable": "RateTables!$N$31:$O$32",
+  "HurrCapPct": "RateTables!$B$45",
+  "HurrDedTable": "RateTables!$H$31:$I$33",
+  "MinPremium": "RateTables!$B$43",
+  "RoofBands": "RateTables!$H$12:$I$16"
+ },
+ "exceptions": [
+  {
+   "id": "A1",
+   "type": "range_short_of_table",
+   "cell": "Calc!O2:O41"
+  },
+  {
+   "id": "A2",
+   "type": "hardcoded_value_in_formula_column",
+   "cell": "Calc!AM17"
+  },
+  {
+   "id": "A3",
+   "type": "inconsistent_formula",
+   "cell": "Calc!X31"
+  }
+ ],
+ "function_inventory": {
+  "VLOOKUP": 10,
+  "ROUND": 9,
+  "IF": 8,
+  "INDEX": 4,
+  "MATCH": 4,
+  "IFERROR": 3,
+  "MIN": 3,
+  "SUM": 3,
+  "SUMPRODUCT": 2,
+  "AND": 1,
+  "AVERAGE": 1,
+  "COUNTA": 1,
+  "DATE": 1,
+  "DATEDIF": 1,
+  "EDATE": 1,
+  "LEFT": 1,
+  "MAX": 1,
+  "OR": 1,
+  "ROUNDUP": 1,
+  "TEXT": 1,
+  "YEARFRAC": 1
+ },
+ "unsupported": [],
+ "limits": ["Macros and VBA are not supported; .xlsm files are never opened.", "Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are listed as unsupported.", "External links, array and dynamic-array formulas, data tables and iterative calculation are out of scope.", "The oracle is LibreOffice 24.2 with forced recalculation; Excel parity is UNVERIFIED unless the Excel cross-check runs.", "Inputs are sampled, so equivalence is evidence, not proof.", "The workbook's anomalies were seeded deliberately for the demonstration."],
+ "stats": {
+  "formula_cells": 1724,
+  "rules": 48,
+  "calc_columns": 43,
+  "other_cells": 5
+ }
+}

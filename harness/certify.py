@@ -34,6 +34,17 @@ from harness import spotcheck as SP
 from harness import trace as TR
 
 
+def excel_crosscheck_summary():
+    """Summary of golden/excel_crosscheck.json (written once by a person with Excel), or None."""
+    p = os.path.join(C.GOLDEN, "excel_crosscheck.json")
+    if not os.path.exists(p):
+        return None
+    d = C.read_json(p)
+    keep = ("excel_version", "libreoffice", "rows", "cells_compared", "cells_equal",
+            "display_precision_suspects", "mismatches_by_output", "excel_file", "excel_file_sha256")
+    return dict({k: d.get(k) for k in keep}, file_sha256=C.sha256_file(p))
+
+
 def hashes(seed, service):
     gp = C.golden_paths(seed)
     root = C.service_root(service)
@@ -149,7 +160,7 @@ def certify(seed, service):
         "traceability": {"total_rules": tr["total_rules"], "counts": tr["counts"], "gate": tr["gate"]},
         "oracle": {"engine": o.get("engine"), "version": o.get("version"), "label": o.get("label"),
                    "recalc": o.get("recalc"), "profile_sha256": o.get("profile_sha256")},
-        "excel_crosscheck": None,
+        "excel_crosscheck": excel_crosscheck_summary(),
         "hashes": h, "git_commit": C.git_commit(),
         "seconds": dict({k: round(v, 2) for k, v in t.items()}, **{"run_" + k: v for k, v in res["seconds"].items()},
                         oracle_recalc=o.get("seconds_recalc"),
@@ -245,7 +256,8 @@ def render_html(c):
                                  for s in m["survivors"]]))
     parts.append("<h2>Oracle and hashes</h2>" + _table(["Item", "Value"], [
         ("Oracle", c["oracle"].get("label")), ("Recalculation", c["oracle"].get("recalc")),
-        ("Excel cross-check", "not run (Excel parity UNVERIFIED)" if c["excel_crosscheck"] is None else "run"),
+        ("Excel cross-check", "not run (Excel parity UNVERIFIED)" if c["excel_crosscheck"] is None else
+         "%(cells_equal)d of %(cells_compared)d cells equal over %(rows)d policies (%(excel_version)s)" % c["excel_crosscheck"]),
         ("git commit", c["git_commit"])] + [(k, v) for k, v in c["hashes"].items()]))
     parts.append("<h2>Limits</h2><ul>%s</ul>" % "".join("<li>%s</li>" % _e(x) for x in c["limits"]))
     parts.append("<p class='muted'>Written by harness/certify.py (Claude Code harness). Numbers are copied from "

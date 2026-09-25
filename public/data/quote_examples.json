@@ -1,0 +1,393 @@
+{
+ "_about": "Golden policies with the values the original workbook produced (recorded oracle). Synthetic data for Example Mutual Insurance Co. (FICTIONAL).",
+ "encoding": {
+  "blank": null,
+  "date": {
+   "date": "YYYY-MM-DD"
+  },
+  "error": {
+   "error": "#N/A"
+  }
+ },
+ "examples": [
+  {
+   "expected": {
+    "age_factor": 1.25,
+    "alarm_flag": 1.0,
+    "aoi_factor": 1.4,
+    "aoi_units": 1282.793,
+    "aop_net": 8029.49,
+    "aop_premium": 10705.98,
+    "assessment": 154.13,
+    "base_premium": 3688.03,
+    "base_rate": 2.875,
+    "claims_factor": 1.0,
+    "claims_free_flag": 1.0,
+    "constr_factor": 0.8,
+    "constr_hurr_factor": 0.7,
+    "credit_pct": 0.25,
+    "credit_raw": 0.25,
+    "ded_factor": 1.1,
+    "exp_date": {
+     "date": "2028-03-12"
+    },
+    "home_age": 69.0,
+    "hurr_capped": 3793.86,
+    "hurr_ded_factor": 1.0,
+    "hurr_pct_used": 0.03,
+    "hurr_premium": 3793.86,
+    "hurr_rate": 6.5,
+    "min_applied": 11855.27,
+    "mit_basic_flag": 0.0,
+    "mit_fort_flag": 1.0,
+    "new_home_flag": 0.0,
+    "pc_factor": 1.3,
+    "policy_fee": 25.0,
+    "policy_id": "HO-000001",
+    "premium_rounded": 11856.0,
+    "rate_class": "T08-F09",
+    "rate_per_1000": 9.242,
+    "refer_flag": "REFER",
+    "roof_age_used": 26.0,
+    "roof_factor": 1.45,
+    "subtotal": 11823.35,
+    "tax": 297.03,
+    "tax_rate": 0.025,
+    "term_factor": 1.0027,
+    "term_premium": 11855.27,
+    "total_due": 12332.16,
+    "wind_mit_factor": 0.65
+   },
+   "label": "first golden policy",
+   "policy": {
+    "alarm": "Y",
+    "claims_3yr": 0,
+    "construction": "FireResistive",
+    "coverage_a": 1282793,
+    "deductible": 0,
+    "effective_date": {
+     "date": "2027-03-12"
+    },
+    "hurr_ded_pct": 0.03,
+    "policy_id": "HO-000001",
+    "protection_class": 9,
+    "roof_age": 26,
+    "term_months": 12,
+    "wind_mit": "fortified",
+    "year_built": 1958,
+    "zone": "T08"
+   },
+   "row": 2
+  },
+  {
+   "expected": {
+    "age_factor": 1.15,
+    "alarm_flag": 0.0,
+    "aoi_factor": 1.25,
+    "aoi_units": 985.0,
+    "aop_net": {
+     "error": "#N/A"
+    },
+    "aop_premium": {
+     "error": "#N/A"
+    },
+    "assessment": {
+     "error": "#N/A"
+    },
+    "base_premium": {
+     "error": "#N/A"
+    },
+    "base_rate": {
+     "error": "#N/A"
+    },
+    "claims_factor": 1.5,
+    "claims_free_flag": 0.0,
+    "constr_factor": 0.94,
+    "constr_hurr_factor": 0.9,
+    "credit_pct": 0.04,
+    "credit_raw": 0.04,
+    "ded_factor": 0.74,
+    "exp_date": {
+     "date": "2027-05-12"
+    },
+    "home_age": 46.0,
+    "hurr_capped": {
+     "error": "#N/A"
+    },
+    "hurr_ded_factor": 0.72,
+    "hurr_pct_used": 0.1,
+    "hurr_premium": {
+     "error": "#N/A"
+    },
+    "hurr_rate": {
+     "error": "#N/A"
+    },
+    "min_applied": {
+     "error": "#N/A"
+    },
+    "mit_basic_flag": 1.0,
+    "mit_fort_flag": 0.0,
+    "new_home_flag": 0.0,
+    "pc_factor": 1.01,
+    "policy_fee": 15.0,
+    "policy_id": "HO-000106",
+    "premium_rounded": {
+     "error": "#N/A"
+    },
+    "rate_class": "T09-M07",
+    "rate_per_1000": {
+     "error": "#N/A"
+    },
+    "refer_flag": "REFER",
+    "roof_age_used": 16.0,
+    "roof_factor": 1.25,
+    "subtotal": {
+     "error": "#N/A"
+    },
+    "tax": {
+     "error": "#N/A"
+    },
+    "tax_rate": {
+     "error": "#N/A"
+    },
+    "term_factor": 0.4959,
+    "term_premium": {
+     "error": "#N/A"
+    },
+    "total_due": {
+     "error": "#N/A"
+    },
+    "wind_mit_factor": 0.85
+   },
+   "label": "ineligible zone (T09 -> #N/A)",
+   "policy": {
+    "alarm": null,
+    "claims_3yr": 4,
+    "construction": "MasonryVeneer",
+    "coverage_a": 985000,
+    "deductible": 10000,
+    "effective_date": {
+     "date": "2026-11-12"
+    },
+    "hurr_ded_pct": 0.1,
+    "policy_id": "HO-000106",
+    "protection_class": 7,
+    "roof_age": 16,
+    "term_months": 6,
+    "wind_mit": "Basic",
+    "year_built": 1980,
+    "zone": "T09"
+   },
+   "row": 107
+  },
+  {
+   "expected": {
+    "age_factor": 1.08,
+    "alarm_flag": 1.0,
+    "aoi_factor": 1.12,
+    "aoi_units": 455.0,
+    "aop_net": 1984.01,
+    "aop_premium": 2334.13,
+    "assessment": 60.71,
+    "base_premium": 1933.75,
+    "base_rate": 4.25,
+    "claims_factor": 1.0,
+    "claims_free_flag": 1.0,
+    "constr_factor": 1.0,
+    "constr_hurr_factor": 1.0,
+    "credit_pct": 0.15,
+    "credit_raw": 0.15,
+    "ded_factor": 0.74,
+    "exp_date": {
+     "date": "2028-07-15"
+    },
+    "home_age": 20.0,
+    "hurr_capped": 2673.13,
+    "hurr_ded_factor": 1.0,
+    "hurr_pct_used": 0.02,
+    "hurr_premium": 2673.13,
+    "hurr_rate": 5.875,
+    "min_applied": 4669.71,
+    "mit_basic_flag": 0.0,
+    "mit_fort_flag": 0.0,
+    "new_home_flag": 0.0,
+    "pc_factor": 0.93,
+    "policy_fee": 25.0,
+    "policy_id": "HO-000011",
+    "premium_rounded": 4670.0,
+    "rate_class": "T07-F04",
+    "rate_per_1000": 10.263,
+    "refer_flag": "REFER",
+    "roof_age_used": 28.0,
+    "roof_factor": 1.45,
+    "subtotal": 4657.14,
+    "tax": 117.38,
+    "tax_rate": 0.025,
+    "term_factor": 1.0027,
+    "term_premium": 4669.71,
+    "total_due": 4873.09,
+    "wind_mit_factor": 1.0
+   },
+   "label": "deductible of 10,000 or more (anomaly A1)",
+   "policy": {
+    "alarm": "y",
+    "claims_3yr": 0,
+    "construction": "Frame",
+    "coverage_a": 455000,
+    "deductible": 10000,
+    "effective_date": {
+     "date": "2027-07-15"
+    },
+    "hurr_ded_pct": 0.02,
+    "policy_id": "HO-000011",
+    "protection_class": 4,
+    "roof_age": 28,
+    "term_months": 12,
+    "wind_mit": "None",
+    "year_built": 2007,
+    "zone": "T07"
+   },
+   "row": 12
+  },
+  {
+   "expected": {
+    "age_factor": 1.0,
+    "alarm_flag": 1.0,
+    "aoi_factor": 1.25,
+    "aoi_units": 790.319,
+    "aop_net": 2944.15,
+    "aop_premium": 3463.7,
+    "assessment": 54.21,
+    "base_premium": 3252.16,
+    "base_rate": 4.115,
+    "claims_factor": 1.5,
+    "claims_free_flag": 0.0,
+    "constr_factor": 0.8,
+    "constr_hurr_factor": 0.7,
+    "credit_pct": 0.15,
+    "credit_raw": 0.15,
+    "ded_factor": 0.74,
+    "exp_date": {
+     "date": "2028-03-01"
+    },
+    "home_age": 19.0,
+    "hurr_capped": 1213.63,
+    "hurr_ded_factor": 1.0,
+    "hurr_pct_used": 0.02,
+    "hurr_premium": 1213.63,
+    "hurr_rate": 3.375,
+    "min_applied": 4169.01,
+    "mit_basic_flag": 0.0,
+    "mit_fort_flag": 1.0,
+    "new_home_flag": 0.0,
+    "pc_factor": 1.01,
+    "policy_fee": 25.0,
+    "policy_id": "HO-000038",
+    "premium_rounded": 4170.0,
+    "rate_class": "T05-F07",
+    "rate_per_1000": 5.275,
+    "refer_flag": "REFER",
+    "roof_age_used": 0.0,
+    "roof_factor": 0.95,
+    "subtotal": 4157.78,
+    "tax": 94.39,
+    "tax_rate": 0.0225,
+    "term_factor": 1.0027,
+    "term_premium": 4169.01,
+    "total_due": 4343.6,
+    "wind_mit_factor": 0.65
+   },
+   "label": "blank roof age",
+   "policy": {
+    "alarm": "y",
+    "claims_3yr": 4,
+    "construction": "FireResistive",
+    "coverage_a": 790319,
+    "deductible": 5000,
+    "effective_date": {
+     "date": "2027-03-01"
+    },
+    "hurr_ded_pct": null,
+    "policy_id": "HO-000038",
+    "protection_class": 7,
+    "roof_age": null,
+    "term_months": 12,
+    "wind_mit": "fortified",
+    "year_built": 2008,
+    "zone": "T05"
+   },
+   "row": 39
+  },
+  {
+   "expected": {
+    "age_factor": 1.15,
+    "alarm_flag": 1.0,
+    "aoi_factor": 1.0,
+    "aoi_units": 391.0,
+    "aop_net": 2782.02,
+    "aop_premium": 3272.97,
+    "assessment": 18.68,
+    "base_premium": 1221.88,
+    "base_rate": 3.125,
+    "claims_factor": 1.1,
+    "claims_free_flag": 0.0,
+    "constr_factor": 1.0,
+    "constr_hurr_factor": 1.0,
+    "credit_pct": 0.15,
+    "credit_raw": 0.15,
+    "ded_factor": 1.1,
+    "exp_date": {
+     "date": "2028-10-17"
+    },
+    "home_age": 49.0,
+    "hurr_capped": 82.34,
+    "hurr_ded_factor": 0.72,
+    "hurr_pct_used": 0.1,
+    "hurr_premium": 82.34,
+    "hurr_rate": 0.45,
+    "min_applied": 1436.19,
+    "mit_basic_flag": 0.0,
+    "mit_fort_flag": 1.0,
+    "new_home_flag": 0.0,
+    "pc_factor": 1.75,
+    "policy_fee": 15.0,
+    "policy_id": "HO-000002",
+    "premium_rounded": 1437.0,
+    "rate_class": "T01-F10",
+    "rate_per_1000": 3.673,
+    "refer_flag": "OK",
+    "roof_age_used": 14.0,
+    "roof_factor": 1.1,
+    "subtotal": 2864.36,
+    "tax": 25.41,
+    "tax_rate": 0.0175,
+    "term_factor": 0.5014,
+    "term_premium": 1436.19,
+    "total_due": 1496.09,
+    "wind_mit_factor": 0.65
+   },
+   "label": "six-month term",
+   "policy": {
+    "alarm": "y",
+    "claims_3yr": 1,
+    "construction": "Frame",
+    "coverage_a": 391000,
+    "deductible": 499,
+    "effective_date": {
+     "date": "2028-04-17"
+    },
+    "hurr_ded_pct": 0.1,
+    "policy_id": "HO-000002",
+    "protection_class": 10,
+    "roof_age": 14,
+    "term_months": 6,
+    "wind_mit": "fortified",
+    "year_built": 1979,
+    "zone": "T01"
+   },
+   "row": 3
+  }
+ ],
+ "oracle": "LibreOffice 24.2.7.2, recorded, golden seed 2026",
+ "seed": 2026
+}

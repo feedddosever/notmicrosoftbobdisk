@@ -142,6 +142,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `tools/lo_recalc.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/make_manual.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/tests/test_check_evidence.py` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `tools/tests/test_excel_crosscheck.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/tests/test_guard.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `tools/units.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `vercel.json` | Claude Code (AI agent), scaffold | – | pending | pending |

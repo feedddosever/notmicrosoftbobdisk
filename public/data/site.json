@@ -1,0 +1,48 @@
+{
+ "_about": "Site metadata written by tools/build_site_data.py. Synthetic data; Example Mutual Insurance Co. (FICTIONAL).",
+ "carrier": "Example Mutual Insurance Co. (FICTIONAL)",
+ "commit": "53308dd08a7e5ce4c8901a1976ca98199e052de6",
+ "commit_short": "53308dd",
+ "exports_available": null,
+ "files": {
+  "decisions.json": {
+   "sha256": "c58eadd93acf4bcc8c470257d5e83faf7bd68721656ad87c2218b222e34d636b",
+   "source": "reports/decision_queue.json + decisions/decisions.jsonl"
+  },
+  "graph.json": {
+   "sha256": "9024d4d818f9395bf416c99648df8f7dd16e6d0dc1b393ff1eeffa0168af98b1",
+   "source": "build/graph.json"
+  },
+  "lints.json": {
+   "sha256": "30a175cd7a7e225e839eacd729f81fba51afa3d11a7dc9ba1e51792cfc06cb81",
+   "source": "build/lints.json"
+  },
+  "quote_examples.json": {
+   "sha256": "f12e76e2f2fee0f12cfcb2064c1223e9384de529ee8cc3d3a88738789ec76f8d",
+   "source": "golden/"
+  },
+  "replay.json": {
+   "sha256": "1cc1b88418cee176feeeced7c23d4f11a658c026cf0bc6e3f313141f2e2afd0f",
+   "source": "audit/, reports/run_log.jsonl, bob_sessions/INDEX.md, git log"
+  }
+ },
+ "missing": [
+  "certificate.json",
+  "certificate_report.html",
+  "mutation.json",
+  "spotcheck.json",
+  "traceability.json",
+  "verify_sample_results.json"
+ ],
+ "mode": "live",
+ "notes": [
+  "service service.sheetshift_ho3.rater does not import (ServiceMissing)"
+ ],
+ "recorded": null,
+ "repo_url": "https://github.com/feedddosever/notmicrosoftbobdisk",
+ "schema": 1,
+ "service": {
+  "module": "service.sheetshift_ho3.rater",
+  "standin": false
+ }
+}

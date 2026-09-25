@@ -1,0 +1,15 @@
+{
+ "_about": "Replay of a recorded run, built by tools/build_site_data.py from audit logs, the run log, bob_sessions/INDEX.md, decisions and Bob-Task commits. Nothing here runs Bob.",
+ "events": [],
+ "sources": {
+  "Bob-Task commits": 0,
+  "INDEX rows": 0,
+  "audit edits": 0,
+  "decisions": 0,
+  "guard allows": 0,
+  "guard blocks": 0,
+  "run log records": 0
+ },
+ "tasks": [],
+ "truncated_events": 0
+}
