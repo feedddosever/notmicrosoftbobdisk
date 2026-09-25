@@ -17,7 +17,7 @@ def lines():
     v = sys.version_info
     out = ["SheetShift session. Python %d.%d.%d." % (v[0], v[1], v[2])]
     if v < (3, 11):
-        out.append("Warning: harness and service target Python 3.11+; hooks still work on 3.8+.")
+        out.append("Warning: harness and service target Python 3.12 (3.11 works); hooks still work on 3.8+.")
     groups = C.open_groups()
     if groups:
         shown = ", ".join("%s %s %s" % (g.get("id"), g.get("class"), g.get("cell", ""))

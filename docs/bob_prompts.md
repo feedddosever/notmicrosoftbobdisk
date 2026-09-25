@@ -16,11 +16,11 @@ Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member review
   git config user.name m<N>
   git config sheetshift.handle m<N>
   ```
-- [ ] **Python.** `python3 --version` must be 3.8 or later on PATH; the service and harness target 3.11.
-  - On Windows, install python.org Python with `python3` on PATH, or run Bob in WSL. The Microsoft Store stub exits 9009, and then the guard does not run at all.
+- [ ] **Python.** `python3 --version` must be 3.8 or later on PATH; the service and harness target 3.12 (the version CI and Vercel run).
+  - On Windows, `python3` is often only the Microsoft Store placeholder, which exits with an error, and then the guard does not run at all. Install python.org Python 3.12 for your user with "Add python.exe to PATH" (or `winget install -e --id Python.Python.3.12 --scope user --override "/quiet InstallAllUsers=0 PrependPath=1 Include_launcher=1"`), then create the `python3` command once in a new PowerShell window: `$p = (Get-Command python).Source; Copy-Item $p (Join-Path (Split-Path $p) 'python3.exe')`. Check that `cmd /c python3 --version` prints 3.12, then restart Bob IDE.
   - Then create and activate a virtual environment and install the dev dependencies into it:
     - macOS, Linux, WSL: `python3 -m venv .venv && . .venv/bin/activate && python -m pip install -r requirements-dev.txt`
-    - Windows (PowerShell): `py -3 -m venv .venv; .venv\Scripts\Activate.ps1; python -m pip install -r requirements-dev.txt`
+    - Windows: skip the virtual environment (a Windows venv has no `python3` command, so Bob would fall back to a Python without the packages) and install into Python 3.12 directly: `python3 -m pip install -r requirements-dev.txt`
   - In Bob, select `.venv` as the Python interpreter and open a new terminal. Confirm that `python3 -c "import openpyxl, pytest"` exits 0 there before T00; Bob's commands call bare `python3`.
   - On Windows, keep Git from converting line endings: the repo's `.gitattributes` forces LF. If you cloned before that file existed, run `git rm --cached -r . && git reset --hard` once (or re-clone).
 - [ ] **Workspace.** Open the repo folder itself as the Bob workspace (not a parent folder and not a multi-root workspace). The hooks run `python3 .bob/hooks/...` relative to it.
