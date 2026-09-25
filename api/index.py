@@ -38,9 +38,20 @@ def _stub_app():
     return stub
 
 
-try:
-    from service.sheetshift_ho3.api import app  # noqa: F401  (IBM Bob's app, task T04)
-except ModuleNotFoundError as e:
-    if e.name not in _MISSING_OK:
-        raise
-    app = _stub_app()
+def _inner_app():
+    """IBM Bob's app when it exists; the stub only when its module is missing."""
+    try:
+        from service.sheetshift_ho3.api import app as bob_app  # IBM Bob's app, task T04
+    except ModuleNotFoundError as e:
+        if e.name not in _MISSING_OK:
+            raise
+        return _stub_app()
+    return bob_app
+
+
+from fastapi import FastAPI  # noqa: E402
+
+# Vercel looks for a top-level `app` FastAPI instance in this file, so the entry point is a thin
+# wrapper that hands every request (including /docs and /openapi.json) to the inner app.
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+app.mount("/", _inner_app())
