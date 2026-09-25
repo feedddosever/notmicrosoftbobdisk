@@ -1,0 +1,195 @@
+{
+ "PostToolUse:search_ibm_docs": {
+  "input_keys": [
+   "library_name",
+   "query"
+  ],
+  "tool": "search_ibm_docs",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_response",
+   "tool_use_id"
+  ]
+ },
+ "PostToolUse:use_skill": {
+  "input_keys": [
+   "skill_name"
+  ],
+  "tool": "use_skill",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_response",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:apply_diff": {
+  "input_keys": [
+   "diff",
+   "path"
+  ],
+  "tool": "apply_diff",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:execute_command": {
+  "input_keys": [
+   "command"
+  ],
+  "tool": "execute_command",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:glob": {
+  "input_keys": [
+   "pattern"
+  ],
+  "tool": "glob",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:grep": {
+  "input_keys": [
+   "ignore_case",
+   "path",
+   "pattern"
+  ],
+  "tool": "grep",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:list_files": {
+  "input_keys": [
+   "path"
+  ],
+  "tool": "list_files",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:office_read": {
+  "input_keys": [
+   "mode",
+   "path"
+  ],
+  "tool": "office_read",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:read_file": {
+  "input_keys": [
+   "path",
+   "range"
+  ],
+  "tool": "read_file",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:search_ibm_docs": {
+  "input_keys": [
+   "library_name",
+   "query"
+  ],
+  "tool": "search_ibm_docs",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:use_skill": {
+  "input_keys": [
+   "skill_name"
+  ],
+  "tool": "use_skill",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "SessionStart:-": {
+  "input_keys": [],
+  "tool": null,
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "source"
+  ]
+ },
+ "Stop:-": {
+  "input_keys": [],
+  "tool": null,
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "last_assistant_message",
+   "session_id"
+  ]
+ },
+ "UserPromptSubmit:-": {
+  "input_keys": [],
+  "tool": null,
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "prompt",
+   "session_id"
+  ]
+ }
+}
