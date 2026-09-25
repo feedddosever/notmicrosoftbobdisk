@@ -11,8 +11,12 @@ Map (read these, not the whole repo):
 
 Loop: /shift-map → /shift-plan → /shift-translate → /shift-verify → /shift-triage → /shift-report.
 
-Never edit: workbook/ manual/ harness/ golden/ build/ decisions/ tools/ .bob/ .github/ AGENTS.md
-reports/*.json (a hook blocks this and CI rejects it). If the harness looks wrong, write docs/notes/HARNESS-<n>.md.
+Read anything, always: the workbook (use office_read), the manual PDF, build/, harness/, docs/. Reading is
+expected. Only writing is restricted.
+
+Never edit (write, modify, move or delete): workbook/ manual/ harness/ golden/ build/ decisions/ tools/ .bob/
+.github/ AGENTS.md reports/*.json (a hook blocks this and CI rejects it). If the harness looks wrong, write
+docs/notes/HARNESS-<n>.md. When the person says a request is a guard test, make the call as asked; the hook blocks it.
 
 Never run tools/decide.py or decide an anomaly. Write a brief in docs/anomalies/; a person decides.
 
