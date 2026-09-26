@@ -2,6 +2,7 @@
 
 Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 """
+import json
 import os
 import sys
 
@@ -32,6 +33,18 @@ def test_naming_hints():
     assert "lower case" in E.naming_hint("Teamalpha_task01_login_flow_m1_summary.png")
     assert E.SCREENSHOT_RE.match("teamalpha_task01_login_flow_m1_summary.png")
     assert "teamalpha_task01_login_flow_m1_summary.png" in E.NAMING_HELP
+
+
+def test_json_exports_are_scanned_for_emails_after_decoding():
+    code = json.dumps({"content": 'app = FastAPI()\n@app.get("/api/health")\n'})
+    assert "n@app.get" in " ".join(E.EMAIL_RE.findall(code))     # the raw text looks like an address
+    assert E.found_emails("t_task04_api_m1_history.json", code) == []
+    diff = json.dumps({"diff": '+\n+@app.get("/api/health")\n+def health():\n'})
+    assert E.found_emails("t_task04_api_m1_history.json", diff) == []   # a diff's added decorator line
+    fake = "jdoe" + "@" + "example.com"                           # assembled: CI rejects literal addresses
+    real = json.dumps({"content": "line one\n" + fake, "by": "1+m1@users.noreply.github.com"})
+    assert E.found_emails("t_task04_api_m1_history.json", real) == [fake]
+    assert E.found_emails("notes.md", "mail " + fake) == [fake]
 
 
 def test_json_exports_are_accepted_and_parsed(tmp_path, monkeypatch):

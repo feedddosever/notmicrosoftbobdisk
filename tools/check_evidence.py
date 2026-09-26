@@ -51,7 +51,9 @@ TRAILER_OK = re.compile(r"^T(\d{2}) \((m[1-4])\)$")
 HOME_RE = re.compile(r"(?i)(/Users/|/home/|\b[a-z]:(\\{1,2}|/)Users(\\{1,2}|/))(?!<home>)[^\\/\s]+")
 NAMING_HELP = ("expected <team>_taskNN_<desc>_<mN>_summary.png (or _history.json / _history.md), e.g. "
                "teamalpha_task01_login_flow_m1_summary.png: lowercase, two-digit task, handle before _summary")
-EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# The local part starts with a letter or digit: in Bob's exported diffs a decorator line reads
+# "+@app.get(", which would otherwise be the address +@app.get.
+EMAIL_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 EMAIL_OK = re.compile(r"(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$", re.I)
 
 # Not counted in the Bob-authored line ratio: generated data, binaries, logs and evidence.
@@ -220,6 +222,34 @@ def naming_hint(name):
     return ""
 
 
+def _strings(obj):
+    """Every string (keys and values) in a parsed JSON document."""
+    if isinstance(obj, str):
+        yield obj
+    elif isinstance(obj, dict):
+        for k, v in obj.items():
+            yield k
+            for s in _strings(v):
+                yield s
+    elif isinstance(obj, list):
+        for v in obj:
+            for s in _strings(v):
+                yield s
+
+
+def found_emails(name, text):
+    """Non-noreply email addresses in an export. A JSON export is scanned string by string after
+    decoding, so code that Bob wrote, such as "\\n@app.get(" inside a JSON string, is not read as the
+    address n@app.get; a file that does not parse is scanned as raw text."""
+    chunks = [text]
+    if name.endswith(".json"):
+        try:
+            chunks = list(_strings(json.loads(text)))
+        except ValueError:
+            pass
+    return sorted({e for c in chunks for e in EMAIL_RE.findall(c) if not EMAIL_OK.search(e)})
+
+
 def check_exports(rep, exports):
     for name in exports:
         with open(os.path.join(SESSIONS, name), encoding="utf-8", errors="replace") as f:
@@ -231,7 +261,7 @@ def check_exports(rep, exports):
                 rep.error("bob_sessions/%s is not valid JSON; re-import it with tools/import_bob_export.py" % name)
         if HOME_RE.search(text):
             rep.error("bob_sessions/%s contains a home path; scrub it (see bob_sessions/README.md)" % name)
-        bad = sorted({e for e in EMAIL_RE.findall(text) if not EMAIL_OK.search(e)})
+        bad = found_emails(name, text)
         if bad:
             rep.error("bob_sessions/%s contains %d email address(es); scrub them" % (name, len(bad)))
 

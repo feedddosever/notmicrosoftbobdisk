@@ -52,6 +52,9 @@ def make_export():
                 _result("4", "write_file", "ok"),
                 _call("5", "spawn_subagent", description="u3", name="general"),
                 _result("5", "spawn_subagent", [{"type": "text", "text": "done"}]),
+                _call("8", "write_file", path="service/sheetshift_ho3/api.py",
+                      content='app = FastAPI()\n\n@app.get("/api/health")\ndef health():\n    return {}\n'),
+                _result("8", "write_file", "ok"),
                 _call("6", "read_file", path="C:/Users/jdoe/secret.txt"),
                 _result("6", "read_file", "boom", error=True),
             ]}
@@ -82,6 +85,7 @@ def test_scrub_removes_every_home_path_form_and_keeps_json():
     assert '"key": "<context cache key>"' in text and "|plan|" not in text
     assert not E.HOME_RE.search(text)
     assert "1+m1@users.noreply.github.com" in text          # noreply addresses stay
+    assert '\\n@app.get(\\"/api/health\\")' in text          # Bob's decorator is code, not an email
     assert I.load_export(text)["tasks"][0]["task"]["id"] == "abc123"
 
 
@@ -91,11 +95,13 @@ def test_summary_counts_modes_cost_subagents_files_and_errors():
     assert s["modes"] == ["plan", "agent"]
     assert s["cost"] == pytest.approx(0.84321) and s["child_costs"] == [0.2]
     assert s["subagents"] == 1
-    assert s["files"] == ["docs/design/service_plan.md", "service/sheetshift_ho3/units/u1.py",
-                          "service/sheetshift_ho3/units/u2.py", "service/sheetshift_ho3/units/u3.py"]
+    assert s["files"] == ["docs/design/service_plan.md", "service/sheetshift_ho3/api.py",
+                          "service/sheetshift_ho3/units/u1.py", "service/sheetshift_ho3/units/u2.py",
+                          "service/sheetshift_ho3/units/u3.py"]
     assert (s["failed"], s["blocked"]) == (2, 1)
     assert I.files_cell(s["files"], s["blocked"]) == (
-        "docs/design/service_plan.md, service/sheetshift_ho3/units/ (3); 1 call blocked by the guard")
+        "docs/design/service_plan.md, service/sheetshift_ho3/api.py, service/sheetshift_ho3/units/ (3); "
+        "1 call blocked by the guard")
     assert I.cost_cell(s) == "task cost 0.84 (+0.20 in 1 subagent task)"
 
 

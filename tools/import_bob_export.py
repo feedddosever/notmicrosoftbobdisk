@@ -46,18 +46,19 @@ KEEP_IF_SET = ("commit", "gauge_before", "gauge_after")
 
 # ---------------------------------------------------------------- scrub
 def scrub(text):
-    """(scrubbed text, home paths replaced, emails replaced, cache keys replaced)."""
+    """(scrubbed text, home paths replaced, emails replaced, cache keys replaced).
+
+    Emails are found in the decoded JSON strings (check_evidence.found_emails), then replaced in
+    the raw text: matching the raw text directly would read Bob's code "\\n@app.get(" as the
+    address n@app.get and break the \\n escape. Raises ValueError if the text is not JSON."""
     text, n_home = EV.HOME_RE.subn("<home>", text)
     text, n_key = CACHE_KEY_RE.subn(r"\1<context cache key>\2", text)
-    n_mail = [0]
-
-    def mail(m):
-        if EV.EMAIL_OK.search(m.group(0)):
-            return m.group(0)
-        n_mail[0] += 1
-        return "<email>"
-    text = EV.EMAIL_RE.sub(mail, text)
-    return text, n_home, n_mail[0], n_key
+    json.loads(text)
+    n_mail = 0
+    for e in EV.found_emails("export.json", text):
+        n_mail += text.count(e)
+        text = text.replace(e, "<email>")
+    return text, n_home, n_mail, n_key
 
 
 def load_export(text):

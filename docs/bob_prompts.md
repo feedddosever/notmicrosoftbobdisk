@@ -160,6 +160,14 @@ Write service/sheetshift_ho3/api.py (FastAPI; the only non-stdlib file): GET /ap
 
 - **Expected output:** `api.py` and `tests/test_api.py`.
 
+> **Result for m1 (Sat 26 Sep, run before T03; task cost 1.10).** Bob wrote `api.py` (health, quote, verify, trace), `tests/test_api.py` (34 tests) and, because T03 had not run yet, a placeholder `rater.py` (the literal `ORDER` and a `quote()` that returns blanks). Review found: `health()` counts `SHEETSHIFT_*` environment variables (`os.environ`, line 127), against the prompt and the README, so `tests/test_no_env.py` fails; Bob's own run passed only because it added `--ignore=tests/test_no_env.py`. The placeholder `quote()` also turns any Python exception into `XLError("#ERROR: …")`, which is not an Excel error code and would hide a crash from the harness. The harness itself runs on the placeholder without failing CI (verify and mutate exit 0). Fixed by the follow-up below; T03 then replaces the placeholder `rater.py`.
+
+**T04 follow-up (same task, Sheet Translator):**
+
+```
+Review fixes. (1) tests/test_no_env.py fails: service/sheetshift_ho3/api.py line 127 reads os.environ. The task said env_vars: 0 and no environment variables, so return the constant 0 and remove the os import. (2) In service/sheetshift_ho3/rater.py, remove the try/except in quote() that turns a Python exception into XLError("#ERROR: ..."): "#ERROR:" is not an Excel error code, and a crash must reach the harness. (3) Run python3 -m pytest -q tests with no --ignore and show the result.
+```
+
 ## T05 — triage (*record*; runs in parallel with T06 on a different member)
 
 - **Mode:** Sheet Triage. **Branch:** `bob/t05-triage`. **Est.** 2–4 coins.
