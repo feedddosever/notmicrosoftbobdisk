@@ -5,12 +5,14 @@ Helper name mapping (user-facing names → plan §10 xl_* names):
   xroundup        = xl_roundup        (ROUNDUP via 15-sig-fig Decimal + ROUND_UP)
   band            = xl_vlookup_approx (approximate VLOOKUP: bisect_right(keys,v)-1)
   exact           = xl_vlookup_exact  (exact VLOOKUP / MATCH: case-insensitive linear search)
-  text_eq         = (case-insensitive text equality, Excel IF/= semantics)
+  text_eq         = (Excel = semantics: case-insensitive str; blank(None) equals "" and 0)
   n0              = (blank-to-zero coercion: None → 0)
   edate           = xl_edate          (EDATE: same day m months later, clamped to EOM)
   yearfrac_basis3 = xl_yearfrac_3     (YEARFRAC basis 3: (b-a).days / 365)
   datedif_y       = xl_datedif_y      (DATEDIF "y": complete years; XLError("#NUM!") if a > b)
   iferror         = xl_iferror        (IFERROR: return alt when x is XLError)
+  xmin            = MIN: ignores None args; propagates first XLError
+  xmax            = MAX: ignores None args; propagates first XLError
 """
 
 import calendar
@@ -142,7 +144,24 @@ def exact(v, keys: list, vals: list):
 
 
 def text_eq(a, b) -> bool:
-    """Excel text equality: case-insensitive when both are str."""
+    """Excel = semantics.
+
+    - XLError argument: return the error unchanged (not a bool).
+    - Both str: case-insensitive comparison.
+    - blank (None) equals "" and equals 0; blank does NOT equal "Y".
+    - Otherwise: standard Python equality.
+    """
+    err = _propagate(a, b)
+    if err is not None:
+        return err
+    # blank (None) equals "" and equals 0 (§20 Blanks)
+    # Normalise: treat None as equivalent to both 0 and "".
+    if a is None and (b == "" or b == 0):
+        return True
+    if b is None and (a == "" or a == 0):
+        return True
+    if a is None or b is None:
+        return False
     if isinstance(a, str) and isinstance(b, str):
         return a.lower() == b.lower()
     return a == b
@@ -164,8 +183,11 @@ def n0(x):
 # ---------------------------------------------------------------------------
 
 def edate(d, m: int):
-    """EDATE(d, m): same calendar day m months later, clamped to end-of-month."""
+    """EDATE(d, m): same calendar day m months later, clamped to end-of-month.
+    Returns an XLError argument unchanged."""
     import datetime
+    if isinstance(d, XLError):
+        return d
     month = d.month + m
     year = d.year + (month - 1) // 12
     month = (month - 1) % 12 + 1
@@ -192,6 +214,28 @@ def datedif_y(a, b):
     if (b.month, b.day) < (a.month, a.day):
         years -= 1
     return years
+
+
+# ---------------------------------------------------------------------------
+# MIN / MAX
+# ---------------------------------------------------------------------------
+
+def xmin(*args):
+    """MIN(*args): ignore None arguments; return first XLError unchanged."""
+    err = _propagate(*args)
+    if err is not None:
+        return err
+    filtered = [a for a in args if a is not None]
+    return min(filtered)
+
+
+def xmax(*args):
+    """MAX(*args): ignore None arguments; return first XLError unchanged."""
+    err = _propagate(*args)
+    if err is not None:
+        return err
+    filtered = [a for a in args if a is not None]
+    return max(filtered)
 
 
 # ---------------------------------------------------------------------------

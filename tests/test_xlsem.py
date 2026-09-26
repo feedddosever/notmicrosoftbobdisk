@@ -25,6 +25,8 @@ from service.sheetshift_ho3.xlsem import (
     yearfrac_basis3,
     datedif_y,
     iferror,
+    xmin,
+    xmax,
 )
 
 
@@ -169,6 +171,27 @@ def test_if_y_eq_Y():
     assert (1 if text_eq("y", "Y") else 0) == 1
 
 
+def test_text_eq_blank_eq_empty_string():
+    # blank="" is TRUE
+    assert text_eq(None, "") is True
+
+
+def test_text_eq_blank_eq_zero():
+    # blank=0 is TRUE
+    assert text_eq(None, 0) is True
+
+
+def test_text_eq_blank_neq_Y():
+    # blank="Y" is FALSE (blank coerces to 0, not "Y")
+    assert text_eq(None, "Y") is False
+
+
+def test_text_eq_propagates_error():
+    e = XLError("#N/A")
+    result = text_eq(e, "Y")
+    assert isinstance(result, XLError) and result.code == "#N/A"
+
+
 # ---------------------------------------------------------------------------
 # n0 — blank coercion
 # ---------------------------------------------------------------------------
@@ -182,9 +205,8 @@ def test_n0_blank_times_1():
     assert n0(None) * 1 == 0
 
 
-def test_n0_blank_eq_empty():
-    # blank = "" → True via n0 interpreted as 0: 0 == "" is false in Python
-    # but blank = 0 is True
+def test_n0_blank_is_zero():
+    # n0 converts blank to 0 for arithmetic
     assert n0(None) == 0
 
 
@@ -201,6 +223,11 @@ def test_edate_month_end_clamp():
     # EDATE(DATE(2026,8,31), 6) → 2027-02-28
     d = datetime.date(2026, 8, 31)
     assert edate(d, 6) == datetime.date(2027, 2, 28)
+
+
+def test_edate_propagates_error():
+    e = XLError("#N/A")
+    assert edate(e, 6) is e
 
 
 # ---------------------------------------------------------------------------
@@ -253,18 +280,40 @@ def test_iferror_na_caught_string():
 
 
 # ---------------------------------------------------------------------------
-# MIN/MAX semantics (via Python builtins — illustrative, not helpers)
+# xmin / xmax
 # ---------------------------------------------------------------------------
 
-def test_min_ignores_none():
-    # MIN(blank, 3) = 3 (blank ignored)
-    args = [x for x in [None, 3] if x is not None]
-    assert min(args) == 3
+def test_xmin_ignores_none():
+    # MIN(blank, 3) = 3
+    assert xmin(None, 3) == 3
 
 
-def test_min_max_combined():
-    # MIN(0.33, 0.10) + MAX(1, 5) = 5.1
-    result = min(0.33, 0.10) + max(1, 5)
+def test_xmin_normal():
+    assert xmin(5, 2, 8) == 2
+
+
+def test_xmin_propagates_error():
+    e = XLError("#N/A")
+    assert xmin(e, 3) is e
+
+
+def test_xmax_ignores_none():
+    # MAX(blank, 3) = 3
+    assert xmax(None, 3) == 3
+
+
+def test_xmax_normal():
+    assert xmax(1, 5, 3) == 5
+
+
+def test_xmax_propagates_error():
+    e = XLError("#DIV/0!")
+    assert xmax(e, 5) is e
+
+
+def test_xmin_xmax_combined():
+    # MIN(0.33, 0.10) + MAX(1, 5) = 5.1 (probe table)
+    result = xmin(0.33, 0.10) + xmax(1, 5)
     assert math.isclose(result, 5.1, abs_tol=1e-9)
 
 
