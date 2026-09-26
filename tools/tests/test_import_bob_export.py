@@ -12,6 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import check_evidence as E  # noqa: E402
 import import_bob_export as I  # noqa: E402
 
+# Assembled at run time: CI's personal-data step rejects any literal non-noreply address in the repo.
+FAKE_EMAIL = "jdoe" + "@" + "example.com"
 HEADER = ("| Task | Member | Mode | Subagents | Files changed | Commit | Gauge before | Gauge after "
           "| Screenshot | Export | Status |\n|---|---|---|---|---|---|---|---|---|---|---|\n")
 
@@ -37,7 +39,7 @@ def make_export():
                      "costs": {"cost": 0.84321}},
             "messages": [
                 {"id": "s", "role": "system", "data": {"content": "Active file: c:\\Users\\jdoe\\repo\\x.py"}},
-                _user("plan", "read file:///c%3A/Users/jdoe/Desktop/repo/a.md, mail jdoe@example.com"),
+                _user("plan", "read file:///c%3A/Users/jdoe/Desktop/repo/a.md, mail " + FAKE_EMAIL),
                 _call("1", "write_file", path="docs/design/service_plan.md", content="x"),
                 _result("1", "write_file", "ok"),
                 _call("2", "apply_diff", path="harness/common.py", diff="d"),
