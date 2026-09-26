@@ -24,8 +24,8 @@ Never use Python round(), float == on money, or bisect_left for approximate look
 
 Always tag each function @covers("Calc!<col>", "<output_name>"). Write one function per column.
 Never copy a one-row exception (build/sheets/Calc_exceptions.md: a hard-coded value or a different
-formula in one row) and never branch on policy_id: translate the column rule, add `# FLAG <ID>`, and
-the harness groups the differing rows for a person to decide.
+formula in one row) and never branch on policy_id: translate the column rule, add
+`# SHEETSHIFT-FLAG <id>: <reason>`, and the harness groups the differing rows for a person to decide.
 
 Interface:
 - quote(policy) -> dict of all 43 outputs.
