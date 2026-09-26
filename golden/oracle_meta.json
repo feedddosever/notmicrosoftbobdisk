@@ -23,5 +23,63 @@
   },
   "seconds_recalc": 6.28,
   "generated_at": "2026-09-25T18:13:09+00:00"
+ },
+ "patched": {
+  "engine": "LibreOffice",
+  "version": "24.2.7.2",
+  "version_string": "LibreOffice 24.2.7.2 420(Build:2)",
+  "label": "LibreOffice 24.2.7.2, recorded, golden seed 2026",
+  "recalc": "forced full recalculation on load (OOXMLRecalcMode=0, ODFRecalcMode=0)",
+  "profile": "harness/lo_profile/registrymodifications.xcu",
+  "profile_sha256": "02812278eb685eda79207833194d1f07b36acabdfc465c0a707a1a50063363d5",
+  "seed": 2026,
+  "rows": 10000,
+  "columns": 43,
+  "inputs_sha256": "8334d8a2c55902797826c0b77171a7b002dc925db8087039e8ec33a7298b1e94",
+  "workbook": "workbook/example_mutual_ho3_rater.xlsx",
+  "workbook_sha256": "7fb6363ba5136e18596506d29a95026548af9d883942edeae54f33214b1e83c4",
+  "expanded_sha256": "61cf98d6d5d09366b00aacb70d96415e1afa7d805829bdeb1d4a867344a4287e",
+  "csv": "golden/oracle_2026_patched_Calc.csv.gz",
+  "csv_gz_sha256": "af5c1c997e22bc81678ff326381864f1f11c010d12deeb0812ecfdf1a0566c7f",
+  "csv_sha256": "b0d476da9e05201dbd190cb28c97d934dd7f50659c99ae5655f01dece17bf503",
+  "error_cells": {
+   "#N/A": 16
+  },
+  "seconds_recalc": 4.14,
+  "generated_at": "2026-09-26T15:29:59+00:00",
+  "decisions_sha256": "0809cd7290b97f80ddad02ef3de2462a24dd2eb59cf1d98acf076665848d3fe0",
+  "patched_workbook_sha256": "e09bb9a79ed44cdcd8d1cdcbb11d8e21dc17a9e27b30f174d352da8483040db4",
+  "patches": [
+   {
+    "cells": "O2:O41",
+    "cells_changed": 40,
+    "repair": "RateTables!$A$31:$B$35 -> DedBands",
+    "decision": "D-001",
+    "lint": "A1",
+    "option": "adopt-manual",
+    "rule": "R-205",
+    "type": "range_short_of_table"
+   },
+   {
+    "cells": "AM17",
+    "cells_changed": 1,
+    "repair": "48.17 -> =ROUND((AJ17+AK17)*G17,2)",
+    "decision": "D-002",
+    "lint": "A2",
+    "option": "adopt-manual",
+    "rule": "R-510",
+    "type": "hardcoded_value_in_formula_column"
+   },
+   {
+    "cells": "X31",
+    "cells_changed": 1,
+    "repair": "'=W31' -> =MIN(W31,CreditCap)",
+    "decision": "D-003",
+    "lint": "A3",
+    "option": "adopt-manual",
+    "rule": "R-310",
+    "type": "inconsistent_formula"
+   }
+  ]
  }
 }
