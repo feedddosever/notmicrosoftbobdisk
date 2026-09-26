@@ -80,7 +80,8 @@
  },
  "PreToolUse:execute_command": {
   "input_keys": [
-   "command"
+   "command",
+   "timeout_seconds"
   ],
   "tool": "execute_command",
   "top_keys": [
@@ -153,7 +154,8 @@
  },
  "PreToolUse:read_file": {
   "input_keys": [
-   "path"
+   "path",
+   "range"
   ],
   "tool": "read_file",
   "top_keys": [

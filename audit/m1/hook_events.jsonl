@@ -75,3 +75,31 @@
 {"ts": "2026-09-26T11:30:20Z", "handle": "m1", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "tests/test_xlsem.py", "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T11:30:30Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T11:33:19Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:56:17Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:17Z", "handle": "m1", "event": "PreToolUse", "tool": "list_files", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:20Z", "handle": "m1", "event": "PreToolUse", "tool": "list_files", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:21Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:25Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:25Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:56:31Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:56:31Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:57:20Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:58:13Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:58:36Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:00:28Z", "handle": "m1", "event": "PreToolUse", "tool": "list_files", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:00:29Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:00:53Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:00:57Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:01:57Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:02:40Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "service/sheetshift_ho3/api.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:03:00Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "service/sheetshift_ho3/rater.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:03:36Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "tests/test_api.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:03:41Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:04:21Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:35:31Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:35:41Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:35:41Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:35:54Z", "handle": "m1", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "service/sheetshift_ho3/api.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:36:01Z", "handle": "m1", "event": "PreToolUse", "tool": "grep", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T12:36:09Z", "handle": "m1", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "service/sheetshift_ho3/rater.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T12:36:29Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
