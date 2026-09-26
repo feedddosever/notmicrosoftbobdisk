@@ -5,5 +5,8 @@
 useDefault = true
 
 [allowlist]
-description = "guard-hook test fixtures (synthetic fake keys)"
+description = "guard-hook test fixtures (synthetic fake keys); Bob's context-cache key in the T00 export commit"
 paths = ['''tools/tests/test_guard\.py''']
+# cb779a1 committed the T00 export with Bob's context-window cache key ("<task id>|<mode>|<hashes>"),
+# which generic-api-key reads as a secret. It is not one; tools/import_bob_export.py now blanks it.
+commits = ["cb779a1cbc41d5853e8edc0d59971367407b6b66"]

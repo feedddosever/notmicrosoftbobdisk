@@ -36,7 +36,8 @@ def make_export():
     main = {"task": {"id": "abc123", "parentId": None, "title": "Plan the service", "status": "active",
                      "workspace": "file:c:\\Users\\jdoe\\Desktop\\repo",
                      "env": {"modeId": "plan", "workspace": "c:\\users\\jdoe\\desktop\\repo"},
-                     "costs": {"cost": 0.84321}},
+                     "costs": {"cost": 0.84321, "contextWindowBreakdown": {
+                         "key": ("0123456789abcdef" * 2) + "|plan|1344334112|443597102|2169253608"}}},
             "messages": [
                 {"id": "s", "role": "system", "data": {"content": "Active file: c:\\Users\\jdoe\\repo\\x.py"}},
                 _user("plan", "read file:///c%3A/Users/jdoe/Desktop/repo/a.md, mail " + FAKE_EMAIL),
@@ -75,9 +76,10 @@ def sessions(tmp_path):
 def test_scrub_removes_every_home_path_form_and_keeps_json():
     raw = json.dumps(make_export(), indent=2)
     assert "jdoe" in raw
-    text, n_home, n_mail = I.scrub(raw)
+    text, n_home, n_mail, n_key = I.scrub(raw)
     assert "jdoe" not in text.replace("<home>", "")
-    assert n_home >= 5 and n_mail == 1
+    assert n_home >= 5 and n_mail == 1 and n_key == 1
+    assert '"key": "<context cache key>"' in text and "|plan|" not in text
     assert not E.HOME_RE.search(text)
     assert "1+m1@users.noreply.github.com" in text          # noreply addresses stay
     assert I.load_export(text)["tasks"][0]["task"]["id"] == "abc123"

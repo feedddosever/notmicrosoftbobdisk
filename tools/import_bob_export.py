@@ -7,8 +7,10 @@ Bob IDE's Export button (task header) saves one JSON file per task: {version, ex
 workspace, tasks: [{task, messages}]}. The file holds the workspace's absolute path many times,
 so it is never committed as saved (`bob-task-*.json` is git-ignored). This tool:
 - scrubs the raw text, keeping Bob's formatting: home paths (any case, JSON-escaped, forward-slash
-  or URL-encoded) become <home>, email addresses other than noreply ones become <email>; the
-  result must still parse and must pass the checks in tools/check_evidence.py;
+  or URL-encoded) become <home>, email addresses other than noreply ones become <email>, and
+  Bob's context-cache key (which secret scanners mistake for an API key) becomes
+  <context cache key>; the result must still parse and must pass the checks in
+  tools/check_evidence.py;
 - writes bob_sessions/<team>_task<NN>_<desc>_<handle>_history.json (refuses to overwrite
   without --force);
 - prints what the export records: modes, cost, subagents, files Bob edited, failed or blocked
@@ -36,13 +38,17 @@ from tools import check_evidence as EV  # noqa: E402
 EDIT_TOOLS = ("write_file", "apply_diff", "insert_content", "search_and_replace", "office_edit")
 SPAWN_TOOLS = ("spawn_subagent", "start_subtask")
 GUARD_PREFIX = "SheetShift guard blocked"
+# Bob's context-window cache key, "<task id>|<mode>|<hash>|<hash>|<hash>": not a secret, but
+# gitleaks' generic-api-key rule reads it as one, and the evidence-folder scan runs default rules.
+CACHE_KEY_RE = re.compile(r'("key"\s*:\s*")[0-9a-f]{32}\|[^"]*(")')
 KEEP_IF_SET = ("commit", "gauge_before", "gauge_after")
 
 
 # ---------------------------------------------------------------- scrub
 def scrub(text):
-    """(scrubbed text, home paths replaced, emails replaced)."""
+    """(scrubbed text, home paths replaced, emails replaced, cache keys replaced)."""
     text, n_home = EV.HOME_RE.subn("<home>", text)
+    text, n_key = CACHE_KEY_RE.subn(r"\1<context cache key>\2", text)
     n_mail = [0]
 
     def mail(m):
@@ -51,7 +57,7 @@ def scrub(text):
         n_mail[0] += 1
         return "<email>"
     text = EV.EMAIL_RE.sub(mail, text)
-    return text, n_home, n_mail[0]
+    return text, n_home, n_mail[0], n_key
 
 
 def load_export(text):
@@ -239,7 +245,7 @@ def main(argv=None, sessions=None):
         raw = f.read()
     try:
         load_export(raw)
-        text, n_home, n_mail = scrub(raw)
+        text, n_home, n_mail, n_key = scrub(raw)
         export = load_export(text)
     except ValueError as e:
         print("ERROR: %s: %s" % (a.export, e), file=sys.stderr)
@@ -259,7 +265,8 @@ def main(argv=None, sessions=None):
 
     s = summarize(export)
     row = build_row(task, handle, s, shot, export_name, a.status)
-    print("wrote bob_sessions/%s (%d home paths and %d emails scrubbed)" % (export_name, n_home, n_mail))
+    print("wrote bob_sessions/%s (scrubbed: %d home paths, %d emails, %d cache keys)" % (
+        export_name, n_home, n_mail, n_key))
     print("Bob task %s: %s" % (s["task_id"], s["title"][:100]))
     print("  modes: %s | %s | subagents: %d" % (", ".join(s["modes"]) or "?", cost_cell(s) or "no cost field",
                                                  s["subagents"]))
