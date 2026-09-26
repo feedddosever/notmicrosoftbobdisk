@@ -224,10 +224,18 @@ Claude Code then runs `make patch` to produce the patched oracle. There is no sc
 - **Screenshot:** `bob_sessions/<team>_task07_decisions_<handle>_summary.png`
 
 ```
-Read @decisions/decisions.jsonl. Implement each decision (adopt-manual → the manual rule; keep-workbook → keep the column rule; escalate → no code change; add {"cell": "Calc!<col>" (the column key from build/graph.json rule_order, not the queue cell), "reason": "...", "decision": "D-00N"} to service/sheetshift_ho3/OUT_OF_SCOPE.json) with one test per decision. Then /shift-verify and quote original.unexplained_cells, original.decided_cells and patched.unexplained_cells from reports/last_run.json.
+Read @decisions/decisions.jsonl. Implement each decision: adopt-manual → the manual rule (no code change when the column rule already follows the manual); keep-workbook → keep the column rule; escalate → no code change, and only for escalate add {"cell": "Calc!<col>" (the column key from build/graph.json rule_order, not the queue cell), "reason": "...", "decision": "D-00N"} to service/sheetshift_ho3/OUT_OF_SCOPE.json. Write one test per decision. Then /shift-verify and quote original.unexplained_cells, original.decided_cells and patched.unexplained_cells from reports/last_run.json.
 ```
 
 - **Expected output:** unexplained cells `[U]` = 0 is the target.
+
+> **Result for m1 (Sat 26 Sep, task cost 2.14).** D-001: `c_O_ded_factor` now reads the six-row `DedBands` (`$A$31:$B$36`), comment citing D-001 and R-205. D-002 and D-003: no code change needed (the column rules already follow R-510 and R-310). 9 tests in `tests/test_decisions.py`. Bob's `/shift-verify`: original 0 unexplained, 20,461 decided (D-001 20,449, D-002 2, D-003 10); patched 430,000/430,000 equal, 0 unexplained (reproduced by Claude Code; the full suite, 556 tests, passes with nothing skipped). Review found one error, caused by the prompt's wording at the time (since clarified above): Bob also added `Calc!AM` and `Calc!X` to `OUT_OF_SCOPE.json` for the two adopt-manual decisions, declaring two translated columns out of scope. The trace gate ignores it (a column with a function counts as covered), but the file is wrong. Fixed by the follow-up below.
+
+**T07 follow-up (same task, Sheet Translator):**
+
+```
+Review fix. OUT_OF_SCOPE.json is only for a decision that removes a column from quote() (escalate). D-002 and D-003 are adopt-manual and Calc!AM and Calc!X are implemented and covered, so delete service/sheetshift_ho3/OUT_OF_SCOPE.json (it has no other entries; the harness declares the Summary cells itself from build/graph.json). Then run python3 -m harness.trace and python3 -m pytest -q tests with no --ignore, and show both results.
+```
 
 ## T08 — code review (*record*)
 
