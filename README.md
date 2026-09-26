@@ -60,7 +60,7 @@ API: `GET /api/health`, `GET /api/verify?n=200&sample_seed=7`, `POST /api/quote`
 
 ## Limits
 
-- Evidence over sampled and boundary inputs, not a formal proof.
+- Evidence over sampled and boundary inputs, not a formal proof. Generated policies stay inside each rate table's range (never below a band table's first key), so the `#N/A` branch for such inputs is covered by unit tests, not by the 10,000-policy comparison (mutant M32, labelled a gap).
 - The oracle is LibreOffice 24.2 with full recalculation forced, not Excel. Excel parity is unverified unless the optional cross-check (`tools/excel_crosscheck.py`) is run.
 - Macros and VBA are not supported, and `.xlsm` files are never opened.
 - Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are reported as unsupported.

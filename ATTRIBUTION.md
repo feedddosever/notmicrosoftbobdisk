@@ -131,6 +131,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `public/site.js` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `public/trace.html` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `public/verify.html` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `reports/mutation_labels.json` | People: m1 labels each surviving mutant; the per-mutant analysis was drafted by Claude Code (AI agent) | read by harness/mutate.py | m1 | pending |
 | `requirements-dev.txt` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `requirements.txt` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `service/sheetshift_ho3/__init__.py` | IBM Bob | T02, m1 | pending | 4de71da |

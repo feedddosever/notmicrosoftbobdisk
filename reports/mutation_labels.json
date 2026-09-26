@@ -1,0 +1,21 @@
+{
+ "_about": "Labels for surviving mutants (harness/mutate.py), keyed by fingerprint. A person decides each label; the analysis was drafted by Claude Code (AI agent) and agreed by m1 on 26 Sep 2026 after the T03 run (service tree a8617a3a).",
+ "8a608fda64": {"id": "M15", "label": "equivalent mutant", "by": "m1",
+  "reason": "tables._parse_ref: .upper() removed from the sheet name. Every table reference in the service is written 'RateTables!...' in the same case, so no lookup changes."},
+ "40a1e28f2a": {"id": "M16", "label": "equivalent mutant", "by": "m1",
+  "reason": "xlsem.text_eq: 'b is None' -> 'b == 0'. Every call site passes a literal as b ('Y', 'Basic', 'Fortified', 'Frame', '', 0), never a blank, and for b == 0 the mutated branch returns the same result as a == b."},
+ "b8751188fb": {"id": "M17", "label": "equivalent mutant", "by": "m1",
+  "reason": "xlsem.datedif_y: 'a > b' -> 'a >= b'. On equal dates it returns #NUM! instead of 0, but the only use is IFERROR(DATEDIF(...), 0) in Calc!B, which gives 0 either way."},
+ "6948446b0f": {"id": "M18", "label": "equivalent mutant", "by": "m1",
+  "reason": "tables._col_num: the counter starts at 1 instead of 0. For single-letter columns (all RateTables columns are A..L) every column number shifts by the same 26, so offsets inside a table are unchanged."},
+ "0a7e6a67b2": {"id": "M30", "label": "equivalent mutant", "by": "m1",
+  "reason": "xlsem.xmax: drops zero arguments instead of blanks. The only MAX is MAX(term_premium, 350); removing a 0 cannot change a maximum that includes 350, and no blank reaches it."},
+ "050939398c": {"id": "M32", "label": "gap", "by": "m1",
+  "reason": "xlsem.band: 'i < 0' -> 'i < -1', so a value below a band table's first key returns the last band instead of #N/A. The generated policies never fall below a table's first key (harness input domain), so the 10,000-policy comparison cannot see it. Covered by Bob's unit test (tests/test_xlsem.py, VLOOKUP key -1 -> #N/A). Stated in the README limits."},
+ "9265f01667": {"id": "M33", "label": "equivalent mutant", "by": "m1",
+  "reason": "tables._col_num: .upper() removed from the column letters. Every reference in the service uses upper-case column letters."},
+ "d22f843c5e": {"id": "M52", "label": "equivalent mutant", "by": "m1",
+  "reason": "rater.quote: 'out_name is not None' -> 'out_name != 0'. Every unit function is registered in STEPS, so out_name is always an output-name string."},
+ "d4f34218e9": {"id": "M59", "label": "equivalent mutant", "by": "m1",
+  "reason": "units/u3_hurricane.c_W_credit_raw: rows('RateTables!$B$40:$F$40')[0] -> [-1]. The range is a single row, so the first and last rows are the same."}
+}
