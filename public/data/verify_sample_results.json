@@ -1,0 +1,22 @@
+{
+ "_about": "Precomputed static fallback for /verify: the service at this commit run over the whole verification sample. The live page calls /api/verify instead.",
+ "cells_compared": 86000,
+ "cells_equal": 86000,
+ "commit": "d1510e87e9f7e2cf19cf2280962daa37bc5ec750",
+ "mismatches": [],
+ "mismatches_by_output": {},
+ "mismatches_truncated": 0,
+ "oracle": "LibreOffice 24.2.7.2, recorded, golden seed 2026",
+ "oracle_variant": "patched",
+ "precomputed": true,
+ "rows": 2000,
+ "rows_equal": 2000,
+ "service": "service.sheetshift_ho3.rater",
+ "tolerance": {
+  "blank_zero_empty": "blank, 0 and \"\" are different",
+  "dates": "exact",
+  "errors": "same error code",
+  "numbers": "absolute difference <= 1e-6",
+  "text": "exact and case-sensitive"
+ }
+}

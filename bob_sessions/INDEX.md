@@ -11,3 +11,4 @@ One row per Bob task, including T00 and any aborted, re-run or fallback task. `t
 | T04 | m1 | sheet-translator | 0 | service/sheetshift_ho3/ (2), tests/test_api.py | f2f3d71 | – | task cost 1.77 | sheetshift_task04_api_m1_summary.png | sheetshift_task04_api_m1_history.json | done |
 | T05 | m1 | sheet-triage | 0 | reports/notes/triage_1.md | ae91248 | – | task cost 0.17 | sheetshift_task05_triage_m1_summary.png | sheetshift_task05_triage_m1_history.json | done |
 | T06 | m1 | sheet-analyst | 0 | docs/anomalies/ (3) | 3331d0d | – | task cost 0.80 | sheetshift_task06_briefs_m1_summary.png | sheetshift_task06_briefs_m1_history.json | done |
+| T07 | m1 | sheet-translator | 0 | service/sheetshift_ho3/units/u2_aop.py, tests/test_decisions.py (OUT_OF_SCOPE.json added, then deleted after review) | d1510e8 | – | task cost 2.84 | sheetshift_task07_decisions_m1_summary.png | sheetshift_task07_decisions_m1_history.json | done |

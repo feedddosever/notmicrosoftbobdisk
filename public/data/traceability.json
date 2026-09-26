@@ -1,0 +1,930 @@
+{
+ "_about": "Workbook rule -> service code traceability (harness/trace.py).",
+ "service": "service.sheetshift_ho3.rater",
+ "total_rules": 48,
+ "counts": {
+  "covered": 43,
+  "out_of_scope": 5,
+  "uncovered": 0
+ },
+ "gate": "pass",
+ "uncovered": [],
+ "unknown_cells_in_steps": [],
+ "doubly_tagged": [],
+ "out_of_scope_not_in_graph": [],
+ "rules": [
+  {
+   "cell": "Calc!A",
+   "output_name": "policy_id",
+   "template": "=Policies!A2",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 28,
+     "name": "c_A_policy_id"
+    }
+   ],
+   "tests": [
+    "tests/test_api.py:258",
+    "tests/test_u1.py:15"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!B",
+   "output_name": "home_age",
+   "template": "=IFERROR(DATEDIF(DATE(Policies!E2,1,1),Policies!M2,\"y\"),0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 33,
+     "name": "c_B_home_age"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:16"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!C",
+   "output_name": "roof_age_used",
+   "template": "=Policies!F2*1",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 41,
+     "name": "c_C_roof_age_used"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:17"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!D",
+   "output_name": "aoi_units",
+   "template": "=Policies!G2/1000",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 46,
+     "name": "c_D_aoi_units"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:18"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!E",
+   "output_name": "base_rate",
+   "template": "=VLOOKUP(Policies!B2,BaseRates,2,FALSE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 51,
+     "name": "c_E_base_rate"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:19"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!F",
+   "output_name": "hurr_rate",
+   "template": "=VLOOKUP(Policies!B2,BaseRates,3,FALSE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 56,
+     "name": "c_F_hurr_rate"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:20"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!G",
+   "output_name": "tax_rate",
+   "template": "=VLOOKUP(Policies!B2,BaseRates,4,FALSE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 61,
+     "name": "c_G_tax_rate"
+    }
+   ],
+   "tests": [
+    "tests/test_decisions.py:68",
+    "tests/test_u1.py:21"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!H",
+   "output_name": "base_premium",
+   "template": "=ROUND(E2*D2,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 66,
+     "name": "c_H_base_premium"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:22"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!I",
+   "output_name": "constr_factor",
+   "template": "=INDEX(RateTables!$B$13:$B$16,MATCH(Policies!C2,RateTables!$A$13:$A$16,0))",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 74,
+     "name": "c_I_constr_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:23"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!J",
+   "output_name": "constr_hurr_factor",
+   "template": "=INDEX(RateTables!$C$13:$C$16,MATCH(Policies!C2,RateTables!$A$13:$A$16,0))",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u1_base.py",
+     "line": 79,
+     "name": "c_J_constr_hurr_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u1.py:24"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!K",
+   "output_name": "pc_factor",
+   "template": "=INDEX(RateTables!$B$19:$C$28,MATCH(Policies!D2,RateTables!$A$19:$A$28,0),IF(Policies!C2=\"Frame\",1,2))",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 55,
+     "name": "c_K_pc_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:20"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!L",
+   "output_name": "age_factor",
+   "template": "=VLOOKUP(B2,AgeBands,2,TRUE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 65,
+     "name": "c_L_age_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:21"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!M",
+   "output_name": "roof_factor",
+   "template": "=VLOOKUP(C2,RoofBands,2,TRUE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 71,
+     "name": "c_M_roof_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:22"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!N",
+   "output_name": "aoi_factor",
+   "template": "=VLOOKUP(Policies!G2,AOIBands,2,TRUE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 77,
+     "name": "c_N_aoi_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:23"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!O",
+   "output_name": "ded_factor",
+   "template": "=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 83,
+     "name": "c_O_ded_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_decisions.py:19",
+    "tests/test_decisions.py:35",
+    "tests/test_decisions.py:43",
+    "tests/test_decisions.py:51",
+    "tests/test_u2.py:24"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!P",
+   "output_name": "claims_factor",
+   "template": "=VLOOKUP(MIN(Policies!L2,3),ClaimsTable,2,FALSE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 90,
+     "name": "c_P_claims_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:25"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!Q",
+   "output_name": "aop_premium",
+   "template": "=ROUND(H2*I2*K2*L2*M2*N2*O2*P2,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 97,
+     "name": "c_Q_aop_premium"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:26"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!R",
+   "output_name": "alarm_flag",
+   "template": "=IF(Policies!J2=\"Y\",1,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 119,
+     "name": "c_R_alarm_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:27"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!S",
+   "output_name": "claims_free_flag",
+   "template": "=IF(AND(Policies!L2=0,B2>=3),1,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 125,
+     "name": "c_S_claims_free_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:28"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!T",
+   "output_name": "new_home_flag",
+   "template": "=IF(B2<=5,1,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u2_aop.py",
+     "line": 135,
+     "name": "c_T_new_home_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u2.py:29"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!U",
+   "output_name": "mit_basic_flag",
+   "template": "=IF(Policies!K2=\"Basic\",1,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 23,
+     "name": "c_U_mit_basic_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:109",
+    "tests/test_u3.py:14"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!V",
+   "output_name": "mit_fort_flag",
+   "template": "=IF(Policies!K2=\"Fortified\",1,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 33,
+     "name": "c_V_mit_fort_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:110",
+    "tests/test_u3.py:15"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!W",
+   "output_name": "credit_raw",
+   "template": "=SUMPRODUCT(R2:V2,CreditPcts)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 43,
+     "name": "c_W_credit_raw"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:111",
+    "tests/test_u3.py:16"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!X",
+   "output_name": "credit_pct",
+   "template": "=MIN(W2,CreditCap)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 68,
+     "name": "c_X_credit_pct"
+    }
+   ],
+   "tests": [
+    "tests/test_decisions.py:104",
+    "tests/test_decisions.py:114",
+    "tests/test_decisions.py:123",
+    "tests/test_decisions.py:20",
+    "tests/test_u3.py:17"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!Y",
+   "output_name": "aop_net",
+   "template": "=ROUND(Q2*(1-X2),2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 82,
+     "name": "c_Y_aop_net"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:113",
+    "tests/test_u3.py:18"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!Z",
+   "output_name": "hurr_pct_used",
+   "template": "=IF(Policies!I2=\"\",0.02,Policies!I2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 98,
+     "name": "c_Z_hurr_pct_used"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:114",
+    "tests/test_u3.py:19"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AA",
+   "output_name": "hurr_ded_factor",
+   "template": "=IFERROR(VLOOKUP(Z2,HurrDedTable,2,FALSE),1)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 108,
+     "name": "c_AA_hurr_ded_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:115",
+    "tests/test_u3.py:20"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AB",
+   "output_name": "wind_mit_factor",
+   "template": "=IFERROR(INDEX(RateTables!$L$31:$L$33,MATCH(Policies!K2,RateTables!$K$31:$K$33,0)),1)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 124,
+     "name": "c_AB_wind_mit_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:116",
+    "tests/test_u3.py:21"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AC",
+   "output_name": "hurr_premium",
+   "template": "=ROUND(F2*D2*J2*AA2*AB2,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 138,
+     "name": "c_AC_hurr_premium"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:117",
+    "tests/test_u3.py:22"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AD",
+   "output_name": "hurr_capped",
+   "template": "=MIN(AC2,Policies!G2*HurrCapPct)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u3_hurricane.py",
+     "line": 165,
+     "name": "c_AD_hurr_capped"
+    }
+   ],
+   "tests": [
+    "tests/test_u3.py:118",
+    "tests/test_u3.py:23"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AE",
+   "output_name": "subtotal",
+   "template": "=Y2+AD2",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 23,
+     "name": "c_AE_subtotal"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:15",
+    "tests/test_u4.py:39"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AF",
+   "output_name": "exp_date",
+   "template": "=EDATE(Policies!M2,Policies!N2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 34,
+     "name": "c_AF_exp_date"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:16",
+    "tests/test_u4.py:40"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AG",
+   "output_name": "term_factor",
+   "template": "=ROUND(YEARFRAC(Policies!M2,AF2,3),4)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 40,
+     "name": "c_AG_term_factor"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:17",
+    "tests/test_u4.py:41"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AH",
+   "output_name": "term_premium",
+   "template": "=ROUND(AE2*AG2,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 50,
+     "name": "c_AH_term_premium"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:18",
+    "tests/test_u4.py:42"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AI",
+   "output_name": "min_applied",
+   "template": "=MAX(AH2,MinPremium)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 61,
+     "name": "c_AI_min_applied"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:19",
+    "tests/test_u4.py:43"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AJ",
+   "output_name": "premium_rounded",
+   "template": "=ROUNDUP(AI2,0)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 71,
+     "name": "c_AJ_premium_rounded"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:20",
+    "tests/test_u4.py:44"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AK",
+   "output_name": "policy_fee",
+   "template": "=VLOOKUP(Policies!N2,FeeTable,2,FALSE)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 81,
+     "name": "c_AK_policy_fee"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:21",
+    "tests/test_u4.py:45"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AL",
+   "output_name": "assessment",
+   "template": "=ROUND(AJ2*AssessRate,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 88,
+     "name": "c_AL_assessment"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:22",
+    "tests/test_u4.py:46"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AM",
+   "output_name": "tax",
+   "template": "=ROUND((AJ2+AK2)*G2,2)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 98,
+     "name": "c_AM_tax"
+    }
+   ],
+   "tests": [
+    "tests/test_decisions.py:21",
+    "tests/test_decisions.py:74",
+    "tests/test_u4.py:23",
+    "tests/test_u4.py:47"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AN",
+   "output_name": "total_due",
+   "template": "=AJ2+AK2+AL2+AM2",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 110,
+     "name": "c_AN_total_due"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:24",
+    "tests/test_u4.py:48"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AO",
+   "output_name": "refer_flag",
+   "template": "=IF(OR(Policies!G2>1000000,C2>20,Policies!L2>=3),\"REFER\",\"OK\")",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 123,
+     "name": "c_AO_refer_flag"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:25",
+    "tests/test_u4.py:49"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AP",
+   "output_name": "rate_per_1000",
+   "template": "=ROUND(AH2/D2,3)",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 134,
+     "name": "c_AP_rate_per_1000"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:26",
+    "tests/test_u4.py:50"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Calc!AQ",
+   "output_name": "rate_class",
+   "template": "=Policies!B2&\"-\"&LEFT(Policies!C2,1)&TEXT(Policies!D2,\"00\")",
+   "functions": [
+    {
+     "file": "service/sheetshift_ho3/units/u4_final.py",
+     "line": 145,
+     "name": "c_AQ_rate_class"
+    }
+   ],
+   "tests": [
+    "tests/test_u4.py:27",
+    "tests/test_u4.py:51"
+   ],
+   "status": "covered"
+  },
+  {
+   "cell": "Summary!B2",
+   "output_name": null,
+   "template": "=COUNTA(Calc!A2:A41)",
+   "functions": [],
+   "tests": [],
+   "status": "out_of_scope",
+   "out_of_scope": {
+    "reason": "whole-book aggregate over all policy rows; not part of rating a single quote",
+    "source": "build/graph.json"
+   }
+  },
+  {
+   "cell": "Summary!B3",
+   "output_name": null,
+   "template": "=SUM(Calc!AJ2:AJ41)",
+   "functions": [],
+   "tests": [],
+   "status": "out_of_scope",
+   "out_of_scope": {
+    "reason": "whole-book aggregate over all policy rows; not part of rating a single quote",
+    "source": "build/graph.json"
+   }
+  },
+  {
+   "cell": "Summary!B4",
+   "output_name": null,
+   "template": "=SUM(Calc!AN2:AN41)",
+   "functions": [],
+   "tests": [],
+   "status": "out_of_scope",
+   "out_of_scope": {
+    "reason": "whole-book aggregate over all policy rows; not part of rating a single quote",
+    "source": "build/graph.json"
+   }
+  },
+  {
+   "cell": "Summary!B5",
+   "output_name": null,
+   "template": "=AVERAGE(Calc!AP2:AP41)",
+   "functions": [],
+   "tests": [],
+   "status": "out_of_scope",
+   "out_of_scope": {
+    "reason": "whole-book aggregate over all policy rows; not part of rating a single quote",
+    "source": "build/graph.json"
+   }
+  },
+  {
+   "cell": "Summary!B6",
+   "output_name": null,
+   "template": "=SUMPRODUCT(Calc!AD2:AD41)/SUM(Calc!AE2:AE41)",
+   "functions": [],
+   "tests": [],
+   "status": "out_of_scope",
+   "out_of_scope": {
+    "reason": "whole-book aggregate over all policy rows; not part of rating a single quote",
+    "source": "build/graph.json"
+   }
+  }
+ ],
+ "reverse_index": {
+  "service/sheetshift_ho3/units/u1_base.py:c_A_policy_id": [
+   "Calc!A"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_B_home_age": [
+   "Calc!B"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_C_roof_age_used": [
+   "Calc!C"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_D_aoi_units": [
+   "Calc!D"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_E_base_rate": [
+   "Calc!E"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_F_hurr_rate": [
+   "Calc!F"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_G_tax_rate": [
+   "Calc!G"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_H_base_premium": [
+   "Calc!H"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_I_constr_factor": [
+   "Calc!I"
+  ],
+  "service/sheetshift_ho3/units/u1_base.py:c_J_constr_hurr_factor": [
+   "Calc!J"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_K_pc_factor": [
+   "Calc!K"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_L_age_factor": [
+   "Calc!L"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_M_roof_factor": [
+   "Calc!M"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_N_aoi_factor": [
+   "Calc!N"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_O_ded_factor": [
+   "Calc!O"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_P_claims_factor": [
+   "Calc!P"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_Q_aop_premium": [
+   "Calc!Q"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_R_alarm_flag": [
+   "Calc!R"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_S_claims_free_flag": [
+   "Calc!S"
+  ],
+  "service/sheetshift_ho3/units/u2_aop.py:c_T_new_home_flag": [
+   "Calc!T"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_AA_hurr_ded_factor": [
+   "Calc!AA"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_AB_wind_mit_factor": [
+   "Calc!AB"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_AC_hurr_premium": [
+   "Calc!AC"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_AD_hurr_capped": [
+   "Calc!AD"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_U_mit_basic_flag": [
+   "Calc!U"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_V_mit_fort_flag": [
+   "Calc!V"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_W_credit_raw": [
+   "Calc!W"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_X_credit_pct": [
+   "Calc!X"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_Y_aop_net": [
+   "Calc!Y"
+  ],
+  "service/sheetshift_ho3/units/u3_hurricane.py:c_Z_hurr_pct_used": [
+   "Calc!Z"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AE_subtotal": [
+   "Calc!AE"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AF_exp_date": [
+   "Calc!AF"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AG_term_factor": [
+   "Calc!AG"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AH_term_premium": [
+   "Calc!AH"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AI_min_applied": [
+   "Calc!AI"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AJ_premium_rounded": [
+   "Calc!AJ"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AK_policy_fee": [
+   "Calc!AK"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AL_assessment": [
+   "Calc!AL"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AM_tax": [
+   "Calc!AM"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AN_total_due": [
+   "Calc!AN"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AO_refer_flag": [
+   "Calc!AO"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AP_rate_per_1000": [
+   "Calc!AP"
+  ],
+  "service/sheetshift_ho3/units/u4_final.py:c_AQ_rate_class": [
+   "Calc!AQ"
+  ]
+ }
+}

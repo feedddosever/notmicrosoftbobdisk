@@ -1,0 +1,511 @@
+{
+ "_about": "SheetShift equivalence certificate (harness/certify.py). Synthetic data; Example Mutual Insurance Co. is FICTIONAL; the anomalies were seeded.",
+ "status": "GREEN",
+ "status_reasons": [],
+ "warnings": [],
+ "run_id": "75d5cd8a0168",
+ "seed": 2026,
+ "service": "service.sheetshift_ho3.rater",
+ "policies": 10000,
+ "boundary_policies": 170,
+ "lint_guided_rows": [
+  17,
+  31
+ ],
+ "original": {
+  "cells_compared": 430000,
+  "cells_equal": 409539,
+  "decided_cells": {
+   "total": 20461,
+   "by_decision": {
+    "D-001": 20449,
+    "D-002": 2,
+    "D-003": 10
+   }
+  },
+  "unexplained_cells": 0,
+  "root_cells_explaining_all_diffs": 1876
+ },
+ "patched": {
+  "cells_compared": 430000,
+  "cells_equal": 430000,
+  "unexplained_cells": 0
+ },
+ "groups_by_class": {
+  "decided": [
+   {
+    "id": "G01",
+    "cell": "Calc!O",
+    "kind": "numeric",
+    "rows": 1874,
+    "cells": 20449,
+    "lint": "A1",
+    "decision": "D-001",
+    "signature": "delta -0.08 x1874 | p.deductible in [10000..50000] (precision 1.00: 1874 of 1874 such rows)"
+   },
+   {
+    "id": "G02",
+    "cell": "Calc!X",
+    "kind": "numeric",
+    "rows": 1,
+    "cells": 10,
+    "lint": "A3",
+    "decision": "D-003",
+    "signature": "delta -0.08 x1 | single row 31 (HO-000030); p.effective_date in [2027-06-01..2027-06-01] (precision 0.04: 1 of 28 such rows)"
+   },
+   {
+    "id": "G03",
+    "cell": "Calc!AM",
+    "kind": "numeric",
+    "rows": 1,
+    "cells": 2,
+    "lint": "A2",
+    "decision": "D-002",
+    "signature": "delta -21.65 x1 | single row 17 (HO-000016); c.premium_rounded in [1301..1301] (precision 0.20: 1 of 5 such rows)"
+   }
+  ]
+ },
+ "groups_by_class_patched": {},
+ "static_only_anomalies": [],
+ "decisions": [
+  {
+   "id": "D-001",
+   "lint": "A1",
+   "status": "DECIDED",
+   "option": "adopt-manual",
+   "rule": "R-205",
+   "by": "m1"
+  },
+  {
+   "id": "D-002",
+   "lint": "A2",
+   "status": "DECIDED",
+   "option": "adopt-manual",
+   "rule": "R-510",
+   "by": "m1"
+  },
+  {
+   "id": "D-003",
+   "lint": "A3",
+   "status": "DECIDED",
+   "option": "adopt-manual",
+   "rule": "R-310",
+   "by": "m1"
+  }
+ ],
+ "mutation": {
+  "total": 60,
+  "killed": 51,
+  "killed_by_crash": 4,
+  "catch_rate": 0.85,
+  "caught_using_boundary_rows": 45,
+  "caught_using_random_rows": 46,
+  "caught_only_by_boundary_rows": [
+   "M19"
+  ],
+  "caught_only_by_random_rows": [
+   "M23",
+   "M55"
+  ],
+  "survivors": [
+   {
+    "id": "M15",
+    "op": "text_case",
+    "file": "tables.py",
+    "line": 103,
+    "function": "_parse_ref",
+    "change": ".upper() removed",
+    "fingerprint": "8a608fda64",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M16",
+    "op": "blank",
+    "file": "xlsem.py",
+    "line": 161,
+    "function": "text_eq",
+    "change": "None -> 0 in comparison",
+    "fingerprint": "40a1e28f2a",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M17",
+    "op": "comparison",
+    "file": "xlsem.py",
+    "line": 211,
+    "function": "datedif_y",
+    "change": "> -> >=",
+    "fingerprint": "b8751188fb",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M18",
+    "op": "constant",
+    "file": "tables.py",
+    "line": 90,
+    "function": "_col_num",
+    "change": "0 -> 1",
+    "fingerprint": "6948446b0f",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M30",
+    "op": "blank",
+    "file": "xlsem.py",
+    "line": 237,
+    "function": "xmax",
+    "change": "None -> 0 in comparison",
+    "fingerprint": "0a7e6a67b2",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M32",
+    "op": "constant",
+    "file": "xlsem.py",
+    "line": 128,
+    "function": "band",
+    "change": "0 -> -1",
+    "fingerprint": "050939398c",
+    "label": "gap",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M33",
+    "op": "text_case",
+    "file": "tables.py",
+    "line": 91,
+    "function": "_col_num",
+    "change": ".upper() removed",
+    "fingerprint": "9265f01667",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M52",
+    "op": "blank",
+    "file": "rater.py",
+    "line": 106,
+    "function": "quote",
+    "change": "None -> 0 in comparison",
+    "fingerprint": "d22f843c5e",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   },
+   {
+    "id": "M59",
+    "op": "constant",
+    "file": "units/u3_hurricane.py",
+    "line": 60,
+    "function": "c_W_credit_raw",
+    "change": "0 -> -1",
+    "fingerprint": "d4f34218e9",
+    "label": "equivalent mutant",
+    "labelled_by": "m1"
+   }
+  ],
+  "sites_found": {
+   "band_lookup": 1,
+   "blank": 26,
+   "comparison": 12,
+   "constant": 141,
+   "iferror": 3,
+   "min_max": 3,
+   "round_mode": 2,
+   "text_case": 6
+  },
+  "seed": 2026,
+  "sample_seed": 2026,
+  "seconds": 200.3,
+  "status": "ok",
+  "control": {
+   "crashed": false,
+   "changed_cells": 0,
+   "error": null,
+   "seconds": 9.59
+  },
+  "stale": false
+ },
+ "naive_baseline": {
+  "bisect_left_band": {
+   "method": "AST: bisect_right -> bisect_left; <=/>= -> </> inside band helpers",
+   "sites": [
+    {
+     "line": 127,
+     "change": "bisect_right -> bisect_left",
+     "file": "xlsem.py"
+    }
+   ],
+   "rows_affected": 7244,
+   "cells_affected": 102784,
+   "boundary_rows": 129,
+   "random_rows": 7115,
+   "roots": {
+    "age_factor": 553,
+    "alarm_flag": 709,
+    "aoi_factor": 727,
+    "aoi_units": 709,
+    "base_rate": 709,
+    "claims_factor": 709,
+    "constr_factor": 709,
+    "constr_hurr_factor": 709,
+    "ded_factor": 6632,
+    "exp_date": 709,
+    "home_age": 709,
+    "hurr_pct_used": 709,
+    "hurr_rate": 709,
+    "mit_basic_flag": 709,
+    "mit_fort_flag": 709,
+    "pc_factor": 709,
+    "policy_fee": 709,
+    "policy_id": 709,
+    "rate_class": 709,
+    "roof_age_used": 709,
+    "roof_factor": 1223,
+    "tax_rate": 709,
+    "wind_mit_factor": 709
+   },
+   "crashed": false,
+   "error": null
+  },
+  "case_sensitive_text": {
+   "method": "AST: all .casefold()/.lower()/.upper() calls removed",
+   "sites": [
+    {
+     "op": "text_case",
+     "k": 0,
+     "line": 91,
+     "function": "_col_num",
+     "covers": null,
+     "change": ".upper() removed",
+     "file": "tables.py"
+    },
+    {
+     "op": "text_case",
+     "k": 1,
+     "line": 103,
+     "function": "_parse_ref",
+     "covers": null,
+     "change": ".upper() removed",
+     "file": "tables.py"
+    },
+    {
+     "op": "text_case",
+     "k": 0,
+     "line": 138,
+     "function": "exact",
+     "covers": null,
+     "change": ".lower() removed",
+     "file": "xlsem.py"
+    },
+    {
+     "op": "text_case",
+     "k": 1,
+     "line": 140,
+     "function": "exact",
+     "covers": null,
+     "change": ".lower() removed",
+     "file": "xlsem.py"
+    },
+    {
+     "op": "text_case",
+     "k": 2,
+     "line": 166,
+     "function": "text_eq",
+     "covers": null,
+     "change": ".lower() removed",
+     "file": "xlsem.py"
+    },
+    {
+     "op": "text_case",
+     "k": 3,
+     "line": 166,
+     "function": "text_eq",
+     "covers": null,
+     "change": ".lower() removed",
+     "file": "xlsem.py"
+    }
+   ],
+   "rows_affected": 3525,
+   "cells_affected": 48419,
+   "boundary_rows": 46,
+   "random_rows": 3479,
+   "roots": {
+    "alarm_flag": 1973,
+    "aoi_factor": 2,
+    "aoi_units": 2,
+    "base_rate": 3,
+    "claims_factor": 2,
+    "constr_factor": 2,
+    "constr_hurr_factor": 2,
+    "ded_factor": 2,
+    "exp_date": 2,
+    "home_age": 2,
+    "hurr_pct_used": 2,
+    "hurr_rate": 3,
+    "mit_basic_flag": 3,
+    "mit_fort_flag": 1972,
+    "pc_factor": 2,
+    "policy_fee": 2,
+    "policy_id": 2,
+    "rate_class": 2,
+    "roof_age_used": 2,
+    "tax_rate": 3,
+    "wind_mit_factor": 1973
+   },
+   "crashed": false,
+   "error": null
+  },
+  "min_blank_as_zero": {
+   "method": "input-level: blank inputs of MIN() columns passed as 0",
+   "sites": [
+    {
+     "change": "blank claims_3yr -> 0"
+    },
+    {
+     "change": "blank coverage_a -> 0"
+    }
+   ],
+   "rows_affected": 1110,
+   "cells_affected": 12150,
+   "boundary_rows": 14,
+   "random_rows": 1096,
+   "roots": {
+    "claims_factor": 1110
+   },
+   "crashed": false,
+   "error": null
+  },
+  "naive_round": {
+   "method": "AST: Excel-rounding helper body -> Python round()",
+   "sites": [
+    {
+     "line": 100,
+     "function": "xround",
+     "change": "body -> round()",
+     "file": "xlsem.py"
+    }
+   ],
+   "rows_affected": 2552,
+   "cells_affected": 9966,
+   "boundary_rows": 49,
+   "random_rows": 2503,
+   "roots": {
+    "aop_net": 302,
+    "aop_premium": 3,
+    "assessment": 756,
+    "base_premium": 814,
+    "hurr_premium": 324,
+    "rate_per_1000": 4,
+    "tax": 686,
+    "term_premium": 1
+   },
+   "crashed": false,
+   "error": null
+  },
+  "any_rows": 8819
+ },
+ "spotcheck": {
+  "groups": [
+   {
+    "id": "G01",
+    "class": "decided",
+    "cell": "Calc!O",
+    "lint": "A1",
+    "rows": 1874,
+    "p_detect_20": 0.9842
+   },
+   {
+    "id": "G02",
+    "class": "decided",
+    "cell": "Calc!X",
+    "lint": "A3",
+    "rows": 1,
+    "p_detect_20": 0.002
+   },
+   {
+    "id": "G03",
+    "class": "decided",
+    "cell": "Calc!AM",
+    "lint": "A2",
+    "rows": 1,
+    "p_detect_20": 0.002
+   }
+  ],
+  "naive_baseline": {
+   "any_rows": {
+    "rows": 8819,
+    "p_detect_20": 1.0
+   },
+   "bisect_left_band": {
+    "rows": 7244,
+    "p_detect_20": 1.0
+   },
+   "case_sensitive_text": {
+    "rows": 3525,
+    "p_detect_20": 0.9998
+   },
+   "min_blank_as_zero": {
+    "rows": 1110,
+    "p_detect_20": 0.9049
+   },
+   "naive_round": {
+    "rows": 2552,
+    "p_detect_20": 0.9972
+   }
+  }
+ },
+ "traceability": {
+  "total_rules": 48,
+  "counts": {
+   "covered": 43,
+   "out_of_scope": 5,
+   "uncovered": 0
+  },
+  "gate": "pass"
+ },
+ "oracle": {
+  "engine": "LibreOffice",
+  "version": "24.2.7.2",
+  "label": "LibreOffice 24.2.7.2, recorded, golden seed 2026",
+  "recalc": "forced full recalculation on load (OOXMLRecalcMode=0, ODFRecalcMode=0)",
+  "profile_sha256": "02812278eb685eda79207833194d1f07b36acabdfc465c0a707a1a50063363d5"
+ },
+ "excel_crosscheck": null,
+ "hashes": {
+  "workbook": "7fb6363ba5136e18596506d29a95026548af9d883942edeae54f33214b1e83c4",
+  "rate_tables_build": "56b6ed5d3e7c06fddc79a31e3909fa6dbe37c2a7abc82aca33fec2d04c3ee250",
+  "rate_tables_service": "56b6ed5d3e7c06fddc79a31e3909fa6dbe37c2a7abc82aca33fec2d04c3ee250",
+  "service_tree": "46a9cb449bc30ea28bf5482b7dcbc9d12b4d10599fd50efa4e206a5fcee7921b",
+  "harness_tree": "728a78550c2a64b6a55c86e7b6e3a6766407d0f31bf4d33ffb45bc4ceeef2f05",
+  "harness_tree_expected": "728a78550c2a64b6a55c86e7b6e3a6766407d0f31bf4d33ffb45bc4ceeef2f05",
+  "golden_inputs": "8334d8a2c55902797826c0b77171a7b002dc925db8087039e8ec33a7298b1e94",
+  "oracle_original_csv_gz": "6e8e2764d0908ce9dbf01a5bb138d4f987fed31dc88a513528382e78640ad5f7",
+  "oracle_patched_csv_gz": "af5c1c997e22bc81678ff326381864f1f11c010d12deeb0812ecfdf1a0566c7f",
+  "decisions_jsonl": "0809cd7290b97f80ddad02ef3de2462a24dd2eb59cf1d98acf076665848d3fe0"
+ },
+ "git_commit": "d1510e87e9f7e2cf19cf2280962daa37bc5ec750",
+ "seconds": {
+  "run": 12.46,
+  "trace": 0.38,
+  "run_load_golden": 2.69,
+  "run_service": 6.69,
+  "run_compare_triage": 2.02,
+  "run_compare_triage_patched": 1.0,
+  "oracle_recalc": 6.28,
+  "mutation": 200.3
+ },
+ "limits": [
+  "Macros and VBA are not supported; .xlsm files are never opened.",
+  "Volatile functions (NOW, TODAY, RAND, OFFSET, INDIRECT) are listed as unsupported.",
+  "External links, array and dynamic-array formulas, data tables and iterative calculation are out of scope.",
+  "The oracle is LibreOffice 24.2 with forced recalculation; Excel parity is UNVERIFIED unless the Excel cross-check runs.",
+  "Inputs are sampled, so equivalence is evidence, not proof.",
+  "The workbook's anomalies were seeded deliberately for the demonstration."
+ ],
+ "generated_at": "2026-09-26T15:59:37+00:00"
+}

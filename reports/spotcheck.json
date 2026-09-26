@@ -1,0 +1,56 @@
+{
+ "_about": "Chance that a 20-policy manual spot-check shows each problem at least once.",
+ "run_id": "75d5cd8a0168",
+ "policies": 10000,
+ "sample_size": 20,
+ "formula": "p_detect_20 = 1 - (1 - rows/N)^20",
+ "groups": [
+  {
+   "id": "G01",
+   "class": "decided",
+   "cell": "Calc!O",
+   "lint": "A1",
+   "rows": 1874,
+   "p_detect_20": 0.9842
+  },
+  {
+   "id": "G02",
+   "class": "decided",
+   "cell": "Calc!X",
+   "lint": "A3",
+   "rows": 1,
+   "p_detect_20": 0.002
+  },
+  {
+   "id": "G03",
+   "class": "decided",
+   "cell": "Calc!AM",
+   "lint": "A2",
+   "rows": 1,
+   "p_detect_20": 0.002
+  }
+ ],
+ "naive_baseline": {
+  "any_rows": {
+   "rows": 8819,
+   "p_detect_20": 1.0
+  },
+  "bisect_left_band": {
+   "rows": 7244,
+   "p_detect_20": 1.0
+  },
+  "case_sensitive_text": {
+   "rows": 3525,
+   "p_detect_20": 0.9998
+  },
+  "min_blank_as_zero": {
+   "rows": 1110,
+   "p_detect_20": 0.9049
+  },
+  "naive_round": {
+   "rows": 2552,
+   "p_detect_20": 0.9972
+  }
+ },
+ "mutation_service_tree_sha256": "46a9cb449bc30ea28bf5482b7dcbc9d12b4d10599fd50efa4e206a5fcee7921b"
+}

@@ -1,15 +1,778 @@
 {
  "_about": "Replay of a recorded run, built by tools/build_site_data.py from audit logs, the run log, bob_sessions/INDEX.md, decisions and Bob-Task commits. Nothing here runs Bob.",
- "events": [],
+ "events": [
+  {
+   "detail": "protected path",
+   "handle": "m1",
+   "kind": "guard_block",
+   "title": "Guard blocked office_read on workbook/probe/stale_cache.xlsx",
+   "ts": "2026-09-25T22:48:05Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T22:48:10Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T22:50:01Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T22:51:53Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T22:52:55Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:18:36Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:18:44Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:19:02Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:19:20Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:19:27Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:19:37Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:19:48Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:20:00Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:51:51Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:52:32Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:52:42Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:52:53Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:53:35Z"
+  },
+  {
+   "detail": "protected path",
+   "handle": "m1",
+   "kind": "guard_block",
+   "title": "Guard blocked apply_diff on harness/common.py",
+   "ts": "2026-09-25T23:54:04Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:54:07Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:54:31Z"
+  },
+  {
+   "detail": "redirect into a protected path",
+   "handle": "m1",
+   "kind": "guard_block",
+   "title": "Guard blocked execute_command on a protected path",
+   "ts": "2026-09-25T23:54:41Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:54:44Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:54:53Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:55:09Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-25T23:55:35Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "docs/design/service_plan.md",
+   "title": "Bob edited docs/design/service_plan.md",
+   "ts": "2026-09-26T10:53:17Z"
+  },
+  {
+   "detail": "smoke: not run yet",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T10:53:37Z"
+  },
+  {
+   "commit": "9e2266a8e44fca56adbb17ae520377c5d87f9067",
+   "detail": "mode plan; subagents 0; gauge ? -> task cost 2.46; done",
+   "export": "bob_sessions/sheetshift_task01_plan_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task01_plan_m1_summary.png",
+   "task": "T01",
+   "title": "T01: service plan from Bob's Plan-mode onboarding",
+   "ts": "2026-09-26T11:00:43Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/__init__.py",
+   "title": "Bob edited service/sheetshift_ho3/__init__.py",
+   "ts": "2026-09-26T11:09:03Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/xlsem.py",
+   "title": "Bob edited service/sheetshift_ho3/xlsem.py",
+   "ts": "2026-09-26T11:09:30Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/tables.py",
+   "title": "Bob edited service/sheetshift_ho3/tables.py",
+   "ts": "2026-09-26T11:09:48Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_xlsem.py",
+   "title": "Bob edited tests/test_xlsem.py",
+   "ts": "2026-09-26T11:10:47Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_tables.py",
+   "title": "Bob edited tests/test_tables.py",
+   "ts": "2026-09-26T11:11:07Z"
+  },
+  {
+   "detail": "smoke: pending (U1, U2, U3, U4 not yet written)",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T11:11:58Z"
+  },
+  {
+   "commit": "4de71dad2e2a02349999dcfc9513b4a07e57c6d9",
+   "detail": "mode sheet-translator; subagents 1; gauge ? -> task cost 2.02; done",
+   "export": "bob_sessions/sheetshift_task02_xlsem_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task02_xlsem_m1_summary.png",
+   "task": "T02",
+   "title": "T02: Excel-semantics helpers, traceability registry and rate-table access",
+   "ts": "2026-09-26T11:18:08Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/xlsem.py",
+   "title": "Bob edited service/sheetshift_ho3/xlsem.py",
+   "ts": "2026-09-26T11:29:49Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_xlsem.py",
+   "title": "Bob edited tests/test_xlsem.py",
+   "ts": "2026-09-26T11:30:21Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/xlsem.py",
+   "title": "Bob edited service/sheetshift_ho3/xlsem.py",
+   "ts": "2026-09-26T11:32:58Z"
+  },
+  {
+   "detail": "smoke: pending (U1, U2, U3, U4 not yet written)",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T11:34:03Z"
+  },
+  {
+   "commit": "9af8dfe6b3f5a5877dfddaf9d07225d80938f6c8",
+   "handle": "m1",
+   "kind": "commit",
+   "task": "T02",
+   "title": "T02 follow-up: blank equality, MIN/MAX helpers, EDATE error pass-through",
+   "ts": "2026-09-26T11:38:20Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/api.py",
+   "title": "Bob edited service/sheetshift_ho3/api.py",
+   "ts": "2026-09-26T12:02:42Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/rater.py",
+   "title": "Bob edited service/sheetshift_ho3/rater.py",
+   "ts": "2026-09-26T12:03:01Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_api.py",
+   "title": "Bob edited tests/test_api.py",
+   "ts": "2026-09-26T12:03:37Z"
+  },
+  {
+   "detail": "smoke: pending (U1, U2, U3, U4 not yet written)",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T12:05:01Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/api.py",
+   "title": "Bob edited service/sheetshift_ho3/api.py",
+   "ts": "2026-09-26T12:35:56Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/rater.py",
+   "title": "Bob edited service/sheetshift_ho3/rater.py",
+   "ts": "2026-09-26T12:36:10Z"
+  },
+  {
+   "detail": "smoke: pending (U1, U2, U3, U4 not yet written)",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T12:36:54Z"
+  },
+  {
+   "commit": "f2f3d71502ae5429dcdb83a2c0d71035b7344e64",
+   "detail": "mode sheet-translator; subagents 0; gauge ? -> task cost 1.77; done",
+   "export": "bob_sessions/sheetshift_task04_api_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task04_api_m1_summary.png",
+   "task": "T04",
+   "title": "T04: FastAPI app (health, quote, verify, trace) and a placeholder rater",
+   "ts": "2026-09-26T12:41:15Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/__init__.py",
+   "title": "Bob edited service/sheetshift_ho3/units/__init__.py",
+   "ts": "2026-09-26T12:55:58Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u2_aop.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u2_aop.py",
+   "ts": "2026-09-26T12:56:19Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u3_hurricane.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u3_hurricane.py",
+   "ts": "2026-09-26T12:56:21Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u1_base.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u1_base.py",
+   "ts": "2026-09-26T12:56:29Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u4_final.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u4_final.py",
+   "ts": "2026-09-26T12:56:29Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_u3.py",
+   "title": "Bob edited tests/test_u3.py",
+   "ts": "2026-09-26T12:56:54Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_u1.py",
+   "title": "Bob edited tests/test_u1.py",
+   "ts": "2026-09-26T12:56:59Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_u2.py",
+   "title": "Bob edited tests/test_u2.py",
+   "ts": "2026-09-26T12:57:27Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_u4.py",
+   "title": "Bob edited tests/test_u4.py",
+   "ts": "2026-09-26T12:57:27Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u1_base.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u1_base.py",
+   "ts": "2026-09-26T12:58:12Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u2_aop.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u2_aop.py",
+   "ts": "2026-09-26T12:59:12Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/rater.py",
+   "title": "Bob edited service/sheetshift_ho3/rater.py",
+   "ts": "2026-09-26T13:00:18Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_rater_order.py",
+   "title": "Bob edited tests/test_rater_order.py",
+   "ts": "2026-09-26T13:00:41Z"
+  },
+  {
+   "detail": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T13:03:03Z"
+  },
+  {
+   "commit": "c1c690d522d271b5b26c6539d5439a21fca299ee",
+   "detail": "mode sheet-translator; subagents 4; gauge ? -> task cost 4.22; done",
+   "export": "bob_sessions/sheetshift_task03_translate_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task03_translate_m1_summary.png",
+   "task": "T03",
+   "title": "T03: the 43 formula columns in four units, translated by four parallel subagents",
+   "ts": "2026-09-26T13:13:52Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "reports/notes/triage_1.md",
+   "title": "Bob edited reports/notes/triage_1.md",
+   "ts": "2026-09-26T15:04:28Z"
+  },
+  {
+   "detail": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:04:34Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "docs/anomalies/D-001.md",
+   "title": "Bob edited docs/anomalies/D-001.md",
+   "ts": "2026-09-26T15:12:07Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "docs/anomalies/D-002.md",
+   "title": "Bob edited docs/anomalies/D-002.md",
+   "ts": "2026-09-26T15:12:23Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "docs/anomalies/D-003.md",
+   "title": "Bob edited docs/anomalies/D-003.md",
+   "ts": "2026-09-26T15:12:43Z"
+  },
+  {
+   "detail": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:12:54Z"
+  },
+  {
+   "commit": "ae91248ecba059b46fa4ec1f0148e55307ced01e",
+   "detail": "mode sheet-triage; subagents 0; gauge ? -> task cost 0.17; done",
+   "export": "bob_sessions/sheetshift_task05_triage_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task05_triage_m1_summary.png",
+   "task": "T05",
+   "title": "T05: triage note: two anomaly groups, zero translation bugs",
+   "ts": "2026-09-26T15:19:31Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "docs/anomalies/D-001.md",
+   "title": "Bob edited docs/anomalies/D-001.md",
+   "ts": "2026-09-26T15:22:23Z"
+  },
+  {
+   "detail": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:22:32Z"
+  },
+  {
+   "detail": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:23:45Z"
+  },
+  {
+   "detail": "Table 205 has a 10,000-and-over band at 0.66; the workbook range stops one row short",
+   "handle": "m1",
+   "kind": "decision",
+   "title": "D-001: adopt-manual (R-205) on Calc!O2:O41",
+   "ts": "2026-09-26T15:24:19Z"
+  },
+  {
+   "detail": "R-510 forbids per-policy tax overrides; AM17 is a hand-entered 48.17",
+   "handle": "m1",
+   "kind": "decision",
+   "title": "D-002: adopt-manual (R-510) on Calc!AM17",
+   "ts": "2026-09-26T15:24:44Z"
+  },
+  {
+   "detail": "R-310 caps total credits at 25%; X31 omits the cap",
+   "handle": "m1",
+   "kind": "decision",
+   "title": "D-003: adopt-manual (R-310) on Calc!X31",
+   "ts": "2026-09-26T15:24:55Z"
+  },
+  {
+   "commit": "3331d0da1fe255264eed4c721d32ea8e21417c41",
+   "detail": "mode sheet-analyst; subagents 0; gauge ? -> task cost 0.80; done",
+   "export": "bob_sessions/sheetshift_task06_briefs_m1_history.json",
+   "handle": "m1",
+   "kind": "task",
+   "screenshot": "bob_sessions/sheetshift_task06_briefs_m1_summary.png",
+   "task": "T06",
+   "title": "T06: anomaly briefs D-001 to D-003, each recommending without deciding",
+   "ts": "2026-09-26T15:26:17Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/units/u2_aop.py",
+   "title": "Bob edited service/sheetshift_ho3/units/u2_aop.py",
+   "ts": "2026-09-26T15:43:04Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "service/sheetshift_ho3/OUT_OF_SCOPE.json",
+   "title": "Bob edited service/sheetshift_ho3/OUT_OF_SCOPE.json",
+   "ts": "2026-09-26T15:43:11Z"
+  },
+  {
+   "detail": "write_file",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_decisions.py",
+   "title": "Bob edited tests/test_decisions.py",
+   "ts": "2026-09-26T15:43:42Z"
+  },
+  {
+   "detail": "smoke all OK: 149/200 rows equal; lint-explained cells A1:529,A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:45:15Z"
+  },
+  {
+   "detail": "apply_diff",
+   "handle": "m1",
+   "kind": "edit",
+   "path": "tests/test_decisions.py",
+   "title": "Bob edited tests/test_decisions.py",
+   "ts": "2026-09-26T15:51:07Z"
+  },
+  {
+   "detail": "smoke all OK: 149/200 rows equal; lint-explained cells A1:529,A2:2,A3:10",
+   "handle": "m1",
+   "kind": "smoke",
+   "title": "Task turn ended",
+   "ts": "2026-09-26T15:52:04Z"
+  },
+  {
+   "commit": "d1510e87e9f7e2cf19cf2280962daa37bc5ec750",
+   "handle": "m1",
+   "kind": "commit",
+   "task": "T07",
+   "title": "T07: implement the three decisions; D-001 moves ded_factor to the six-row DedBands",
+   "ts": "2026-09-26T15:55:34Z"
+  }
+ ],
  "sources": {
-  "Bob-Task commits": 0,
-  "INDEX rows": 0,
-  "audit edits": 0,
-  "decisions": 0,
-  "guard allows": 0,
-  "guard blocks": 0,
-  "run log records": 0
+  "Bob-Task commits": 8,
+  "INDEX rows": 8,
+  "audit edits": 38,
+  "decisions": 3,
+  "guard allows": 250,
+  "guard blocks": 3,
+  "run log records": 35
  },
- "tasks": [],
+ "tasks": [
+  {
+   "commit": null,
+   "export": "bob_sessions/sheetshift_task00_probes_m1_history.json",
+   "files_changed": "none; 2 calls blocked by the guard",
+   "gauge_after": "task cost 1.08",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "ask, agent, sheet-translator",
+   "screenshot": "bob_sessions/sheetshift_task00_probes_m1_summary.png",
+   "status": "re-run",
+   "subagents": "0",
+   "task": "T00"
+  },
+  {
+   "commit": "9e2266a",
+   "export": "bob_sessions/sheetshift_task01_plan_m1_history.json",
+   "files_changed": "docs/design/service_plan.md",
+   "gauge_after": "task cost 2.46",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "plan",
+   "screenshot": "bob_sessions/sheetshift_task01_plan_m1_summary.png",
+   "status": "done",
+   "subagents": "0",
+   "task": "T01"
+  },
+  {
+   "commit": "4de71da",
+   "export": "bob_sessions/sheetshift_task02_xlsem_m1_history.json",
+   "files_changed": "service/sheetshift_ho3/ (3), tests/ (2)",
+   "gauge_after": "task cost 2.02",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-translator",
+   "screenshot": "bob_sessions/sheetshift_task02_xlsem_m1_summary.png",
+   "status": "done",
+   "subagents": "1",
+   "task": "T02"
+  },
+  {
+   "commit": "c1c690d",
+   "export": "bob_sessions/sheetshift_task03_translate_m1_history.json",
+   "files_changed": "service/sheetshift_ho3/rater.py, tests/test_rater_order.py; by the 4 subagents (audit/m1/bob_edits.jsonl): service/sheetshift_ho3/units/ (5), tests/test_u1..u4.py (4)",
+   "gauge_after": "task cost 4.22",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-translator",
+   "screenshot": "bob_sessions/sheetshift_task03_translate_m1_summary.png",
+   "status": "done",
+   "subagents": "4",
+   "task": "T03"
+  },
+  {
+   "commit": "f2f3d71",
+   "export": "bob_sessions/sheetshift_task04_api_m1_history.json",
+   "files_changed": "service/sheetshift_ho3/ (2), tests/test_api.py",
+   "gauge_after": "task cost 1.77",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-translator",
+   "screenshot": "bob_sessions/sheetshift_task04_api_m1_summary.png",
+   "status": "done",
+   "subagents": "0",
+   "task": "T04"
+  },
+  {
+   "commit": "ae91248",
+   "export": "bob_sessions/sheetshift_task05_triage_m1_history.json",
+   "files_changed": "reports/notes/triage_1.md",
+   "gauge_after": "task cost 0.17",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-triage",
+   "screenshot": "bob_sessions/sheetshift_task05_triage_m1_summary.png",
+   "status": "done",
+   "subagents": "0",
+   "task": "T05"
+  },
+  {
+   "commit": "3331d0d",
+   "export": "bob_sessions/sheetshift_task06_briefs_m1_history.json",
+   "files_changed": "docs/anomalies/ (3)",
+   "gauge_after": "task cost 0.80",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-analyst",
+   "screenshot": "bob_sessions/sheetshift_task06_briefs_m1_summary.png",
+   "status": "done",
+   "subagents": "0",
+   "task": "T06"
+  },
+  {
+   "commit": null,
+   "export": "bob_sessions/sheetshift_task07_decisions_m1_history.json",
+   "files_changed": "service/sheetshift_ho3/OUT_OF_SCOPE.json, service/sheetshift_ho3/units/u2_aop.py, tests/test_decisions.py",
+   "gauge_after": "task cost 2.84",
+   "gauge_before": "",
+   "member": "m1",
+   "mode": "sheet-translator",
+   "screenshot": "bob_sessions/sheetshift_task07_decisions_m1_summary.png",
+   "status": "done",
+   "subagents": "0",
+   "task": "T07"
+  }
+ ],
  "truncated_events": 0
 }

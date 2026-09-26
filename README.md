@@ -17,16 +17,17 @@ All data is synthetic. The carrier is **Example Mutual Insurance Co. (FICTIONAL)
 ## The result
 
 <!-- headline:start (written by `python -m tools.build_site_data --readme` from reports/certificate.json; do not edit by hand) -->
-**[C] cells compared: [E] identical to the workbook, [D] differing only in rows traced to [A] human-signed decisions, [U] unexplained.**
+**430,000 cells compared: 409,539 identical to the workbook, 20,461 differing only in rows traced to 3 human-signed decisions, 0 unexplained.**
 
-- Decision-patched workbook: [Cp] of [Cp] cells identical.
-- Harness sensitivity: [K] of [M] mutants of Bob's code caught.
-- A 20-quote spot check misses naive rounding [P20] of the time.
-- Certificate status: [STATUS] · seed 2026 · 10,000 policies · oracle: LibreOffice 24.2, forced recalculation, recorded.
+- Decision-patched workbook: 430,000 of 430,000 cells identical, 0 unexplained.
+- Harness sensitivity: 51 of 60 mutants of Bob's code caught.
+- A 20-quote spot check misses naive rounding 0.3% of the time.
+- Certificate status: GREEN · seed 2026 · 10,000 policies · oracle: LibreOffice 24.2.7.2, recorded, golden seed 2026.
 <!-- headline:end -->
 
-- Time: one person hand-translating unit [Ux] took [Hman] min; Bob took [Hbob] min (n = 1).
-- Bob-authored lines: [Lb] of [Lt] non-generated lines (`python3 tools/check_evidence.py`).
+- Mutation survivors: the 9 of 60 that survived are labelled by a person in `reports/mutation_labels.json`: 8 cannot change any output, 1 is an input-domain gap covered by a unit test (see Limits).
+- Bob-authored lines: 4,151 of 16,861 non-generated lines (`python3 tools/check_evidence.py`). The rest is the grader, tooling and scaffold, which Claude Code wrote so that Bob never wrote its own exam.
+- IBM Bob: 8 tasks (T00–T07), four parallel subagents in T03, about 16 Bobcoins; every task's summary screenshot and exported session is in [`bob_sessions/`](bob_sessions/).
 
 How to read it. Seed 2026 gives 10,000 generated policies, including boundary cases. Each one goes through the original workbook (recalculated once in LibreOffice with full recalculation forced) and through Bob's service, and all 43 output columns are compared: numbers within 1e-6, dates and text exactly, errors by code. A cell is **unexplained** when it differs in a row whose root cells no signed decision covers. A second comparison, against a copy of the workbook patched with the decisions, must match in every cell, so a decision cannot hide a translation bug.
 

@@ -1,12 +1,20 @@
 {
  "_about": "Site metadata written by tools/build_site_data.py. Synthetic data; Example Mutual Insurance Co. (FICTIONAL).",
  "carrier": "Example Mutual Insurance Co. (FICTIONAL)",
- "commit": "53308dd08a7e5ce4c8901a1976ca98199e052de6",
- "commit_short": "53308dd",
- "exports_available": null,
+ "commit": "d1510e87e9f7e2cf19cf2280962daa37bc5ec750",
+ "commit_short": "d1510e8",
+ "exports_available": true,
  "files": {
+  "certificate.json": {
+   "sha256": "9817a02dfdda0d759adcd91c9bd4a665a0b53a48f39ff98b43aa55c3a84e15f7",
+   "source": "reports/certificate.json"
+  },
+  "certificate_report.html": {
+   "sha256": "3313146ef0bd890d25260c73857b2ea580de795c1c3bc306f85f96930a0649e1",
+   "source": "reports/certificate.html"
+  },
   "decisions.json": {
-   "sha256": "c58eadd93acf4bcc8c470257d5e83faf7bd68721656ad87c2218b222e34d636b",
+   "sha256": "6a41353c922b5935419f7387150c9bea4647b10b67f327f42a16321ac002346b",
    "source": "reports/decision_queue.json + decisions/decisions.jsonl"
   },
   "graph.json": {
@@ -17,28 +25,38 @@
    "sha256": "30a175cd7a7e225e839eacd729f81fba51afa3d11a7dc9ba1e51792cfc06cb81",
    "source": "build/lints.json"
   },
+  "mutation.json": {
+   "sha256": "462397f8fea2df344cf946804871bcc658a36ef5a3f3364eeb59e11fa1aa7425",
+   "source": "reports/mutation_report.json"
+  },
   "quote_examples.json": {
    "sha256": "f12e76e2f2fee0f12cfcb2064c1223e9384de529ee8cc3d3a88738789ec76f8d",
    "source": "golden/"
   },
   "replay.json": {
-   "sha256": "1cc1b88418cee176feeeced7c23d4f11a658c026cf0bc6e3f313141f2e2afd0f",
+   "sha256": "37beee3ed513de073644332ab427c8f8eccce0222156b5c6ded945bb1f208f6a",
    "source": "audit/, reports/run_log.jsonl, bob_sessions/INDEX.md, git log"
+  },
+  "spotcheck.json": {
+   "sha256": "a8f7f0dcc797de7ccf4b7a500fa55e2232a06e7c4aa4ef72854552782726e61c",
+   "source": "reports/spotcheck.json"
+  },
+  "traceability.json": {
+   "sha256": "d868f01ccd4f34b31bc292da83facb989361e904f687a6060fc03c89d5f9ee41",
+   "source": "reports/traceability.json"
+  },
+  "verify_sample_results.json": {
+   "sha256": "e4da404e5cd3fb88b3871441462c26d0038ca6a51dca65ac3d1857e722545231",
+   "source": "service/sheetshift_ho3/data/verify_sample_2026.json.gz + service.sheetshift_ho3.rater"
   }
  },
- "missing": [
-  "certificate.json",
-  "certificate_report.html",
-  "mutation.json",
-  "spotcheck.json",
-  "traceability.json",
-  "verify_sample_results.json"
- ],
+ "missing": [],
  "mode": "live",
- "notes": [
-  "service service.sheetshift_ho3.rater does not import (ServiceMissing)"
- ],
- "recorded": null,
+ "notes": [],
+ "recorded": {
+  "first": "2026-09-25",
+  "last": "2026-09-26"
+ },
  "repo_url": "https://github.com/feedddosever/notmicrosoftbobdisk",
  "schema": 1,
  "service": {

@@ -237,6 +237,8 @@ Read @decisions/decisions.jsonl. Implement each decision: adopt-manual → the m
 Review fix. OUT_OF_SCOPE.json is only for a decision that removes a column from quote() (escalate). D-002 and D-003 are adopt-manual and Calc!AM and Calc!X are implemented and covered, so delete service/sheetshift_ho3/OUT_OF_SCOPE.json (it has no other entries; the harness declares the Summary cells itself from build/graph.json). Then run python3 -m harness.trace and python3 -m pytest -q tests with no --ignore, and show both results.
 ```
 
+> **After the follow-up (task cost 2.84, commit d1510e8).** Bob deleted the file, changed its two tests to assert that `Calc!AM` and `Calc!X` are registered in `STEPS`, and showed trace 43 covered / 5 out of scope / 0 uncovered and 370 tests passing. Final harness on Bob's service: original 409,539/430,000 equal, 20,461 decided, **0 unexplained**; patched **430,000/430,000**; mutation 51/60 (same nine labelled survivors); **certificate GREEN**.
+
 ## T08 — code review (*record*)
 
 - **Mode:** Agent, then `/review`. **Branch:** `bob/t08-review`. **Est.** 2–4 coins. Solo: 3 or fewer, scoped to `service/sheetshift_ho3/units/` via Settings → Bob Findings.
