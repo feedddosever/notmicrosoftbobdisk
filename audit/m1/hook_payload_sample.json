@@ -165,6 +165,21 @@
    "tool_use_id"
   ]
  },
+ "PreToolUse:spawn_subagent": {
+  "input_keys": [
+   "description",
+   "name"
+  ],
+  "tool": "spawn_subagent",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
  "PreToolUse:update_todo_list": {
   "input_keys": [
    "todos"

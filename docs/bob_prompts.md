@@ -128,6 +128,16 @@ Copy build/rate_tables.json to service/sheetshift_ho3/data/rate_tables.json with
 
 - **Expected output:** `xlsem.py` (XLError, covers, STEPS and helpers), `tables.py`, `data/rate_tables.json`, and passing `tests/test_xlsem.py` and `tests/test_tables.py`.
 
+> **Result for m1 (Sat 26 Sep, task cost 1.12, one subagent; commit 4de71da).** 55 tests pass; `rate_tables.json` is byte-identical; `covers` resolves paths from `xlsem.py`'s own location; rounding follows the measured rules (15-digit step, `ROUND_HALF_UP` / `ROUND_UP`), `band` uses `bisect_right`, no Python `round()`. Review found three gaps against the rules file that T03 would hit: `text_eq(None, "")` is False (the rules say a blank equals `""` and `0`, so `IF(Policies!I2="",0.02,…)` would take the wrong branch), and `test_n0_blank_eq_empty` only asserts `n0(None) == 0`; `edate` does not pass an `XLError` through; and there is no MIN/MAX helper, so Python `min(XLError, x)` would raise `TypeError` for a T09 zone (`hurr_capped = MIN(AC, cap)`). Fixed by the follow-up below, typed into the same T02 task before T03.
+
+**T02 follow-up (same task, Sheet Translator):**
+
+```
+Review fixes before T03, from the Blanks and Errors sections of @.bob/rules/20-excel-semantics.md. In service/sheetshift_ho3/xlsem.py: (1) text_eq(a, b): a blank (None) equals "" and equals 0, as in the probe table (blank="" is TRUE, blank=0 is TRUE, blank="Y" is FALSE); an XLError argument is returned unchanged. (2) edate(d, m): return an XLError argument unchanged, like the other helpers. (3) add xmin(*args) and xmax(*args) for MIN and MAX: ignore None arguments (MIN(blank,3)=3) and return the first XLError argument unchanged. In tests/test_xlsem.py replace test_n0_blank_eq_empty with tests of text_eq(None, ""), text_eq(None, 0) and text_eq(None, "Y"), and add tests for the edate, xmin and xmax changes, including MIN(0.33, 0.10) + MAX(1, 5) = 5.1 from the probe table through the new helpers. Keep every existing test passing. Run python3 -m pytest -q tests/test_xlsem.py tests/test_tables.py and show the result.
+```
+
+Then re-export the task (same file name pattern), retake the summary screenshot, and re-import with `--force`.
+
 ## T03 — parallel translation (*record continuously*)
 
 - **Mode:** Sheet Translator. **Branch:** `bob/t03-translate`. **Est.** 3–6 coins (recalibrate).
