@@ -192,3 +192,19 @@
 {"ts": "2026-09-26T13:01:36Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T13:01:46Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T13:02:11Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T15:01:56Z", "handle": "m1", "event": "PreToolUse", "tool": "use_skill", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:01:58Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T15:04:06Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:04:06Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:04:27Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "reports/notes/triage_1.md", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T15:11:23Z", "handle": "m1", "event": "PreToolUse", "tool": "use_skill", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:26Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:31Z", "handle": "m1", "event": "PreToolUse", "tool": "search_ibm_docs", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:32Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:38Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:43Z", "handle": "m1", "event": "PreToolUse", "tool": "list_files", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:43Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:11:46Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T15:12:05Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "docs/anomalies/D-001.md", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T15:12:21Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "docs/anomalies/D-002.md", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T15:12:42Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "docs/anomalies/D-003.md", "decision": "allow", "reason": ""}

@@ -1,0 +1,602 @@
+{
+  "version": 1,
+  "exportedAt": 1790435733909,
+  "workspace": "file:<home>\\Desktop\\bob\\notmicrosoftbobdisk",
+  "tasks": [
+    {
+      "task": {
+        "id": "7a78665e10aab15c13c02d72fb0e37f7",
+        "workspace": "file:<home>\\Desktop\\bob\\notmicrosoftbobdisk",
+        "parentId": null,
+        "taskType": "normal",
+        "title": "/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.",
+        "status": "active",
+        "firstMessage": "/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.",
+        "version": null,
+        "gitSha": null,
+        "gitBranch": null,
+        "env": {
+          "id": "7a78665e10aab15c13c02d72fb0e37f7",
+          "workspace": "<home>\\Desktop\\bob\\notmicrosoftbobdisk",
+          "scheme": "file",
+          "workspaceName": "notmicrosoftbobdisk",
+          "language": "en",
+          "isPlayground": false,
+          "costEffective": true,
+          "_meta": {},
+          "staticEnvInfo": {
+            "primaryWorkspace": "<home>\\Desktop\\bob\\notmicrosoftbobdisk",
+            "systemInfo": {
+              "platform": "win32",
+              "release": "10.0.19045",
+              "arch": "x64",
+              "shell": "powershell.exe"
+            }
+          },
+          "model": {
+            "id": "premium-ide",
+            "family": "",
+            "provider": "",
+            "version": "",
+            "contextWindow": 270000,
+            "maxOutputTokens": 64000,
+            "supportsImages": true
+          },
+          "modeId": "sheet-triage"
+        },
+        "costs": {
+          "cost": 0.172756,
+          "contextTokens": 21172,
+          "contextWindowBreakdown": {
+            "total": 13146,
+            "reportedTotal": 21172,
+            "breakdown": {
+              "roleDefinition": 19,
+              "staticSections": 563,
+              "skills": 1083,
+              "baseRules": 197,
+              "projectRules": 3199,
+              "customInstructions": 87,
+              "environment": 76,
+              "toolSystemPrompts": 1102,
+              "toolDefinitions": 6820,
+              "mcpToolDefinitions": 0
+            },
+            "loadedSkills": [
+              {
+                "name": "equivalence-triage",
+                "tokens": 280
+              }
+            ],
+            "key": "<context cache key>"
+          }
+        },
+        "messageQueue": null,
+        "approvalConfig": {
+          "autoApprovalEnabled": true,
+          "outsideWorkspaceAllowed": true,
+          "allowed_permissions": [
+            "read",
+            "skill",
+            "edit",
+            "execute"
+          ],
+          "permissionOptions": [],
+          "allowedExecutors": [
+            {
+              "toolId": "execute_command",
+              "approvedCommands": [
+                "cat",
+                "git diff",
+                "git log",
+                "git rev-parse",
+                "git show",
+                "git status",
+                "grep",
+                "head",
+                "tail",
+                "ls",
+                "sort",
+                "wc",
+                "which",
+                "du",
+                "df"
+              ],
+              "deniedCommands": []
+            }
+          ],
+          "editApprovalPreviewMode": "editor",
+          "forbiddenApprovalGroups": [],
+          "taskAllowedMcpTools": [],
+          "taskCommandApprovals": [
+            {
+              "toolId": "execute_command",
+              "approvedCommands": [
+                "python3 -m harness.run --golden --seed 2026"
+              ]
+            }
+          ]
+        },
+        "lastError": null,
+        "isPinned": false,
+        "createdAt": 1790434902548,
+        "updatedAt": 1790435075787
+      },
+      "messages": [
+        {
+          "id": "178a17d930c291a038080faecc25a958",
+          "role": "system",
+          "data": {
+            "role": "system",
+            "content": "<role_definition>\nYou classify each mismatch group and fix only translation bugs.\n</role_definition>\n\n<investigate_before_answering>\nNever speculate about code you have not opened. If the user references a specific file, you MUST read the file before answering. Investigate and read relevant files before answering questions about the codebase. Never make any claims about code before investigating unless you are certain of the correct answer — give grounded and hallucination-free answers.\n</investigate_before_answering>\n\n<engineering_discipline>\nProduce the minimal change that solves the problem. Do not add features, refactors, or abstractions beyond what was asked. Do not add error handling for scenarios that cannot happen. Do not clean up surrounding code that is unrelated to the task. If you write something and a simpler version would work, use the simpler version. Every changed line should trace directly to the user's request.\n</engineering_discipline>\n\n<tool_use>\n- Choose the most appropriate tool for each step.\n- Tools can be called in parallel when independent, but avoid running operations together that have dependencies (e.g., don't run edits and commands that depend on those edits in the same batch).\n- If a tool fails, address the error before continuing.\n- MCP server tools use IDs formatted as `mcp__<server>__<tool>`. Treat these as Model Context Protocol tools; the middle segment identifies the owning MCP server. Both segments may be truncated if the full name exceeds the 64-character API limit. Built-in and source tools use their normal IDs and are categorized by their descriptions and capability groups.\n- Prefer native file tools (read_file, write_file, search_and_replace, insert_content, list_files) over shell commands for file operations — they need no additional user permissions. Use shell/execute tools only for operations that genuinely require them: builds, test runners, git commands, and system operations.\n\n</tool_use>\n\n<markdown_rules>\nAll responses should show any language construct or filename reference as a clickable link, exactly as [`filename OR language.declaration()`](relative/file/path.ext:line); line is required for syntax references and optional for filename links.\nMermaid diagrams (```mermaid code fences) are rendered natively in-chat.\n\n</markdown_rules>\n\n<auto_appended_context>\nEach user message may contain an auto-appended <environment_details> section that includes potentially relevant information such as git status, active file, and relevant files modified externally since your last interaction. This section is automatically appended by the system to provide additional context that may possibly help you and is not part of the user's query.\n\nPay close attention to the <external_changes> sub-section — it lists files that were modified, deleted, or created outside of your actions. Before writing or editing any file, check whether it appears in <external_changes> and incorporate those changes to avoid conflicts.\n\n</auto_appended_context>\n\n<base_rules>\n- Prefer editing tools (apply_diff, search_and_replace, insert_content) over write_file for existing files.\n- When using write_file, provide the COMPLETE file content. Partial updates or placeholders are not acceptable.\n- Be direct and technical. Do not start messages with \"Great\", \"Certainly\", \"Okay\", or \"Sure\".\n- Follow existing code style and project conventions.\n- Use available tools to accomplish tasks efficiently. Do not ask unnecessary follow-up questions.\n- Do not stop when implementation looks complete. Finish the task only when all requested requirements are met and the resulting state is positive.\n- Before reporting final completion, run the relevant validation for your changes. Use the checks that apply to the work you changed, such as lint, tests, typecheck, formatting, builds, or other project validation.\n- Work is done when the changed work and any affected project state pass the required validation with no new warnings, failures, or unfinished requirements.\n\n</base_rules>\n\n<available_skills>\nYou have access to skills that provide specialized instructions for specific tasks. Review the available skills below. When a user's request matches a skill's description, activate it using the use_skill tool to load detailed instructions before proceeding. Only activate skills that are clearly relevant to the current task. Activate each skill once per current context window. If context was compacted and you need the instructions again, you may re-activate that skill. Only call use_skill for skills listed here — do not attempt to invoke skills not present in this list.\n<skill>\n  <name>build-mcp-server</name>\n  <description>Guide for building a custom MCP server from scratch — covers project scaffolding, the v2 registerTool/registerResource/registerPrompt API, API key and OAuth authentication patterns, building and registering the server. Use when the user wants to create, build, or write a custom MCP server.</description>\n</skill>\n<skill>\n  <name>configure-hooks</name>\n  <description>Add, update, remove, or troubleshoot Bob lifecycle hooks. Use when the user wants to configure automatic commands or HTTPS requests for session, prompt, tool, or stop events.</description>\n</skill>\n<skill>\n  <name>configure-mcp</name>\n  <description>Add a new MCP server or diagnose an existing one — covers local vs remote transport, system dependency checks (node, docker, podman, python, uv), config schema validation, secrets handling, and scope. Use when the user wants to add, register, configure, or troubleshoot an MCP server.</description>\n</skill>\n<skill>\n  <name>create-mode</name>\n  <description>Guide for creating a new custom Bob mode (custom_modes.yaml) — covers the schema, permission groups, roleDefinition, and file location. Use when the user wants to author, create, or scaffold a mode or persona.</description>\n</skill>\n<skill>\n  <name>create-skill</name>\n  <description>Guide for creating a new Bob skill (SKILL.md) — covers the frontmatter schema, name rules, file location, and gotchas. Use when the user wants to author, create, or scaffold a skill.</description>\n</skill>\n<skill>\n  <name>office-insights</name>\n  <description>Use when the user wants to read, edit, create, or inspect a .docx, .xlsx, or .pptx file using the office_read and office_edit tools.</description>\n</skill>\n<skill>\n  <name>equivalence-triage</name>\n  <location>.bob\\skills\\equivalence-triage\\SKILL.md</location>\n  <description>Classify harness mismatch groups and fix translation bugs.</description>\n</skill>\n<skill>\n  <name>manual-adjudication</name>\n  <location>.bob\\skills\\manual-adjudication\\SKILL.md</location>\n  <description>Draft a decision brief for a spreadsheet anomaly using the PDF rating manual.</description>\n</skill>\n<skill>\n  <name>traceability-report</name>\n  <location>.bob\\skills\\traceability-report\\SKILL.md</location>\n  <description>Explain coverage from reports/traceability.json and write the one-file HTML summary when asked.</description>\n</skill>\n<skill>\n  <name>translate-sheet</name>\n  <location>.bob\\skills\\translate-sheet\\SKILL.md</location>\n  <description>Translate one unit's formula columns from build/units/<U>.md into tagged Python functions.</description>\n</skill>\n<skill>\n  <name>xlsx-dependency-map</name>\n  <location>.bob\\skills\\xlsx-dependency-map\\SKILL.md</location>\n  <description>Build and explain the formula map of a workbook using tools/dump_workbook.py.</description>\n</skill>\n</available_skills>\n\n<user_custom_instructions>\nThe following additional instructions are provided by the user, and should be followed to the best of your ability without interfering with the TOOL USE guidelines.\n\nLanguage Preference:\nYou should always speak and think in the \"English\" (en) language unless the user gives you instructions below to do otherwise.\n\nMode-specific Instructions:\nA group joined to a lint is never a translation bug. Never change tolerance.\n</user_custom_instructions>\n\n<project_rules>\nThe following rules are defined by this project and take precedence over your training defaults. They apply to every response for the duration of this session — do not revert to your defaults as the conversation grows longer. Before taking any action, check whether a project rule applies. Where rules from different sources conflict, the more specific source takes precedence: workspace rules override global rules, and mode-specific rules override common rules.\n<workspace_rules_sheet_triage>\n<rule>\n  <filename>triage.md</filename>\n  <content># Sheet Triage\n\n- The harness classifies; you fix. Never change tolerance or classifier thresholds, and never reclassify a group.\n- Fix only groups classed `translation-bug` or `translation-bug-rounding`. Fix one group at a time; after each fix read reports/smoke_last.json (field `line`) with the read tool, or run `python3 -m harness.smoke --unit <U>`.\n- A group joined to a lint is a spreadsheet anomaly. Write a brief for it; never write a code fix.</content>\n</rule>\n</workspace_rules_sheet_triage>\n<workspace_rules>\n<rule>\n  <filename>00-project.md</filename>\n  <content># Project rules\n\n- Code under `service/sheetshift_ho3/` uses the Python standard library only. The one exception is `api.py`, which may import fastapi and pydantic.\n- File I/O happens only in `tables.py` (reads `data/rate_tables.json`) and `api.py` (reads `data/verify_sample_2026.json.gz` and `reports/certificate.json`). No network calls, no environment variables.\n- One function per Calc column: `c_<col>_<output_name>(p, c)`, where `p` is the policy dict (14 inputs, blanks are `None`) and `c` is the dict of outputs computed so far.\n- Use the canonical output names from `build/units.json` and `docs/CONTRACT.md` exactly.\n- `rater.py` holds `ORDER` as a literal tuple of the 43 output names. `tests/test_rater_order.py` asserts that it equals `topo_order` in `build/graph.json`. `rater.py` never reads `build/` at runtime.\n- `quote(policy)` returns a dict with all 43 outputs. It never raises for a spreadsheet error; it returns an `XLError` value in that output (and in every output that depends on it).\n- Tests may read `build/` for expected values. Service code may not.</content>\n</rule>\n<rule>\n  <filename>10-cell-traceability.md</filename>\n  <content># Cell traceability\n\n- Tag every column function with `@covers(\"<Sheet>!<Col>\", \"<output_name>\")`, for example `@covers(\"Calc!O\", \"ded_factor\")`. The decorator comes from `service/sheetshift_ho3/xlsem.py`.\n- `covers` appends `{\"cell\", \"name\", \"fn\", \"file\", \"line\"}` to `xlsem.STEPS` and returns the function unchanged. `name` is the output name, `fn` the function name (`f.__name__`), `file` the repo-relative path with forward slashes, and `line` is `f.__code__.co_firstlineno` (the `@covers` line).\n- Every Calc column A..AQ is tagged exactly once. Never tag a column twice or leave one untagged.\n- Items that are deliberately not translated go in `service/sheetshift_ho3/OUT_OF_SCOPE.json`, each with an exact cell address taken from `build/graph.json` (for example `Summary!B2`), a reason, and a decision ID if a person escalated it.\n- `harness/trace.py` fails on a missing or doubly tagged column and on an out-of-scope cell that is not in the graph.</content>\n</rule>\n<rule>\n  <filename>20-excel-semantics.md</filename>\n  <content># Excel semantics (measured)\n\nThe oracle is LibreOffice 24.2 with full recalculation forced. Every value below was measured with that oracle. Parity with desktop Excel is not verified. Put these rules in `xlsem.py` helpers and use the helpers everywhere.\n\n## Rounding\n- `ROUND(x, d)` first converts x to 15 significant digits, `Decimal(format(x, \".15g\"))`, and then rounds halves away from zero (`ROUND_HALF_UP`).\n- `ROUNDUP(x, d)` makes the same 15-digit conversion and then rounds away from zero (`ROUND_UP`).\n- Never use Python `round()`, which rounds halves to even on the binary value. Never apply `Decimal(x)` to a float without the 15-digit step.\n\n## Lookups\n- `VLOOKUP(v, table, k, TRUE)` returns the row with the largest key <= v: `i = bisect_right(keys, v) - 1`. If `i < 0` the result is `#N/A`. `bisect_left` is wrong exactly on band edges.\n- Use the range the formula names, not the range you think it should name. If the two disagree, translate the formula and add a FLAG comment.\n- Exact `VLOOKUP(.., FALSE)` and `MATCH(.., 0)` compare text case-insensitively. A missing key gives `#N/A`.\n\n## Text\n- Text `=` ignores case: `\"y\"=\"Y\"` is TRUE, and `\"Yes\"=\"Y\"` is FALSE.\n- `&`, `LEFT` and `TEXT` return text exactly as stored. They keep the input's case. `TEXT(7,\"00\")` is `\"07\"`.\n\n## Blanks (a blank input arrives as `None`)\n- In arithmetic a blank is 0: blank*1 = 0.\n- A blank equals `\"\"` and equals 0.\n- `MIN` and `MAX` ignore a blank argument, so `MIN(blank, 3)` = 3 and not 0.\n\n## Dates\n- `EDATE(d, m)` gives the same day m months later, clamped to the last day of the month.\n- `YEARFRAC(a, b, 3)` = (b - a).days / 365.\n- `DATEDIF(a, b, \"y\")` counts complete years. It returns `#NUM!` when a > b.\n\n## Errors\n- Errors propagate through arithmetic, ROUND, MIN/MAX, comparisons and `&`. `IFERROR(x, alt)` returns alt for any error.\n- `x/0` gives `#DIV/0!`. An error equals another error only when the codes match. Represent errors as `XLError(code)`.\n\n## Probe values (use them in tests/test_xlsem.py)\n| Formula | Value |\n|---|---|\n| `ROUND(628.125,2)` | 628.13 |\n| `ROUND(3.505*689,2)` | 2414.95 (Python round gives 2414.94) |\n| `ROUND(1.005,2)` | 1.01 |\n| `ROUND(2.675,2)` | 2.68 |\n| `ROUND(-2.5,0)` | -3 |\n| `ROUNDUP(0.1+0.2,1)` | 0.3 |\n| `ROUNDUP(682.14,0)` | 683 |\n| `VLOOKUP(1000, {0:1.1, 500:1.0, 1000:0.92, 2500:0.82}, 2, TRUE)` | 0.92 |\n| same table, key 999 | 1.0 |\n| same table, key -1 | #N/A |\n| `MATCH(\"fortified\", {\"None\",\"Basic\",\"Fortified\"}, 0)` | 3 |\n| `IF(\"y\"=\"Y\",1,0)` | 1 |\n| `blank*1` / `blank=\"\"` / `blank=0` | 0 / TRUE / TRUE |\n| `EDATE(DATE(2026,8,31),6)` | 2027-02-28 |\n| `ROUND(YEARFRAC(DATE(2028,2,29), EDATE(DATE(2028,2,29),12), 3), 4)` | 1.0 |\n| `DATEDIF(DATE(2020,1,1), DATE(2027,3,1), \"y\")` | 7 |\n| `IFERROR(DATEDIF(DATE(2028,1,1), DATE(2027,3,1), \"y\"), -99)` | -99 |\n| `TEXT(7,\"00\")` / `\"T01\"&\"-\"&LEFT(\"Frame\",1)` | \"07\" / \"T01-F\" |\n| `IFERROR(VLOOKUP(\"zz\", tbl, 2, FALSE)+1, \"#NA-caught\")` | \"#NA-caught\" |\n| `MIN(0.33, 0.10) + MAX(1, 5)` | 5.1 |</content>\n</rule>\n<rule>\n  <filename>30-protected-paths.md</filename>\n  <content># Protected paths (separation of duties)\n\n**Reading is always allowed and expected.** Read the workbook (with `office_read`), the manual PDF, `build/`, `harness/`, `docs/` and every other file freely; your task needs them. The rule below is about **writing** only.\n\nBob builds the service. The harness, the workbook and the golden data are the exam, and people make the decisions. Bob never edits (writes, modifies, moves or deletes):\n\n- `workbook/`, `manual/`: the customer's workbook and the filed manual.\n- `harness/`, `golden/`, `tools/`, `build/`: the exam and its generated map. Regenerate `build/` only with `python3 tools/dump_workbook.py`.\n- `decisions/`: only people write decisions, through `tools/decide.py`. Bob never runs it.\n- `.bob/`, `.github/`, `AGENTS.md`, `.bobignore`, `sheetshift.json`, `Makefile`, `docs/CONTRACT.md`, `ATTRIBUTION.md`, `PROVENANCE.md`: configuration and records.\n- `reports/*.json`, `reports/*.html`, `audit/`: generated evidence. Bob writes only `reports/notes/`.\n- `service/sheetshift_ho3/data/verify_sample_2026.json.gz`, `tests/test_harness_selfcheck.py`, `tests/test_no_env.py`.\n\nA PreToolUse hook blocks these writes and CI rejects any commit that changes them. If the harness looks wrong, write `docs/notes/HARNESS-<n>.md` explaining why, then stop.\n\nWhen the person explicitly says a request is a **guard test**, make the tool call exactly as asked instead of refusing: the hook is the thing being tested, and it will block the call. Report the hook's message verbatim.</content>\n</rule>\n<rule>\n  <filename>40-money-and-rounding.md</filename>\n  <content># Money and rounding\n\n- Keep every ROUND and ROUNDUP step of the workbook, in column order. Never merge two steps and never skip one, even where it looks redundant.\n- Round through the `xlsem` helpers only. Do money arithmetic in the same order as the formula.\n- Tests never compare floats with `==`. Use `pytest.approx(expected, abs=1e-6)` or `math.isclose(a, b, abs_tol=1e-6)`. Compare dates and text exactly, and errors by `.code`.\n- Never compare money with `==` in service code either. Compare with `<`, `>`, `min` or `max` exactly as the formula does.</content>\n</rule>\n</workspace_rules>\n<agents_md>\n<rule>\n  <filename>AGENTS.md</filename>\n  <content># SheetShift — working agreement for Bob\n\nMission: translate workbook/example_mutual_ho3_rater.xlsx (sheet Calc, 43 formula columns) into\nservice/sheetshift_ho3/ so that harness/ reports 0 unexplained differences.\n\nMap (read these, not the whole repo):\n- build/sheets/Calc.md (43 column rules) and build/sheets/Calc_exceptions.md\n- build/units/U1..U4.md (one per translation unit, with canonical output names) and build/lints.json\n- manual/example_mutual_ho3_rating_manual.pdf (the filed rules) and docs/design/service_plan.md\n- docs/CONTRACT.md (the interface, when you need it)\n\nLoop: /shift-map → /shift-plan → /shift-translate → /shift-verify → /shift-triage → /shift-report.\n\nRead anything, always: the workbook (use office_read), the manual PDF, build/, harness/, docs/. Reading is\nexpected. Only writing is restricted.\n\nNever edit (write, modify, move or delete): workbook/ manual/ harness/ golden/ build/ decisions/ tools/ .bob/\n.github/ AGENTS.md reports/*.json (a hook blocks this and CI rejects it). If the harness looks wrong, write\ndocs/notes/HARNESS-<n>.md. When the person says a request is a guard test, make the call as asked; the hook blocks it.\n\nNever run tools/decide.py or decide an anomaly. Write a brief in docs/anomalies/; a person decides.\n\nNever use Python round(), float == on money, or bisect_left for approximate lookups (see .bob/rules).\n\nAlways tag each function @covers(\"Calc!<col>\", \"<output_name>\"). Write one function per column.\nNever copy a one-row exception (build/sheets/Calc_exceptions.md: a hard-coded value or a different\nformula in one row) and never branch on policy_id: translate the column rule, add\n`# SHEETSHIFT-FLAG <id>: <reason>`, and the harness groups the differing rows for a person to decide.\n\nInterface:\n- quote(policy) -> dict of all 43 outputs.\n- Errors are returned as XLError values (.code \"#N/A\"), never raised.\n- xlsem.py owns XLError, covers and STEPS.\n\nAfter each service/ edit a hook runs smoke and writes reports/smoke_last.json. Its result does not\nappear in your context until the next prompt. Read that file with the read tool and use its `line`\nfield (not cat: the guard blocks shell commands that name reports/*.json). If the file is older\nthan your edit, run `python3 -m harness.smoke --unit <U>` (about 0.2 s).\n\nservice/sheetshift_ho3/: stdlib only, except api.py (fastapi, pydantic). I/O only in tables.py and api.py.\n\nAll data is synthetic. The carrier is \"Example Mutual Insurance Co. (FICTIONAL)\", and the anomalies were seeded on purpose.</content>\n</rule>\n</agents_md>\n</project_rules>\n\n<environment_info>\n### Workspace Info\nThe currently active workspace folder is <home>\\Desktop\\bob\\notmicrosoftbobdisk\nUse file paths relative to this directory.\n### Command Execution Environment\nPlatform: win32\nRelease: 10.0.19045\nArchitecture: x64\nShell: powershell.exe\n</environment_info>\n\nYou can get information about available symbols by using the `GetSymbolsOverview` tool for finding top-level symbols in a file,\nor by using `FindSymbol` if you already know the symbol's name path. You generally try to read as little code as possible\nwhile still solving your task, meaning you only read the bodies when you need to, and after you have found the symbol you want to edit.\nFor example, if you are working with python code and already know that you need to read the body of the constructor of the class Foo, you can directly\nuse `FindSymbol` with the name path `Foo/__init__` and `include_body: true`. If you don't know yet which methods in `Foo` you need to read or edit,\nyou can use `FindSymbol` with the name path `Foo`, `include_body: false` and `depth: 1` to get all (top-level) methods of `Foo` before proceeding\nto read the desired methods with `include_body: true`\nYou can understand relationships between symbols by using the `FindReferencingSymbols` tool.\n\n# office_read — structured Office file reading\nUse `office_read` to read content from .docx, .xlsx, or .pptx files. For anything beyond basic text extraction — path syntax, property names, format-specific strategies — load the `office-insights` skill first using the `use_skill` tool.\nPrefer `mode: text` for full extraction, `mode: outline` for structure, `mode: get` with a `query` path for a specific element, `mode: validate` for OpenXML schema validation, `mode: dump` to materialise the full document to disk for scripted analysis of large files.\n**SERIAL CALLS ONLY — this is a hard constraint, not a suggestion:** The resident pipe is a single-writer socket. Never issue multiple `office_read` calls in parallel (in the same turn). One call, wait for the result, then the next. Parallel calls WILL crash the resident.\n\n# office_edit — structured Office file editing\nAlways load the `office-insights` skill (via `use_skill`) before editing — it contains path syntax, property names, and format-specific rules.\n**SERIAL CALLS ONLY — this is a hard constraint, not a suggestion:**\nThe resident pipe is a single-writer socket. Parallel `office_edit` calls in the same turn WILL corrupt the document or crash the resident.\n**Use `operation:batch` when adding multiple elements (e.g. a full slide with shapes).** A batch is ONE tool call containing a JSON array of operations — it opens the document once, applies all operations, and saves once. This is faster and avoids the parallelism trap entirely.\nCorrect pattern for adding a slide with two shapes — ONE tool call:\n  office_edit operation:batch ops:'[{\"command\":\"add\",\"parent\":\"/\",\"type\":\"slide\"},{\"command\":\"add\",\"parent\":\"/slide[last()]\",\"type\":\"shape\",\"props\":{\"text\":\"Title\"}}]'\nOnly fall back to sequential single calls when operations depend on the result of the previous one (e.g. reading back a path before using it).\n\n# glob — file search\nUse `glob` to find files by name pattern (e.g. \"**/*.ts\", \"src/**/*.test.ts\"). Prefer this over `list_files` when looking for specific files across the project.\nOnly fall back to `list_files` when you need to browse a single directory's structure.\n\n# grep — content search\nUse `grep` to find code by content using regex patterns. Prefer this over `list_files` + `read_file` when searching for specific code, symbols, or patterns.\nUse `read_file` only after grep tells you which file and lines to look at.\n\nFor factual questions that require knowledge about IBM products, platforms, languages, commands, APIs, configuration, documented behavior, compatibility, or product-specific errors, consult IBM documentation before answering.\nThis includes technologies such as IBM i, IBM Z, z/OS, Db2, CICS, COBOL, JCL, RPG, AIX, and watsonx, even when the user does not explicitly say IBM.\nFor Bob(or IBM Bob) product questions, call `search_ibm_docs` directly with `library_name: \"bob\"`.\nFor other IBM products, first call `list_ibm_doc_libraries`, select the most relevant exact library name from its response, and then call `search_ibm_docs`. Do not invent or modify library names.\nYou may reuse a library name already returned in the current conversation for follow-up questions about the same product.\nBase factual product claims on the retrieved documentation. If no suitable library or relevant documentation is found, say so rather than guessing.\nDocumentation lookup is unnecessary when the request is purely about code in the workspace and does not require IBM product knowledge.\n\nYou have access to workflows that provide specialized multi-step processes for specific tasks. Review the available workflows below. When a user's request matches a workflow's purpose, use the start_workflow tool. Run the workflow only if you are sure the workflow description will provide appropriate assistance. When suggesting workflows to users, provide the title and description, never the internal ID.\nAvailable workflows:\n* create_pr_workflow: Create Pull Request - Generates description from git diff using PR templates, allows review and editing, then creates the pull request on GitHub.",
+            "_meta": {
+              "mode": {
+                "id": "sheet-triage",
+                "name": "Sheet Triage",
+                "description": "Classifies mismatches and fixes translation bugs",
+                "roleDefinition": "You classify each mismatch group and fix only translation bugs.",
+                "whenToUse": "After /shift-verify reports mismatches.",
+                "customInstructions": "A group joined to a lint is never a translation bug. Never change tolerance.",
+                "groups": [
+                  "read",
+                  "execute",
+                  "edit",
+                  "skill"
+                ],
+                "restrictions": [
+                  {
+                    "id": "edit",
+                    "fileRegex": "^(\\./)?((service|tests)/.*\\.(py|json)|docs/anomalies/[^/]+\\.md|reports/notes/[^/]+\\.md|docs/notes/HARNESS-[0-9]+\\.md)$"
+                  }
+                ],
+                "configPath": "<home>\\Desktop\\bob\\notmicrosoftbobdisk\\.bob\\custom_modes.yaml",
+                "workspaceRoot": "<home>\\desktop\\bob\\notmicrosoftbobdisk",
+                "workspaceName": "notmicrosoftbobdisk",
+                "scope": "workspace"
+              }
+            },
+            "id": "178a17d930c291a038080faecc25a958"
+          },
+          "createdAt": 1790435074925
+        },
+        {
+          "id": "2c52a5c8b938014e1fc96023d4cf65e0",
+          "role": "user",
+          "data": {
+            "role": "user",
+            "content": "---\nname: shift-verify\ndescription: Run the equivalence harness against the golden oracle and quote the result\nmetadata:\n  user-invocable: true\n  disable-model-invocation: true\n---\n\nRun `python3 -m harness.run --golden --seed 2026`. Then quote these fields from reports/last_run.json exactly, without rounding or paraphrasing:\n- cells compared and equal;\n- decided cells;\n- unexplained cells;\n- the number of mismatch groups by class.\n\nIf there are groups, list each one's id, root cell and class from reports/mismatches.json, and each PENDING item in reports/decision_queue.json.\n\n\nthen /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.",
+            "envContext": "SheetShift session. Python 3.12.10.\r\nOpen mismatch groups: 2 (G01 spreadsheet-anomaly Calc!X, G02 spreadsheet-anomaly Calc!AM)\r\nPending decisions: D-001, D-002, D-003\r\nsmoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10\n\nSheetShift: smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10; decisions pending: D-001, D-002, D-003\n\n<environment_details>\n<active_file>\nActive file: <home>\\Desktop\\bob\\notmicrosoftbobdisk\\docs\\bob_prompts.md\n</active_file>\n<git_status_snapshot>\n## Git Status at start of this conversation. This is a point-in-time snapshot and does not reflect subsequent changes.\nBranch: claude/gallant-cerf-dgavj7\n```\n?? reports/certificate.html\n?? reports/certificate.json\n?? reports/decision_queue.json\n?? reports/mismatches.json\n?? reports/mutation_report.json\n?? reports/spotcheck.json\n?? reports/traceability.json\n```\n</git_status_snapshot>\n</environment_details>\n",
+            "availableTools": [
+              "GetSymbolsOverview",
+              "FindSymbol",
+              "FindReferencingSymbols",
+              "use_skill",
+              "apply_diff",
+              "insert_content",
+              "list_files",
+              "read_file",
+              "search_and_replace",
+              "write_file",
+              "office_read",
+              "office_edit",
+              "execute_command",
+              "glob",
+              "grep",
+              "list_ibm_doc_libraries",
+              "search_ibm_docs",
+              "ask_followup_question",
+              "start_workflow"
+            ],
+            "_meta": {
+              "mentionEditorState": {
+                "root": {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "detail": 0,
+                          "format": 0,
+                          "mode": "normal",
+                          "style": "",
+                          "text": "/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.",
+                          "type": "text",
+                          "version": 1
+                        }
+                      ],
+                      "direction": null,
+                      "format": "",
+                      "indent": 0,
+                      "type": "paragraph",
+                      "version": 1,
+                      "textFormat": 0,
+                      "textStyle": ""
+                    }
+                  ],
+                  "direction": null,
+                  "format": "",
+                  "indent": 0,
+                  "type": "root",
+                  "version": 1
+                }
+              },
+              "mask": "/shift-verify then /shift-triage. For each group in @reports/mismatches.json state root cell, signature, precision and the harness class. Fix translation bugs one group at a time; after each fix read reports/smoke_last.json (field line) with the read tool, or run python3 -m harness.smoke --unit <U>. If a fix makes things worse, say so and I will roll back. Write reports/notes/triage_1.md. Do not touch tolerance or protected paths.",
+              "mode": {
+                "id": "sheet-triage",
+                "name": "Sheet Triage",
+                "description": "Classifies mismatches and fixes translation bugs",
+                "roleDefinition": "You classify each mismatch group and fix only translation bugs.",
+                "whenToUse": "After /shift-verify reports mismatches.",
+                "customInstructions": "A group joined to a lint is never a translation bug. Never change tolerance.",
+                "groups": [
+                  "read",
+                  "execute",
+                  "edit",
+                  "skill"
+                ],
+                "restrictions": [
+                  {
+                    "id": "edit",
+                    "fileRegex": "^(\\./)?((service|tests)/.*\\.(py|json)|docs/anomalies/[^/]+\\.md|reports/notes/[^/]+\\.md|docs/notes/HARNESS-[0-9]+\\.md)$"
+                  }
+                ],
+                "configPath": "<home>\\Desktop\\bob\\notmicrosoftbobdisk\\.bob\\custom_modes.yaml",
+                "workspaceRoot": "<home>\\desktop\\bob\\notmicrosoftbobdisk",
+                "workspaceName": "notmicrosoftbobdisk",
+                "scope": "workspace"
+              },
+              "timestamp": 1790434913663
+            },
+            "id": "2c52a5c8b938014e1fc96023d4cf65e0"
+          },
+          "createdAt": 1790435074925
+        },
+        {
+          "id": "a13305ab9ea855c1a6219210395e5d2b",
+          "role": "assistant",
+          "data": {
+            "role": "assistant",
+            "content": "",
+            "id": "a13305ab9ea855c1a6219210395e5d2b",
+            "_meta": {
+              "timestamp": 1790434915358,
+              "spend": {
+                "cost": 0.02892,
+                "contextTokens": 14460
+              }
+            },
+            "toolCalls": [
+              {
+                "id": "tooluse_TRXabqpxIA0Mz9Ss7GT6fO",
+                "name": "use_skill",
+                "arguments": {
+                  "skill_name": "equivalence-triage"
+                }
+              }
+            ]
+          },
+          "createdAt": 1790435074926
+        },
+        {
+          "id": "042898bd680f312d353596c48f00ab2b",
+          "role": "tool",
+          "data": {
+            "role": "tool",
+            "content": "---\nname: equivalence-triage\ndescription: Classify harness mismatch groups and fix translation bugs.\n---\n\n# Triage mismatch groups\n\n1. Read `reports/mismatches.json`. For each group, state:\n   - its id;\n   - the root cell;\n   - the signature and its precision;\n   - the harness `class`.\n2. Use the harness's class. Never reclassify a group, and never change tolerance or thresholds.\n3. Only for classes `translation-bug` and `translation-bug-rounding`:\n   - Fix one group at a time.\n   - After each fix, read `reports/smoke_last.json` (field `line`) with the read tool, or run `python3 -m harness.smoke --unit <U>`. The hook's result only reaches your context at the next prompt.\n   - If the result got worse, say so plainly, so that the person can roll back.\n4. For `spreadsheet-anomaly` or `needs-human` groups, do not change code. Point to `reports/decision_queue.json`.\n5. Write `reports/notes/triage_<n>.md` with a table of every group (id, root cell, class, action, result). End it with the command a person runs to re-verify: `python3 -m harness.run --golden --seed 2026`.\n",
+            "toolUsage": {
+              "signature": {
+                "id": "tooluse_TRXabqpxIA0Mz9Ss7GT6fO",
+                "name": "use_skill",
+                "arguments": {
+                  "skill_name": "equivalence-triage"
+                },
+                "isError": false
+              },
+              "permission": "skill",
+              "labels": {
+                "displayName": "Use Skill equivalence-triage",
+                "error": "Failed to use skill equivalence-triage",
+                "running": "Using skill equivalence-triage",
+                "success": "Used skill equivalence-triage"
+              },
+              "isOutsideWorkspace": false
+            },
+            "_meta": {
+              "durationMs": 479,
+              "timestamp": 1790434916160,
+              "processes": []
+            },
+            "id": "042898bd680f312d353596c48f00ab2b"
+          },
+          "createdAt": 1790435074926
+        },
+        {
+          "id": "e5071bcd169d783d7205b8020dcf071b",
+          "role": "assistant",
+          "data": {
+            "role": "assistant",
+            "content": "",
+            "id": "e5071bcd169d783d7205b8020dcf071b",
+            "_meta": {
+              "timestamp": 1790434917525,
+              "spend": {
+                "cost": 0.029766,
+                "contextTokens": 14883
+              }
+            },
+            "toolCalls": [
+              {
+                "id": "tooluse_tGCRUPH2xzB3d8fobfJ20o",
+                "name": "execute_command",
+                "arguments": {
+                  "command": "python3 -m harness.run --golden --seed 2026",
+                  "timeout_seconds": 60
+                }
+              }
+            ]
+          },
+          "createdAt": 1790435074927
+        },
+        {
+          "id": "245a6d5327338a53cc8ca0ea24f6a46a",
+          "role": "tool",
+          "data": {
+            "role": "tool",
+            "content": "SheetShift run fd00ebc84e8a: 10000 policies, 429988/430000 cells equal; unexplained 12; decided 0; groups {\"spreadsheet-anomaly\": 2}\r\n  G01 spreadsheet-anomaly      Calc!X     rows=1     cells=10     lint=A3  delta -0.08 x1 | single row 31 (HO-000030); p.effective_date in [2027-06-01..2027-06-01] (precision 0.04: 1 of\r\n  G02 spreadsheet-anomaly      Calc!AM    rows=1     cells=2      lint=A2  delta -21.65 x1 | single row 17 (HO-000016); c.premium_rounded in [1301..1301] (precision 0.20: 1 of 5 such ro\r\nstatic-only anomalies: A1\r\ndecisions pending: D-001, D-002, D-003",
+            "toolUsage": {
+              "signature": {
+                "id": "tooluse_tGCRUPH2xzB3d8fobfJ20o",
+                "name": "execute_command",
+                "arguments": {
+                  "command": "python3 -m harness.run --golden --seed 2026",
+                  "timeout_seconds": 60
+                },
+                "isError": false
+              },
+              "permission": "execute",
+              "labels": {
+                "displayName": "Execute Command",
+                "error": "Command failed",
+                "running": "Executing",
+                "success": "Ran",
+                "runningLong": [
+                  "Still running...",
+                  "Command in progress...",
+                  "Some commands take a while...",
+                  "Waiting on the process...",
+                  "The terminal is thinking...",
+                  "Not all commands are fast...",
+                  "Patiently waiting..."
+                ]
+              },
+              "commandUse": {
+                "unverifiable": false,
+                "commands": [
+                  "python3 -m harness.run --golden --seed 2026"
+                ],
+                "requiresSecurityApproval": false,
+                "commandVariants": [
+                  "python3 -m harness.run --golden --seed 2026",
+                  "python3"
+                ]
+              },
+              "isOutsideWorkspace": false
+            },
+            "_meta": {
+              "cwd": ".",
+              "pid": 21008,
+              "exitCode": 0,
+              "durationMs": 125928,
+              "timestamp": 1790435043874,
+              "processes": []
+            },
+            "id": "245a6d5327338a53cc8ca0ea24f6a46a"
+          },
+          "createdAt": 1790435074927
+        },
+        {
+          "id": "14b5605f9908fc17588847ad55deb47f",
+          "role": "assistant",
+          "data": {
+            "role": "assistant",
+            "content": "",
+            "id": "14b5605f9908fc17588847ad55deb47f",
+            "_meta": {
+              "timestamp": 1790435046409,
+              "spend": {
+                "cost": 0.03047,
+                "contextTokens": 15235
+              }
+            },
+            "toolCalls": [
+              {
+                "id": "tooluse_8AumVCuPKlFLUJeo6IuPfB",
+                "name": "read_file",
+                "arguments": {
+                  "path": "reports/mismatches.json"
+                }
+              },
+              {
+                "id": "tooluse_Nj5VyekDDrcLrRLPPGH4Ho",
+                "name": "read_file",
+                "arguments": {
+                  "path": "reports/decision_queue.json"
+                }
+              }
+            ]
+          },
+          "createdAt": 1790435074928
+        },
+        {
+          "id": "86416a38fad13ac48826c4fc80e46d56",
+          "role": "tool",
+          "data": {
+            "role": "tool",
+            "content": "Contents of file reports/mismatches.json:\n\n1 | {\n2 |  \"_about\": \"Mismatch groups from harness.run (classes fixed by harness/triage.py).\",\n3 |  \"run_id\": \"fd00ebc84e8a\",\n4 |  \"seed\": 2026,\n5 |  \"service\": \"service.sheetshift_ho3.rater\",\n6 |  \"tolerance\": {\n7 |   \"numbers\": \"absolute difference <= 1e-6\",\n8 |   \"dates\": \"exact\",\n9 |   \"text\": \"exact and case-sensitive\",\n10 |   \"errors\": \"same error code\",\n11 |   \"blank_zero_empty\": \"blank, 0 and \\\"\\\" are different\"\n12 |  },\n13 |  \"original\": {\n14 |   \"summary\": {\n15 |    \"rows\": 10000,\n16 |    \"cells_compared\": 430000,\n17 |    \"cells_equal\": 429988,\n18 |    \"mismatched_cells\": 12,\n19 |    \"rows_fully_equal\": 9998,\n20 |    \"decided_cells\": {\n21 |     \"total\": 0,\n22 |     \"by_decision\": {}\n23 |    },\n24 |    \"unexplained_cells\": 12,\n25 |    \"root_cells_explaining_all_diffs\": 2,\n26 |    \"cells_by_class\": {\n27 |     \"spreadsheet-anomaly\": 12\n28 |    },\n29 |    \"groups_by_class\": {\n30 |     \"spreadsheet-anomaly\": 2\n31 |    }\n32 |   },\n33 |   \"groups\": [\n34 |    {\n35 |     \"id\": \"G01\",\n36 |     \"root_column\": \"X\",\n37 |     \"cell\": \"Calc!X\",\n38 |     \"output_name\": \"credit_pct\",\n39 |     \"kind\": \"numeric\",\n40 |     \"lint\": \"A3\",\n41 |     \"decision\": \"D-003\",\n42 |     \"decision_option\": null,\n43 |     \"class\": \"spreadsheet-anomaly\",\n44 |     \"reason\": \"joins lint A3 (inconsistent_formula); awaiting a person's decision D-003\",\n45 |     \"root_cells\": 1,\n46 |     \"rows\": 1,\n47 |     \"cells\": 10,\n48 |     \"boundary_rows\": 1,\n49 |     \"random_rows\": 0,\n50 |     \"rounding_step\": null,\n51 |     \"signature\": {\n52 |      \"predicate\": \"p.effective_date in [2027-06-01..2027-06-01]\",\n53 |      \"precision\": 0.0357,\n54 |      \"support\": 1,\n55 |      \"population\": 28,\n56 |      \"delta_profile\": \"-0.08 x1\",\n57 |      \"text\": \"delta -0.08 x1 | single row 31 (HO-000030); p.effective_date in [2027-06-01..2027-06-01] (precision 0.04: 1 of 28 such rows)\"\n58 |     },\n59 |     \"examples\": [\n60 |      {\n61 |       \"row\": 31,\n62 |       \"policy_id\": \"HO-000030\",\n63 |       \"workbook\": \"0.33\",\n64 |       \"service\": \"0.25\",\n65 |       \"inputs\": {\n66 |        \"alarm\": \"Y\",\n67 |        \"claims_3yr\": 0,\n68 |        \"effective_date\": {\n69 |         \"date\": \"2027-06-01\"\n70 |        },\n71 |        \"wind_mit\": \"Fortified\",\n72 |        \"year_built\": 2023\n73 |       }\n74 |      }\n75 |     ],\n76 |     \"sheet_rows\": [\n77 |      31\n78 |     ]\n79 |    },\n80 |    {\n81 |     \"id\": \"G02\",\n82 |     \"root_column\": \"AM\",\n83 |     \"cell\": \"Calc!AM\",\n84 |     \"output_name\": \"tax\",\n85 |     \"kind\": \"numeric\",\n86 |     \"lint\": \"A2\",\n87 |     \"decision\": \"D-002\",\n88 |     \"decision_option\": null,\n89 |     \"class\": \"spreadsheet-anomaly\",\n90 |     \"reason\": \"joins lint A2 (hardcoded_value_in_formula_column); awaiting a person's decision D-002\",\n91 |     \"root_cells\": 1,\n92 |     \"rows\": 1,\n93 |     \"cells\": 2,\n94 |     \"boundary_rows\": 1,\n95 |     \"random_rows\": 0,\n96 |     \"rounding_step\": \"ROUND(..,2)\",\n97 |     \"signature\": {\n98 |      \"predicate\": \"c.premium_rounded in [1301..1301]\",\n99 |      \"precision\": 0.2,\n100 |      \"support\": 1,\n101 |      \"population\": 5,\n102 |      \"delta_profile\": \"-21.65 x1\",\n103 |      \"text\": \"delta -21.65 x1 | single row 17 (HO-000016); c.premium_rounded in [1301..1301] (precision 0.20: 1 of 5 such rows)\"\n104 |     },\n105 |     \"examples\": [\n106 |      {\n107 |       \"row\": 17,\n108 |       \"policy_id\": \"HO-000016\",\n109 |       \"workbook\": \"48.17\",\n110 |       \"service\": \"26.52\",\n111 |       \"inputs\": {\n112 |        \"alarm\": \"N\",\n113 |        \"claims_3yr\": 0,\n114 |        \"construction\": \"Masonry\",\n115 |        \"coverage_a\": 350000,\n116 |        \"deductible\": 1000,\n117 |        \"effective_date\": {\n118 |         \"date\": \"2026-05-01\"\n119 |        },\n120 |        \"hurr_ded_pct\": 0.02,\n121 |        \"protection_class\": 4,\n122 |        \"roof_age\": 8,\n123 |        \"term_months\": 12,\n124 |        \"wind_mit\": \"None\",\n125 |        \"year_built\": 1990,\n126 |        \"zone\": \"T03\"\n127 |       }\n128 |      }\n129 |     ],\n130 |     \"sheet_rows\": [\n131 |      17\n132 |     ]\n133 |    }\n134 |   ]\n135 |  },\n136 |  \"patched\": null,\n137 |  \"static_only_anomalies\": [\n138 |   {\n139 |    \"lint\": \"A1\",\n140 |    \"type\": \"range_short_of_table\",\n141 |    \"cell\": \"Calc!O2:O41\",\n142 |    \"decision\": \"D-001\"\n143 |   }\n144 |  ]\n145 | }\n146 | ",
+            "toolUsage": {
+              "signature": {
+                "id": "tooluse_8AumVCuPKlFLUJeo6IuPfB",
+                "name": "read_file",
+                "arguments": {
+                  "path": "reports/mismatches.json"
+                },
+                "isError": false
+              },
+              "permission": "read",
+              "labels": {
+                "displayName": "Read File {path}",
+                "error": "Failed to read file {path}",
+                "running": "Reading file {path}",
+                "success": "Read file {path}"
+              },
+              "isOutsideWorkspace": false
+            },
+            "_meta": {
+              "fileMtimes": {
+                "file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/mismatches.json": 1790435043759
+              },
+              "durationMs": 590,
+              "timestamp": 1790435047018
+            },
+            "id": "86416a38fad13ac48826c4fc80e46d56"
+          },
+          "createdAt": 1790435074928
+        },
+        {
+          "id": "30399a1061262faecdfaa93ae517f8cc",
+          "role": "tool",
+          "data": {
+            "role": "tool",
+            "content": "Contents of file reports/decision_queue.json:\n\n1 | {\n2 |  \"_about\": \"Anomalies awaiting (or holding) a person's decision. Decide with tools/decide.py <id> --option <allowed option> (people only).\",\n3 |  \"run_id\": \"fd00ebc84e8a\",\n4 |  \"items\": [\n5 |   {\n6 |    \"id\": \"D-001\",\n7 |    \"lint\": \"A1\",\n8 |    \"type\": \"range_short_of_table\",\n9 |    \"cell\": \"Calc!O2:O41\",\n10 |    \"output_name\": \"ded_factor\",\n11 |    \"formula\": \"=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)\",\n12 |    \"column_rule\": \"=VLOOKUP(Policies!H2,RateTables!$A$31:$B$35,2,TRUE)\",\n13 |    \"manual_rule\": \"R-205\",\n14 |    \"options\": [\n15 |     \"keep-workbook\",\n16 |     \"adopt-manual\",\n17 |     \"escalate\"\n18 |    ],\n19 |    \"status\": \"PENDING\",\n20 |    \"decision\": null,\n21 |    \"runtime\": null,\n22 |    \"static_only\": true\n23 |   },\n24 |   {\n25 |    \"id\": \"D-002\",\n26 |    \"lint\": \"A2\",\n27 |    \"type\": \"hardcoded_value_in_formula_column\",\n28 |    \"cell\": \"Calc!AM17\",\n29 |    \"output_name\": \"tax\",\n30 |    \"formula\": \"48.17\",\n31 |    \"column_rule\": \"=ROUND((AJ17+AK17)*G17,2)\",\n32 |    \"manual_rule\": \"R-510\",\n33 |    \"options\": [\n34 |     \"adopt-manual\",\n35 |     \"escalate\"\n36 |    ],\n37 |    \"status\": \"PENDING\",\n38 |    \"decision\": null,\n39 |    \"runtime\": {\n40 |     \"groups\": [\n41 |      \"G02\"\n42 |     ],\n43 |     \"rows\": 1,\n44 |     \"cells\": 2,\n45 |     \"signature\": \"delta -21.65 x1 | single row 17 (HO-000016); c.premium_rounded in [1301..1301] (precision 0.20: 1 of 5 such rows)\",\n46 |     \"example\": {\n47 |      \"row\": 17,\n48 |      \"policy_id\": \"HO-000016\",\n49 |      \"workbook\": \"48.17\",\n50 |      \"service\": \"26.52\",\n51 |      \"inputs\": {\n52 |       \"alarm\": \"N\",\n53 |       \"claims_3yr\": 0,\n54 |       \"construction\": \"Masonry\",\n55 |       \"coverage_a\": 350000,\n56 |       \"deductible\": 1000,\n57 |       \"effective_date\": {\n58 |        \"date\": \"2026-05-01\"\n59 |       },\n60 |       \"hurr_ded_pct\": 0.02,\n61 |       \"protection_class\": 4,\n62 |       \"roof_age\": 8,\n63 |       \"term_months\": 12,\n64 |       \"wind_mit\": \"None\",\n65 |       \"year_built\": 1990,\n66 |       \"zone\": \"T03\"\n67 |      }\n68 |     },\n69 |     \"total_due_delta\": {\n70 |      \"min\": -21.65,\n71 |      \"median\": -21.65,\n72 |      \"max\": -21.65,\n73 |      \"rows\": 1,\n74 |      \"rows_changed\": 1\n75 |     }\n76 |    },\n77 |    \"static_only\": false\n78 |   },\n79 |   {\n80 |    \"id\": \"D-003\",\n81 |    \"lint\": \"A3\",\n82 |    \"type\": \"inconsistent_formula\",\n83 |    \"cell\": \"Calc!X31\",\n84 |    \"output_name\": \"credit_pct\",\n85 |    \"formula\": \"=W31\",\n86 |    \"column_rule\": \"=MIN(W31,CreditCap)\",\n87 |    \"manual_rule\": \"R-310\",\n88 |    \"options\": [\n89 |     \"adopt-manual\",\n90 |     \"escalate\"\n91 |    ],\n92 |    \"status\": \"PENDING\",\n93 |    \"decision\": null,\n94 |    \"runtime\": {\n95 |     \"groups\": [\n96 |      \"G01\"\n97 |     ],\n98 |     \"rows\": 1,\n99 |     \"cells\": 10,\n100 |     \"signature\": \"delta -0.08 x1 | single row 31 (HO-000030); p.effective_date in [2027-06-01..2027-06-01] (precision 0.04: 1 of 28 such rows)\",\n101 |     \"example\": {\n102 |      \"row\": 31,\n103 |      \"policy_id\": \"HO-000030\",\n104 |      \"workbook\": \"0.33\",\n105 |      \"service\": \"0.25\",\n106 |      \"inputs\": {\n107 |       \"alarm\": \"Y\",\n108 |       \"claims_3yr\": 0,\n109 |       \"effective_date\": {\n110 |        \"date\": \"2027-06-01\"\n111 |       },\n112 |       \"wind_mit\": \"Fortified\",\n113 |       \"year_built\": 2023\n114 |      }\n115 |     },\n116 |     \"total_due_delta\": {\n117 |      \"min\": 255.77,\n118 |      \"median\": 255.77,\n119 |      \"max\": 255.77,\n120 |      \"rows\": 1,\n121 |      \"rows_changed\": 1\n122 |     }\n123 |    },\n124 |    \"static_only\": false\n125 |   }\n126 |  ]\n127 | }\n128 | ",
+            "toolUsage": {
+              "signature": {
+                "id": "tooluse_Nj5VyekDDrcLrRLPPGH4Ho",
+                "name": "read_file",
+                "arguments": {
+                  "path": "reports/decision_queue.json"
+                },
+                "isError": false
+              },
+              "permission": "read",
+              "labels": {
+                "displayName": "Read File {path}",
+                "error": "Failed to read file {path}",
+                "running": "Reading file {path}",
+                "success": "Read file {path}"
+              },
+              "isOutsideWorkspace": false
+            },
+            "_meta": {
+              "fileMtimes": {
+                "file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/decision_queue.json": 1790435043764
+              },
+              "durationMs": 633,
+              "timestamp": 1790435047061,
+              "processes": []
+            },
+            "id": "30399a1061262faecdfaa93ae517f8cc"
+          },
+          "createdAt": 1790435074928
+        },
+        {
+          "id": "85b39832b19f75a70fc5526438bd38e7",
+          "role": "assistant",
+          "data": {
+            "role": "assistant",
+            "content": "Here is the full `/shift-verify` report followed by `/shift-triage`.\n\n---\n\n## `/shift-verify` — harness run `fd00ebc84e8a`\n\n| Field | Value |\n|---|---|\n| Cells compared | 430 000 |\n| Cells equal | 429 988 |\n| Decided cells | 0 |\n| Unexplained cells | 12 |\n| Mismatch groups by class | `spreadsheet-anomaly`: **2** |\n\n**Groups** (from [`reports/mismatches.json`](reports/mismatches.json)):\n\n| ID | Root cell | Class |\n|---|---|---|\n| G01 | `Calc!X` | spreadsheet-anomaly |\n| G02 | `Calc!AM` | spreadsheet-anomaly |\n\n**Pending decisions** (from [`reports/decision_queue.json`](reports/decision_queue.json)):\n\n| ID | Cell | Type | Status |\n|---|---|---|---|\n| D-001 | `Calc!O2:O41` | `range_short_of_table` | PENDING |\n| D-002 | `Calc!AM17` | `hardcoded_value_in_formula_column` | PENDING |\n| D-003 | `Calc!X31` | `inconsistent_formula` | PENDING |\n\n---\n\n## `/shift-triage`\n\nBoth mismatch groups are classified **`spreadsheet-anomaly`** by the harness. Per project rules a group joined to a lint is never a translation bug — no code fix is written for either.\n\n### G01 — `Calc!X` (`credit_pct`)\n- **Root cell:** `Calc!X31`\n- **Signature:** `delta -0.08 x1` — single row 31 (HO-000030); `p.effective_date in [2027-06-01..2027-06-01]` (precision 0.04)\n- **Lint:** A3 `inconsistent_formula` — row 31 uses `=W31` instead of the column rule `=MIN(W31,CreditCap)`\n- **Class:** `spreadsheet-anomaly`\n- **Action:** none — awaiting human decision **D-003**\n\n### G02 — `Calc!AM` (`tax`)\n- **Root cell:** `Calc!AM17`\n- **Signature:** `delta -21.65 x1` — single row 17 (HO-000016); `c.premium_rounded in [1301..1301]` (precision 0.20)\n- **Lint:** A2 `hardcoded_value_in_formula_column` — row 17 contains literal `48.17` instead of the column rule `=ROUND((AJ17+AK17)*G17,2)`\n- **Class:** `spreadsheet-anomaly`\n- **Action:** none — awaiting human decision **D-002**\n\nNo translation bugs exist. Writing the triage note now.",
+            "id": "85b39832b19f75a70fc5526438bd38e7",
+            "_meta": {
+              "timestamp": 1790435049624,
+              "spend": {
+                "cost": 0.041256,
+                "contextTokens": 20628
+              }
+            },
+            "toolCalls": [
+              {
+                "id": "tooluse_XjzgHfEOTZ3gFNtkxgMSFu",
+                "name": "write_file",
+                "arguments": {
+                  "path": "reports/notes/triage_1.md",
+                  "content": "# Triage note — run fd00ebc84e8a\n\nGenerated after: `python3 -m harness.run --golden --seed 2026`\n\n## Summary\n\n| Cells compared | Cells equal | Decided | Unexplained | Groups |\n|---|---|---|---|---|\n| 430 000 | 429 988 | 0 | 12 | 2 × spreadsheet-anomaly |\n\nLint-explained cells: A2:2, A3:10  \nStatic-only anomaly: A1 (`Calc!O2:O41`, awaiting D-001)\n\n---\n\n## Group table\n\n| ID | Root cell | Output | Class | Lint | Action | Result |\n|---|---|---|---|---|---|---|\n| G01 | `Calc!X31` | `credit_pct` | spreadsheet-anomaly | A3 `inconsistent_formula` | No code change — awaiting D-003 | n/a |\n| G02 | `Calc!AM17` | `tax` | spreadsheet-anomaly | A2 `hardcoded_value_in_formula_column` | No code change — awaiting D-002 | n/a |\n\n---\n\n## G01 — `Calc!X` (`credit_pct`)\n\n- **Signature:** `delta -0.08 x1` | single row 31 (HO-000030)\n- **Predicate:** `p.effective_date in [2027-06-01..2027-06-01]` (precision 0.04: 1 of 28 such rows)\n- **Workbook value:** 0.33 | **Service value:** 0.25\n- **Column rule:** `=MIN(W31,CreditCap)` — row 31 uses `=W31` (cap omitted)\n- **Joined lint:** A3 `inconsistent_formula` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-003 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## G02 — `Calc!AM` (`tax`)\n\n- **Signature:** `delta -21.65 x1` | single row 17 (HO-000016)\n- **Predicate:** `c.premium_rounded in [1301..1301]` (precision 0.20: 1 of 5 such rows)\n- **Workbook value:** 48.17 | **Service value:** 26.52\n- **Column rule:** `=ROUND((AJ17+AK17)*G17,2)` — row 17 contains literal `48.17`\n- **Joined lint:** A2 `hardcoded_value_in_formula_column` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-002 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## Pending decisions\n\n| ID | Cell | Lint type | Output | Status |\n|---|---|---|---|---|\n| D-001 | `Calc!O2:O41` | `range_short_of_table` | `ded_factor` | PENDING |\n| D-002 | `Calc!AM17` | `hardcoded_value_in_formula_column` | `tax` | PENDING |\n| D-003 | `Calc!X31` | `inconsistent_formula` | `credit_pct` | PENDING |\n\n---\n\n## Conclusion\n\nBoth mismatch groups are `spreadsheet-anomaly` (joined to lints A2 and A3 respectively).  \nThere are **zero translation bugs** in this run. No service code was changed.  \n198/200 random-sample rows are equal; the 2 differing rows are fully explained by the anomalies above.\n\n---\n\nRe-verify with:\n\n```\npython3 -m harness.run --golden --seed 2026\n```\n",
+                  "line_count": 72
+                }
+              }
+            ]
+          },
+          "createdAt": 1790435074928
+        },
+        {
+          "id": "f3f84c98973e1ea49ad2f9899d4aa2d0",
+          "role": "tool",
+          "data": {
+            "role": "tool",
+            "content": "Created file: reports/notes/triage_1.md\n\n<result>\n# Triage note — run fd00ebc84e8a\n\nGenerated after: `python3 -m harness.run --golden --seed 2026`\n\n## Summary\n\n...69 lines truncated. You do not need to re-read the file. The complete file was written successfully. Use read_file if you need to see the full contents.\n</result>",
+            "toolUsage": {
+              "signature": {
+                "id": "tooluse_XjzgHfEOTZ3gFNtkxgMSFu",
+                "name": "write_file",
+                "arguments": {
+                  "path": "reports/notes/triage_1.md",
+                  "content": "# Triage note — run fd00ebc84e8a\n\nGenerated after: `python3 -m harness.run --golden --seed 2026`\n\n## Summary\n\n| Cells compared | Cells equal | Decided | Unexplained | Groups |\n|---|---|---|---|---|\n| 430 000 | 429 988 | 0 | 12 | 2 × spreadsheet-anomaly |\n\nLint-explained cells: A2:2, A3:10  \nStatic-only anomaly: A1 (`Calc!O2:O41`, awaiting D-001)\n\n---\n\n## Group table\n\n| ID | Root cell | Output | Class | Lint | Action | Result |\n|---|---|---|---|---|---|---|\n| G01 | `Calc!X31` | `credit_pct` | spreadsheet-anomaly | A3 `inconsistent_formula` | No code change — awaiting D-003 | n/a |\n| G02 | `Calc!AM17` | `tax` | spreadsheet-anomaly | A2 `hardcoded_value_in_formula_column` | No code change — awaiting D-002 | n/a |\n\n---\n\n## G01 — `Calc!X` (`credit_pct`)\n\n- **Signature:** `delta -0.08 x1` | single row 31 (HO-000030)\n- **Predicate:** `p.effective_date in [2027-06-01..2027-06-01]` (precision 0.04: 1 of 28 such rows)\n- **Workbook value:** 0.33 | **Service value:** 0.25\n- **Column rule:** `=MIN(W31,CreditCap)` — row 31 uses `=W31` (cap omitted)\n- **Joined lint:** A3 `inconsistent_formula` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-003 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## G02 — `Calc!AM` (`tax`)\n\n- **Signature:** `delta -21.65 x1` | single row 17 (HO-000016)\n- **Predicate:** `c.premium_rounded in [1301..1301]` (precision 0.20: 1 of 5 such rows)\n- **Workbook value:** 48.17 | **Service value:** 26.52\n- **Column rule:** `=ROUND((AJ17+AK17)*G17,2)` — row 17 contains literal `48.17`\n- **Joined lint:** A2 `hardcoded_value_in_formula_column` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-002 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## Pending decisions\n\n| ID | Cell | Lint type | Output | Status |\n|---|---|---|---|---|\n| D-001 | `Calc!O2:O41` | `range_short_of_table` | `ded_factor` | PENDING |\n| D-002 | `Calc!AM17` | `hardcoded_value_in_formula_column` | `tax` | PENDING |\n| D-003 | `Calc!X31` | `inconsistent_formula` | `credit_pct` | PENDING |\n\n---\n\n## Conclusion\n\nBoth mismatch groups are `spreadsheet-anomaly` (joined to lints A2 and A3 respectively).  \nThere are **zero translation bugs** in this run. No service code was changed.  \n198/200 random-sample rows are equal; the 2 differing rows are fully explained by the anomalies above.\n\n---\n\nRe-verify with:\n\n```\npython3 -m harness.run --golden --seed 2026\n```\n",
+                  "line_count": 72
+                },
+                "isError": false
+              },
+              "permission": "edit",
+              "labels": {
+                "displayName": "Write File {path}",
+                "error": "Failed to write file {path}",
+                "running": "Writing file {path}",
+                "success": "Wrote file {path}",
+                "runningLong": [
+                  "Still writing...",
+                  "Writing takes time...",
+                  "Nearly written...",
+                  "A lot of content to write...",
+                  "Committing every character...",
+                  "Writing like my life depends on it..."
+                ]
+              },
+              "isOutsideWorkspace": false
+            },
+            "_meta": {
+              "changes": {
+                "file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/notes/triage_1.md": {
+                  "before": "",
+                  "after": "# Triage note — run fd00ebc84e8a\n\nGenerated after: `python3 -m harness.run --golden --seed 2026`\n\n## Summary\n\n| Cells compared | Cells equal | Decided | Unexplained | Groups |\n|---|---|---|---|---|\n| 430 000 | 429 988 | 0 | 12 | 2 × spreadsheet-anomaly |\n\nLint-explained cells: A2:2, A3:10  \nStatic-only anomaly: A1 (`Calc!O2:O41`, awaiting D-001)\n\n---\n\n## Group table\n\n| ID | Root cell | Output | Class | Lint | Action | Result |\n|---|---|---|---|---|---|---|\n| G01 | `Calc!X31` | `credit_pct` | spreadsheet-anomaly | A3 `inconsistent_formula` | No code change — awaiting D-003 | n/a |\n| G02 | `Calc!AM17` | `tax` | spreadsheet-anomaly | A2 `hardcoded_value_in_formula_column` | No code change — awaiting D-002 | n/a |\n\n---\n\n## G01 — `Calc!X` (`credit_pct`)\n\n- **Signature:** `delta -0.08 x1` | single row 31 (HO-000030)\n- **Predicate:** `p.effective_date in [2027-06-01..2027-06-01]` (precision 0.04: 1 of 28 such rows)\n- **Workbook value:** 0.33 | **Service value:** 0.25\n- **Column rule:** `=MIN(W31,CreditCap)` — row 31 uses `=W31` (cap omitted)\n- **Joined lint:** A3 `inconsistent_formula` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-003 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## G02 — `Calc!AM` (`tax`)\n\n- **Signature:** `delta -21.65 x1` | single row 17 (HO-000016)\n- **Predicate:** `c.premium_rounded in [1301..1301]` (precision 0.20: 1 of 5 such rows)\n- **Workbook value:** 48.17 | **Service value:** 26.52\n- **Column rule:** `=ROUND((AJ17+AK17)*G17,2)` — row 17 contains literal `48.17`\n- **Joined lint:** A2 `hardcoded_value_in_formula_column` → harness class is `spreadsheet-anomaly`\n- **Decision required:** D-002 (options: `adopt-manual`, `escalate`)\n\nA group joined to a lint is never a translation bug. No code change was made.\n\n---\n\n## Pending decisions\n\n| ID | Cell | Lint type | Output | Status |\n|---|---|---|---|---|\n| D-001 | `Calc!O2:O41` | `range_short_of_table` | `ded_factor` | PENDING |\n| D-002 | `Calc!AM17` | `hardcoded_value_in_formula_column` | `tax` | PENDING |\n| D-003 | `Calc!X31` | `inconsistent_formula` | `credit_pct` | PENDING |\n\n---\n\n## Conclusion\n\nBoth mismatch groups are `spreadsheet-anomaly` (joined to lints A2 and A3 respectively).  \nThere are **zero translation bugs** in this run. No service code was changed.  \n198/200 random-sample rows are equal; the 2 differing rows are fully explained by the anomalies above.\n\n---\n\nRe-verify with:\n\n```\npython3 -m harness.run --golden --seed 2026\n```\n",
+                  "patch": "Index: file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/notes/triage_1.md\n===================================================================\n--- file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/notes/triage_1.md\n+++ file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/notes/triage_1.md\n@@ -0,0 +1,73 @@\n+# Triage note — run fd00ebc84e8a\n+\n+Generated after: `python3 -m harness.run --golden --seed 2026`\n+\n+## Summary\n+\n+| Cells compared | Cells equal | Decided | Unexplained | Groups |\n+|---|---|---|---|---|\n+| 430 000 | 429 988 | 0 | 12 | 2 × spreadsheet-anomaly |\n+\n+Lint-explained cells: A2:2, A3:10  \n+Static-only anomaly: A1 (`Calc!O2:O41`, awaiting D-001)\n+\n+---\n+\n+## Group table\n+\n+| ID | Root cell | Output | Class | Lint | Action | Result |\n+|---|---|---|---|---|---|---|\n+| G01 | `Calc!X31` | `credit_pct` | spreadsheet-anomaly | A3 `inconsistent_formula` | No code change — awaiting D-003 | n/a |\n+| G02 | `Calc!AM17` | `tax` | spreadsheet-anomaly | A2 `hardcoded_value_in_formula_column` | No code change — awaiting D-002 | n/a |\n+\n+---\n+\n+## G01 — `Calc!X` (`credit_pct`)\n+\n+- **Signature:** `delta -0.08 x1` | single row 31 (HO-000030)\n+- **Predicate:** `p.effective_date in [2027-06-01..2027-06-01]` (precision 0.04: 1 of 28 such rows)\n+- **Workbook value:** 0.33 | **Service value:** 0.25\n+- **Column rule:** `=MIN(W31,CreditCap)` — row 31 uses `=W31` (cap omitted)\n+- **Joined lint:** A3 `inconsistent_formula` → harness class is `spreadsheet-anomaly`\n+- **Decision required:** D-003 (options: `adopt-manual`, `escalate`)\n+\n+A group joined to a lint is never a translation bug. No code change was made.\n+\n+---\n+\n+## G02 — `Calc!AM` (`tax`)\n+\n+- **Signature:** `delta -21.65 x1` | single row 17 (HO-000016)\n+- **Predicate:** `c.premium_rounded in [1301..1301]` (precision 0.20: 1 of 5 such rows)\n+- **Workbook value:** 48.17 | **Service value:** 26.52\n+- **Column rule:** `=ROUND((AJ17+AK17)*G17,2)` — row 17 contains literal `48.17`\n+- **Joined lint:** A2 `hardcoded_value_in_formula_column` → harness class is `spreadsheet-anomaly`\n+- **Decision required:** D-002 (options: `adopt-manual`, `escalate`)\n+\n+A group joined to a lint is never a translation bug. No code change was made.\n+\n+---\n+\n+## Pending decisions\n+\n+| ID | Cell | Lint type | Output | Status |\n+|---|---|---|---|---|\n+| D-001 | `Calc!O2:O41` | `range_short_of_table` | `ded_factor` | PENDING |\n+| D-002 | `Calc!AM17` | `hardcoded_value_in_formula_column` | `tax` | PENDING |\n+| D-003 | `Calc!X31` | `inconsistent_formula` | `credit_pct` | PENDING |\n+\n+---\n+\n+## Conclusion\n+\n+Both mismatch groups are `spreadsheet-anomaly` (joined to lints A2 and A3 respectively).  \n+There are **zero translation bugs** in this run. No service code was changed.  \n+198/200 random-sample rows are equal; the 2 differing rows are fully explained by the anomalies above.\n+\n+---\n+\n+Re-verify with:\n+\n+```\n+python3 -m harness.run --golden --seed 2026\n+```\n"
+                }
+              },
+              "fileMtimes": {
+                "file:///c%3A<home>/Desktop/bob/notmicrosoftbobdisk/reports/notes/triage_1.md": 1790435067292
+              },
+              "durationMs": 1536,
+              "timestamp": 1790435068309,
+              "processes": []
+            },
+            "id": "f3f84c98973e1ea49ad2f9899d4aa2d0"
+          },
+          "createdAt": 1790435074928
+        },
+        {
+          "id": "e3ecc959866ae8dae8b4db2c42c60fc0",
+          "role": "assistant",
+          "data": {
+            "role": "assistant",
+            "content": "Both groups are `spreadsheet-anomaly` — no translation bugs exist. Here is the complete triage result:\n\n---\n\n## Triage outcome\n\n| ID | Root cell | Output | Class | Lint | Action |\n|---|---|---|---|---|---|\n| G01 | `Calc!X31` | `credit_pct` | `spreadsheet-anomaly` | A3 `inconsistent_formula` | No code change — awaiting **D-003** |\n| G02 | `Calc!AM17` | `tax` | `spreadsheet-anomaly` | A2 `hardcoded_value_in_formula_column` | No code change — awaiting **D-002** |\n\n**Why no fix for either group:**\n\n- **G01** — Row 31 of the workbook uses `=W31` (the `MIN(…,CreditCap)` cap is absent). The harness has joined this to lint **A3** (`inconsistent_formula`). A group joined to a lint is never a translation bug; the service correctly implements the column rule `=MIN(W,CreditCap)`.\n\n- **G02** — Row 17 of the workbook contains the hard-coded literal `48.17` instead of the formula `=ROUND((AJ17+AK17)*G17,2)`. The harness has joined this to lint **A2** (`hardcoded_value_in_formula_column`). Same rule applies — no code change.\n\nNext step for the person: run `tools/decide.py` for **D-002** and **D-003** (options: `adopt-manual` or `escalate`). D-001 is static-only and does not affect runtime output.\n\nTriage note written to [`reports/notes/triage_1.md`](reports/notes/triage_1.md).",
+            "id": "e3ecc959866ae8dae8b4db2c42c60fc0",
+            "_meta": {
+              "timestamp": 1790435069895,
+              "spend": {
+                "cost": 0.042344,
+                "contextTokens": 21172
+              }
+            },
+            "stop": true
+          },
+          "createdAt": 1790435074929
+        }
+      ]
+    }
+  ]
+}

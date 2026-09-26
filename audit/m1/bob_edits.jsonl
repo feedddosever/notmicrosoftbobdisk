@@ -26,3 +26,7 @@
 {"ts": "2026-09-26T13:00:18Z", "tool": "write_file", "rel_path": "service/sheetshift_ho3/rater.py"}
 {"ts": "2026-09-26T13:00:30Z", "tool": "apply_diff", "rel_path": "service/sheetshift_ho3/rater.py"}
 {"ts": "2026-09-26T13:00:41Z", "tool": "write_file", "rel_path": "tests/test_rater_order.py"}
+{"ts": "2026-09-26T15:04:28Z", "tool": "write_file", "rel_path": "reports/notes/triage_1.md"}
+{"ts": "2026-09-26T15:12:07Z", "tool": "write_file", "rel_path": "docs/anomalies/D-001.md"}
+{"ts": "2026-09-26T15:12:23Z", "tool": "write_file", "rel_path": "docs/anomalies/D-002.md"}
+{"ts": "2026-09-26T15:12:43Z", "tool": "write_file", "rel_path": "docs/anomalies/D-003.md"}

@@ -183,6 +183,8 @@ Review fixes. (1) tests/test_no_env.py fails: service/sheetshift_ho3/api.py line
 
 - **Expected output:** fixes, `reports/notes/triage_1.md`, and possibly a rollback (show it on video).
 
+> **Result for m1 (Sat 26 Sep, task cost 0.17; commit ae91248).** Bob re-ran the harness and classified both groups as spreadsheet anomalies joined to lints A3 (`Calc!X31`) and A2 (`Calc!AM17`), with signatures and predicates; zero translation bugs, so no fix and no rollback. The note's figures match the harness (checked: HO-000016 tax 48.17 vs 26.52, total_due −21.65; HO-000030 credit 0.33 vs 0.25, total_due +255.77).
+
 ## T06 — anomaly briefs (in parallel with T05)
 
 - **Mode:** Sheet Analyst. **Branch:** `bob/t06-briefs`. **Est.** 1–2 coins.
@@ -193,6 +195,16 @@ For each PENDING entry in @reports/decision_queue.json, use the manual-adjudicat
 ```
 
 - **Expected output:** briefs `docs/anomalies/D-001.md` to `D-003.md`.
+
+> **Result for m1 (Sat 26 Sep, task cost 0.45).** Three briefs, each quoting its rule verbatim with the correct page (R-205 p. 5, R-310 p. 5, R-510 p. 7, checked in the PDF), listing only the allowed options and recommending `adopt-manual` without deciding. D-002 (−$21.65 on HO-000016) and D-003 (+$255.77 on HO-000030) match the harness exactly. **D-001 is wrong on impact:** it says no runtime rows were isolated because "the sample may contain no policies with a $10,000 deductible", rates confidence Medium and leaves the impact uncomputed. In fact the service copies the workbook's short range, so the comparison with the original workbook cannot show A1 (it shows only against the decision-patched workbook); the workbook's own Policies sheet has 11 of 40 policies at $10,000 or more (7 × $10,000, 4 × $25,000), and the 10,000 generated policies have 1,874. A what-if by Claude Code (Bob's service in memory with the lookup over the six-row `DedBands`, no file changed) lowers `total_due` for 1,842 of them: min −$7.22, median −$322.95, max −$2,010.60. Fixed by the follow-up below.
+
+**T06 follow-up (same task, Sheet Analyst):**
+
+```
+Review fix for docs/anomalies/D-001.md. "No runtime rows" does not mean no affected policies: the service copies the workbook's short range, so the comparison with the original workbook cannot show A1; it shows only against the decision-patched workbook after the decision. Use office_read on workbook/example_mutual_ho3_rater.xlsx, sheet Policies, column H (deductible, rows 2 to 41) and count the policies with a deductible of $10,000 or more. Update Rows affected, Premium impact, the recommendation text and the confidence to match, and remove the sentences saying the sample may contain no such policies. You may also cite this what-if, computed outside Bob by Claude Code on the 10,000 generated policies with the lookup over DedBands, labelled as such: 1,874 have a deductible of $10,000 or more (the generator over-weights boundaries), and total_due falls for 1,842 of them (min -$7.22, median -$322.95, max -$2,010.60). Keep the verbatim quote and the three allowed options; recommend, do not decide.
+```
+
+Then re-export the task, retake the summary screenshot, and tell Claude Code.
 
 ## People step — decisions (no Bob)
 
