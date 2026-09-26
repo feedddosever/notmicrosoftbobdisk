@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- SheetShift cover image, 1920x1080. Render: see presentation/README.md.
+     Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md.
+     The headline numbers below are placeholders until reports/certificate.json exists. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SheetShift cover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+  :root { --ink: #f2f5f3; --muted: #9fb8b3; --deep: #0c3b37; --deeper: #082825; --accent: #8fe0d4; --cell: #123f3b; --rule: #25544f; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  body { background: var(--deeper); color: var(--ink); font-family: "Atkinson Hyperlegible", "Segoe UI", Arial, sans-serif; }
+  .frame { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .left { padding: 120px 0 110px 120px; display: flex; flex-direction: column; justify-content: space-between; }
+  .eyebrow { font-family: "JetBrains Mono", Consolas, monospace; font-size: 26px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: "Archivo", "Segoe UI", Arial, sans-serif; font-stretch: 75%; font-weight: 800; font-size: 190px; line-height: .9; margin: 28px 0 0; letter-spacing: -0.01em; }
+  .tag { font-size: 44px; line-height: 1.25; margin: 36px 0 0; max-width: 21ch; color: var(--ink); }
+  .tag b { color: var(--accent); font-weight: 700; }
+  .foot { font-family: "JetBrains Mono", Consolas, monospace; font-size: 26px; color: var(--muted); display: flex; flex-direction: column; gap: 10px; }
+  .foot strong { color: var(--ink); font-weight: 600; }
+  .right { background: var(--deep); padding: 120px 110px 110px; display: flex; flex-direction: column; justify-content: center; gap: 34px; border-left: 2px solid var(--rule); }
+  .card { font-family: "JetBrains Mono", Consolas, monospace; background: var(--cell); border: 2px solid var(--rule); border-radius: 14px; padding: 30px 34px; font-size: 32px; line-height: 1.5; }
+  .card .lbl { display: block; font-size: 20px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .card .f { color: #ffffff; }
+  .card .k { color: var(--accent); }
+  .arrow { font-family: "Archivo", Arial, sans-serif; font-size: 64px; color: var(--accent); text-align: center; line-height: 1; }
+  .result { font-family: "JetBrains Mono", Consolas, monospace; font-size: 30px; line-height: 1.5; color: var(--ink); border-top: 2px solid var(--rule); padding-top: 26px; }
+  .result b { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <section class="left">
+    <div>
+      <div class="eyebrow">Application modernization · testing</div>
+      <h1>SheetShift</h1>
+      <p class="tag">Your rating spreadsheet, as <b>code you own</b>, checked <b>cell by cell</b>.</p>
+    </div>
+    <div class="foot">
+      <span>Built with <strong>IBM Bob</strong></span>
+      <span>Synthetic data · fictional carrier</span>
+    </div>
+  </section>
+  <section class="right">
+    <div class="card"><span class="lbl">Workbook · Calc!H</span><span class="f">=ROUND(E2*D2, 2)</span></div>
+    <div class="arrow" aria-hidden="true">↓</div>
+    <div class="card"><span class="lbl">Bob's service</span><span class="k">@covers</span>("Calc!H", "base_premium")<br>def c_H_base_premium(p, c): …</div>
+    <div class="result" id="headline"><b>[C]</b> cells compared · <b>[U]</b> unexplained<br><b>[A]</b> anomalies decided by a person</div>
+  </section>
+</div>
+</body>
+</html>

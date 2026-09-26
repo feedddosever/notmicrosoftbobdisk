@@ -8,8 +8,8 @@ All data is synthetic. The carrier is **Example Mutual Insurance Co. (FICTIONAL)
 
 | | |
 |---|---|
-| Live app | [LIVE_APP_URL] (Vercel) |
-| Static mirror | [PAGES_URL] (GitHub Pages, precomputed results) |
+| Live app | https://sheetshift-rho.vercel.app (Vercel; the quote API goes live with Bob's task T04) |
+| Static mirror | Optional: GitHub Pages with precomputed results (`.github/workflows/pages.yml`, enabled by a repository admin) |
 | Demo video | [VIDEO_URL] |
 | Bob task evidence | [`bob_sessions/`](bob_sessions/) and [`bob_sessions/INDEX.md`](bob_sessions/INDEX.md) |
 | Certificate | `reports/certificate.json` · `reports/certificate.html` (committed after the final run) |

@@ -75,6 +75,12 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `Makefile` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `PROVENANCE.md` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `README.md` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `THIRD_PARTY_LICENSES.md` | Claude Code (AI agent), generated with `tools/license_gate.py --markdown` | – | pending | pending |
+| `presentation/README.md` | Claude Code (AI agent), draft | – | pending | pending |
+| `presentation/statements.md` | Claude Code (AI agent) draft; the builder edits and approves | – | pending | pending |
+| `presentation/video_script.md` | Claude Code (AI agent) draft; the builder records and narrates | – | pending | pending |
+| `presentation/slides.md` | Claude Code (AI agent) draft; the builder edits | – | pending | pending |
+| `presentation/cover.html` | Claude Code (AI agent) draft | – | pending | pending |
 | `api/index.py` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `bob_sessions/INDEX.md` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `bob_sessions/README.md` | Claude Code (AI agent), scaffold | – | pending | pending |
