@@ -7,6 +7,7 @@ copied into a temporary repo so the audit log never touches this checkout.
 Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md
 """
 import glob
+import importlib.util
 import json
 import os
 import shutil
@@ -202,3 +203,23 @@ def test_payload_sample_holds_keys_only(fake_repo):
     text = open(sample[0], encoding="utf-8").read()
     assert "SECRET_VALUE_NOT_LOGGED" not in text and "input_keys" in text
     assert "PreToolUse:write_file" in text  # keyed by event and tool
+
+
+def test_handle_falls_back_to_the_only_roster_member(tmp_path, monkeypatch):
+    """A slow or missing git answer (one T02 call on Windows) must not log the handle as 'unknown'."""
+    root = tmp_path / "repo"
+    shutil.copytree(HOOKS, str(root / ".bob" / "hooks"), ignore=shutil.ignore_patterns("__pycache__"))
+    spec = importlib.util.spec_from_file_location("_common_copy", str(root / ".bob" / "hooks" / "_common.py"))
+    C = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(C)
+
+    def slow(*args, **kwargs):
+        raise subprocess.TimeoutExpired(args[0], 3)
+    monkeypatch.setattr(C.subprocess, "run", slow)
+    assert C.handle() == "unknown"                                   # no roster
+    roster = root / "bob_sessions" / "roster.json"
+    roster.parent.mkdir()
+    roster.write_text(json.dumps({"members": [{"handle": "m1"}]}), encoding="utf-8")
+    assert C.handle() == "m1"
+    roster.write_text(json.dumps({"members": [{"handle": "m1"}, {"handle": "m2"}]}), encoding="utf-8")
+    assert C.handle() == "unknown"                                   # two members: no guess

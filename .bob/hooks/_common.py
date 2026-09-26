@@ -46,14 +46,25 @@ def now():
 
 
 def handle():
-    """Member handle from `git config sheetshift.handle`; 'unknown' if unset or odd."""
+    """Member handle from `git config sheetshift.handle`. If git gives none (unset, or slow: on
+    Windows one call in T02 timed out) and the roster has exactly one member, that member's handle;
+    otherwise 'unknown'."""
     try:
         out = subprocess.run(["git", "config", "--get", "sheetshift.handle"], cwd=ROOT,
                              stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=3)
         h = out.stdout.decode("utf-8", "replace").strip()
     except Exception:
         h = ""
-    return h if _HANDLE_OK.match(h) else "unknown"
+    if _HANDLE_OK.match(h):
+        return h
+    try:
+        with open(os.path.join(ROOT, "bob_sessions", "roster.json"), encoding="utf-8") as f:
+            members = [m.get("handle") for m in json.load(f).get("members", []) if isinstance(m, dict)]
+    except Exception:
+        members = []
+    if len(members) == 1 and _HANDLE_OK.match(members[0] or ""):
+        return members[0]
+    return "unknown"
 
 
 class Payload(object):

@@ -69,3 +69,9 @@
 {"ts": "2026-09-26T11:10:46Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "tests/test_xlsem.py", "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T11:11:05Z", "handle": "m1", "event": "PreToolUse", "tool": "write_file", "rel_path": "tests/test_tables.py", "decision": "allow", "reason": ""}
 {"ts": "2026-09-26T11:11:10Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:29:27Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:29:27Z", "handle": "m1", "event": "PreToolUse", "tool": "read_file", "rel_path": null, "decision": "allow", "reason": "tool writes no workspace file"}
+{"ts": "2026-09-26T11:29:47Z", "handle": "m1", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "service/sheetshift_ho3/xlsem.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:30:20Z", "handle": "m1", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "tests/test_xlsem.py", "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:30:30Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}
+{"ts": "2026-09-26T11:33:19Z", "handle": "m1", "event": "PreToolUse", "tool": "execute_command", "rel_path": null, "decision": "allow", "reason": ""}

@@ -1,0 +1,1 @@
+{"ts": "2026-09-26T11:32:47Z", "handle": "unknown", "event": "PreToolUse", "tool": "apply_diff", "rel_path": "service/sheetshift_ho3/xlsem.py", "decision": "allow", "reason": ""}

@@ -1,4 +1,20 @@
 {
+ "PostToolUse:apply_diff": {
+  "input_keys": [
+   "diff",
+   "path"
+  ],
+  "tool": "apply_diff",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_response",
+   "tool_use_id"
+  ]
+ },
  "PostToolUse:search_ibm_docs": {
   "input_keys": [
    "library_name",
@@ -137,8 +153,7 @@
  },
  "PreToolUse:read_file": {
   "input_keys": [
-   "path",
-   "range"
+   "path"
   ],
   "tool": "read_file",
   "top_keys": [

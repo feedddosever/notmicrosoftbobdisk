@@ -1,0 +1,17 @@
+{
+ "PreToolUse:apply_diff": {
+  "input_keys": [
+   "diff",
+   "path"
+  ],
+  "tool": "apply_diff",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ }
+}
