@@ -10,4 +10,4 @@ One row per Bob task, including T00 and any aborted, re-run or fallback task. `t
 | T03 | m1 | sheet-translator | 4 | service/sheetshift_ho3/rater.py, tests/test_rater_order.py; by the 4 subagents (audit/m1/bob_edits.jsonl): service/sheetshift_ho3/units/ (5), tests/test_u1..u4.py (4) | c1c690d | – | task cost 4.22 | sheetshift_task03_translate_m1_summary.png | sheetshift_task03_translate_m1_history.json | done |
 | T04 | m1 | sheet-translator | 0 | service/sheetshift_ho3/ (2), tests/test_api.py | f2f3d71 | – | task cost 1.77 | sheetshift_task04_api_m1_summary.png | sheetshift_task04_api_m1_history.json | done |
 | T05 | m1 | sheet-triage | 0 | reports/notes/triage_1.md | ae91248 | – | task cost 0.17 | sheetshift_task05_triage_m1_summary.png | sheetshift_task05_triage_m1_history.json | done |
-| T06 | m1 | sheet-analyst | 0 | docs/anomalies/ (3) | – | – | task cost 0.45 | sheetshift_task06_briefs_m1_summary.png | sheetshift_task06_briefs_m1_history.json | done |
+| T06 | m1 | sheet-analyst | 0 | docs/anomalies/ (3) | 3331d0d | – | task cost 0.80 | sheetshift_task06_briefs_m1_summary.png | sheetshift_task06_briefs_m1_history.json | done |

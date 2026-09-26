@@ -63,6 +63,22 @@
    "tool_use_id"
   ]
  },
+ "PreToolUse:FindSymbol": {
+  "input_keys": [
+   "depth",
+   "filter_path",
+   "name_path_pattern"
+  ],
+  "tool": "FindSymbol",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
  "PreToolUse:apply_diff": {
   "input_keys": [
    "diff",

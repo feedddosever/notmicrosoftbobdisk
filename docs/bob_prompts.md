@@ -206,6 +206,8 @@ Review fix for docs/anomalies/D-001.md. "No runtime rows" does not mean no affec
 
 Then re-export the task, retake the summary screenshot, and tell Claude Code.
 
+> **After the follow-up (task cost 0.80, commit 3331d0d).** Bob read `Policies!H2:H41` with `office_read`, listed the 11 rows (3, 4, 13, 15, 19, 22, 24, 27, 29, 34, 38; checked against the workbook), explained why the original comparison shows 0 delta for them, cited the what-if as Claude Code's, and raised D-001's confidence to High. Options and quote unchanged.
+
 ## People step — decisions (no Bob)
 
 A person acting as pricing lead (when solo, you) runs `tools/decide.py` in a terminal for each anomaly, for example:
