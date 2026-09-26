@@ -60,15 +60,29 @@ ORDER = (
 
 # ---------------------------------------------------------------------------
 # Unit imports — each file registers its @covers functions into xlsem.STEPS.
-# Uncomment each import as the unit is translated.
 # ---------------------------------------------------------------------------
 
-# from service.sheetshift_ho3.units import u1_base  # noqa: F401
-# from service.sheetshift_ho3.units import u2_adjustments  # noqa: F401
-# from service.sheetshift_ho3.units import u3_hurricane  # noqa: F401
-# from service.sheetshift_ho3.units import u4_final  # noqa: F401
+from service.sheetshift_ho3.units import u1_base       # noqa: F401, E402
+from service.sheetshift_ho3.units import u2_aop        # noqa: F401, E402
+from service.sheetshift_ho3.units import u3_hurricane  # noqa: F401, E402
+from service.sheetshift_ho3.units import u4_final      # noqa: F401, E402
 
-_UNIT_FUNCTIONS: list = []  # populated when unit imports above are enabled
+from service.sheetshift_ho3.xlsem import STEPS as _STEPS  # noqa: E402
+
+# Build the ordered list of column functions from STEPS in ORDER sequence.
+_STEP_MAP = {s["name"]: s["fn"] for s in _STEPS}
+_FN_MAP: dict = {}
+for _mod in (u1_base, u2_aop, u3_hurricane, u4_final):
+    for _name in dir(_mod):
+        _obj = getattr(_mod, _name)
+        if callable(_obj) and _name.startswith("c_"):
+            _FN_MAP[_obj.__name__] = _obj
+
+_UNIT_FUNCTIONS = [
+    _FN_MAP[_STEP_MAP[name]]
+    for name in ORDER
+    if name in _STEP_MAP and _STEP_MAP[name] in _FN_MAP
+]
 
 
 def quote(policy: dict) -> dict:
@@ -88,12 +102,8 @@ def quote(policy: dict) -> dict:
     """
     c: dict = {}
     for fn in _UNIT_FUNCTIONS:
-        val = fn(policy, c)
-        # find the output name for this function from STEPS
-        from service.sheetshift_ho3.xlsem import STEPS as _STEPS
-        name = next((s["name"] for s in _STEPS if s["fn"] == fn.__name__), None)
-        if name is not None:
-            c[name] = val
+        out_name = next((s["name"] for s in _STEPS if s["fn"] == fn.__name__), None)
+        if out_name is not None:
+            c[out_name] = fn(policy, c)
 
-    # Fill any not-yet-implemented outputs with None
     return {name: c.get(name) for name in ORDER}
