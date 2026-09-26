@@ -1,6 +1,6 @@
 # bob_sessions: evidence of every IBM Bob task
 
-This folder holds the evidence that IBM Bob did the work: one summary screenshot per task and, if Bob IDE has an Export button, one exported task report per task. It is **flat** (no subfolders), and `tools/check_evidence.py` checks it in CI.
+This folder holds the evidence that IBM Bob did the work: one summary screenshot and one exported task session (Bob IDE's Export button) per task. It is **flat** (no subfolders), and `tools/check_evidence.py` checks it in CI.
 
 Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Members edit it.
 
@@ -9,7 +9,7 @@ Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Members edit
 | What | Pattern | Example |
 |---|---|---|
 | Task summary screenshot | `<team>_taskNN_<desc>_<handle>_summary.png` | `teamslug_task03_translate_units_m1_summary.png` |
-| Exported task report | `<team>_taskNN_<desc>_<handle>_history.md` | `teamslug_task03_translate_units_m1_history.md` |
+| Exported task session (scrubbed) | `<team>_taskNN_<desc>_<handle>_history.json` | `teamslug_task03_translate_units_m1_history.json` |
 | Other screenshot (for example the Bobalytics view) | `<team>_misc_<desc>_<handle>.png` | `teamslug_misc_bobalytics_m1.png` |
 
 - `<team>` is `team_slug` from `roster.json`: the registered lablab team name, lowercase letters and digits only.
@@ -20,11 +20,14 @@ Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Members edit
 ## Capturing a task (right after it finishes)
 
 1. In Bob IDE open Tasks, open the task, and click its header to show the summary.
-2. Screenshot the summary. Crop out any email address, account name or notification.
-3. If the Export button exists, export the task report and scrub it before adding it:
-   `sed -E -i.bak 's#(/Users|/home|[A-Za-z]:(\\){1,2}Users)[/\\]+[^/\\]+#<home>#g' <file> && rm -f <file>.bak` (works with GNU and BSD/macOS sed). Then remove any email address by hand. `check_evidence.py` fails on home paths and on email addresses other than GitHub noreply addresses.
-4. Add a row to `INDEX.md` (below).
-5. Commit Bob's work with the trailer `Bob-Task: TNN (mN)`, for example `Bob-Task: T03 (m1)`. Do not squash Bob commits.
+2. Screenshot the summary (the header with the token count and the Bobcoin cost must be in the picture) and save it as `<team>_taskNN_<desc>_<handle>_summary.png` in this folder. Crop out any email address, account name or notification.
+3. Click **Export** in the task header. Bob saves `bob-task-<id>-<date>.json`; the repository root is a fine place for it (`bob-task-*.json` is git-ignored, because the raw file holds home paths).
+4. Import it. This scrubs home paths and emails, writes the `_history.json` here, and adds or replaces the task's row in `INDEX.md` (below) from what the export records:
+   ```
+   python3 tools/import_bob_export.py bob-task-<id>-<date>.json --task T03 --desc translate_units --index
+   ```
+   Add `--status aborted|re-run|fallback` when it applies. `check_evidence.py` fails on home paths and on email addresses other than GitHub noreply addresses.
+5. Commit Bob's work with the trailer `Bob-Task: TNN (mN)`, for example `Bob-Task: T03 (m1)`. Do not squash Bob commits. Then fill in the row's Commit column (a re-import keeps it).
 
 ## INDEX.md rows
 
@@ -40,17 +43,12 @@ One row per task, including T00 and every aborted, re-run or fallback task. Exac
 | Commit | the short SHA of the commit carrying `Bob-Task: TNN (mN)`, once committed |
 | Gauge before / Gauge after | the Bobcoin gauge readings |
 | Screenshot | the PNG file name in this folder |
-| Export | the `_history.md` file name, or `–` if exports are not available |
+| Export | the `_history.json` file name |
 | Status | `done`, `aborted`, `re-run` or `fallback` |
 
 ## Task exports
 
-T00 records whether Bob IDE 2.0.3 has an Export button for task reports. Set `exports_available` in `roster.json` to `true` or `false`.
-
-- If `true`, every row needs an export (checked with `--final`).
-- If `false`, add a screenshot showing the missing button (as a `misc` file) and write the finding here:
-
-> Export button: _not recorded yet (T00)._
+> Export button: **yes** (T00, 26 Sep 2026). Bob IDE's task header exports one JSON file per task, `bob-task-<id>-<date>.json`, holding the task (modes, cost, context breakdown) and every message and tool call. `roster.json` records `exports_available: true`, so every row needs an export (checked with `--final`).
 
 ## Checking
 

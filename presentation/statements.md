@@ -33,7 +33,7 @@ Limits: the oracle is LibreOffice, not Excel [or: cross-checked against Excel on
 
 ## IBM Bob Usage Statement
 
-SheetShift is a Bob workflow pack (four custom modes, [S] skills, [Q] slash commands, five lifecycle hooks and project rules) plus a deterministic grader, and Bob runs every step of the modernization. We used Bob IDE [version] for [T] tasks, spending [X] of our 40 Bobcoins. Every task's summary screenshot is in bob_sessions/, indexed in bob_sessions/INDEX.md.
+SheetShift is a Bob workflow pack (four custom modes, [S] skills, [Q] slash commands, five lifecycle hooks and project rules) plus a deterministic grader, and Bob runs every step of the modernization. We used Bob IDE [version] for [T] tasks, spending [X] of our 40 Bobcoins. Every task's summary screenshot and exported session is in bob_sessions/, indexed in bob_sessions/INDEX.md.
 
 Onboarding Bob like a teammate. AGENTS.md and .bob/rules/ encode cell-traceability tags, Excel rounding and lookup semantics, and protected paths. The Sheet Translator mode can edit only service/ and tests/; Sheet Analyst writes only notes under docs/.
 

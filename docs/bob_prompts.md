@@ -40,14 +40,14 @@ Author: Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. A member review
 
 1. In the Bob chat panel, open **Tasks** and select the task. If needed, choose **All** to see tasks from every workspace.
 2. Click the **task header**. The task session consumption summary appears.
-3. Take a **PNG** screenshot of the summary and crop out any email address.
-4. Save it as `bob_sessions/<team>_taskNN_<desc>_<handle>_summary.png`. `<team>` is the registered team name as a lowercase slug, and `<handle>` is `m1`..`m4`. Example: `bob_sessions/<team>_task03_translate_m1_summary.png`.
-5. If an Export button exists, save the export as `bob_sessions/<team>_taskNN_<desc>_<handle>_history.md`. Then scrub home paths and check the folder:
+3. Take a **PNG** screenshot of the summary, with the header's token count and Bobcoin cost in the picture, and crop out any email address.
+4. Save it as `bob_sessions/<team>_taskNN_<desc>_<handle>_summary.png`. `<team>` is the registered team name as a lowercase slug, and `<handle>` is `m1`..`m4`. Example: `bob_sessions/sheetshift_task03_translate_m1_summary.png`.
+5. Click **Export** in the task header and save `bob-task-<id>-<date>.json` in the repository root (git-ignored). Then import it; this scrubs home paths and emails, writes `bob_sessions/<team>_taskNN_<desc>_<handle>_history.json`, and adds the task's row to `bob_sessions/INDEX.md` from what the export records (modes, subagents, files Bob edited, guard blocks, task cost):
    ```sh
-   sed -E -i.bak 's#(/Users|/home|[A-Za-z]:(\\){1,2}Users)[/\\]+[^/\\]+#<home>#g' bob_sessions/*_history.md && rm -f bob_sessions/*_history.md.bak
+   python3 tools/import_bob_export.py bob-task-<id>-<date>.json --task T03 --desc translate --index
    python3 tools/check_evidence.py --no-blame
    ```
-6. Add one row to `bob_sessions/INDEX.md`, with the fields below.
+6. After committing Bob's work, fill in the row's Commit column (a later re-import keeps it).
 
 **INDEX.md row fields:**
 

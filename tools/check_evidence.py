@@ -5,12 +5,14 @@ usage: python3 tools/check_evidence.py [--final] [--json] [--no-blame]
 Always errors (exit 1):
 - bob_sessions/ is not flat, or holds a file that is not README.md, INDEX.md, roster.json,
   a task screenshot   <team>_taskNN_<desc>_<handle>_summary.png
-  a task export       <team>_taskNN_<desc>_<handle>_history.md
+  a task export       <team>_taskNN_<desc>_<handle>_history.json (Bob IDE's Export, imported
+                      with tools/import_bob_export.py) or _history.md
   or a misc screenshot <team>_misc_<desc>_<handle>.png (e.g. the Bobalytics view)
 - a file name uses another team slug than roster.json, or a handle not in the roster;
 - an INDEX.md row names a missing or badly named screenshot/export, or two rows share one;
 - a screenshot is not named by any INDEX row (exactly one PNG per row);
-- an export still contains a home path or a non-noreply email address;
+- an export still contains a home path or a non-noreply email address, or a .json export does
+  not parse;
 - a commit has a malformed `Bob-Task:` trailer, or an INDEX row's commit does not carry the
   matching `Bob-Task: TNN (mN)` trailer.
 With --final (the Sun 09:00 gate) these become errors too (otherwise warnings):
@@ -37,9 +39,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SESSIONS = os.path.join(ROOT, "bob_sessions")
 
 SCREENSHOT_RE = re.compile(r"^[a-z0-9]+_task\d{2}_[a-z0-9_]+_m[1-4]_summary\.png$")
-EXPORT_RE = re.compile(r"^[a-z0-9]+_task\d{2}_[a-z0-9_]+_m[1-4]_history\.md$")
+EXPORT_RE = re.compile(r"^[a-z0-9]+_task\d{2}_[a-z0-9_]+_m[1-4]_history\.(md|json)$")
 MISC_RE = re.compile(r"^[a-z0-9]+_misc_[a-z0-9_]+_m[1-4]\.png$")
-NAME_PARTS = re.compile(r"^(?P<team>[a-z0-9]+)_task(?P<nn>\d{2})_(?P<desc>[a-z0-9_]+)_(?P<handle>m[1-4])_(summary\.png|history\.md)$")
+NAME_PARTS = re.compile(r"^(?P<team>[a-z0-9]+)_task(?P<nn>\d{2})_(?P<desc>[a-z0-9_]+)_(?P<handle>m[1-4])_(summary\.png|history\.md|history\.json)$")
 FIXED_FILES = {"README.md", "INDEX.md", "roster.json", ".gitkeep"}
 
 TRAILER_RE = re.compile(r"^Bob-Task:\s*(.*)$", re.M)
@@ -47,7 +49,7 @@ TRAILER_OK = re.compile(r"^T(\d{2}) \((m[1-4])\)$")
 # /Users/x, /home/x and Windows drive paths (any letter, either case, single or JSON-escaped
 # backslashes or forward slashes), unless already scrubbed to <home>.
 HOME_RE = re.compile(r"(?i)(/Users/|/home/|\b[a-z]:(\\{1,2}|/)Users(\\{1,2}|/))(?!<home>)[^\\/\s]+")
-NAMING_HELP = ("expected <team>_taskNN_<desc>_<mN>_summary.png (or _history.md), e.g. "
+NAMING_HELP = ("expected <team>_taskNN_<desc>_<mN>_summary.png (or _history.json / _history.md), e.g. "
                "teamalpha_task01_login_flow_m1_summary.png: lowercase, two-digit task, handle before _summary")
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 EMAIL_OK = re.compile(r"(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$", re.I)
@@ -199,7 +201,7 @@ def check_folder(rep, team, handles):
             rep.error("bob_sessions/%s does not match the naming rule; %s%s" % (name, NAMING_HELP, naming_hint(name)))
             continue
         prefix = name.split("_", 1)[0]
-        handle = re.search(r"_(m[1-4])(?:_summary\.png|_history\.md|\.png)$", name).group(1)
+        handle = re.search(r"_(m[1-4])(?:_summary\.png|_history\.md|_history\.json|\.png)$", name).group(1)
         if team and prefix != team:
             rep.error("bob_sessions/%s uses team slug %r, roster says %r" % (name, prefix, team))
         if handles and handle not in handles:
@@ -212,7 +214,7 @@ def naming_hint(name):
     low = name.lower()
     if low != name and (SCREENSHOT_RE.match(low) or EXPORT_RE.match(low) or MISC_RE.match(low)):
         return " (hint: use lower case: %s)" % low
-    m = re.match(r"^([a-z0-9]+_task\d{2}_[a-z0-9_]+?)_(summary\.png|history\.md)$", low)
+    m = re.match(r"^([a-z0-9]+_task\d{2}_[a-z0-9_]+?)_(summary\.png|history\.md|history\.json)$", low)
     if m and not re.search(r"_m[1-4]$", m.group(1)):
         return " (hint: add your handle: %s_m1_%s)" % (m.group(1), m.group(2))
     return ""
@@ -222,6 +224,11 @@ def check_exports(rep, exports):
     for name in exports:
         with open(os.path.join(SESSIONS, name), encoding="utf-8", errors="replace") as f:
             text = f.read()
+        if name.endswith(".json"):
+            try:
+                json.loads(text)
+            except ValueError:
+                rep.error("bob_sessions/%s is not valid JSON; re-import it with tools/import_bob_export.py" % name)
         if HOME_RE.search(text):
             rep.error("bob_sessions/%s contains a home path; scrub it (see bob_sessions/README.md)" % name)
         bad = sorted({e for e in EMAIL_RE.findall(text) if not EMAIL_OK.search(e)})

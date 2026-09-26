@@ -29,3 +29,7 @@ plan/
 
 # Office lock files (a workbook open in Excel)
 ~$*
+
+# Raw Bob IDE task exports (they hold home paths); tools/import_bob_export.py writes the
+# scrubbed copy into bob_sessions/
+bob-task-*.json
