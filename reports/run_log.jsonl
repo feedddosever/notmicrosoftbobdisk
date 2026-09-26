@@ -26,3 +26,4 @@
 {"ts": "2026-09-26T11:34:03Z", "session_id": "650924f2a5db8b6285421ca99ee0507c", "handle": "m1", "smoke": "smoke: pending (U1, U2, U3, U4 not yet written)"}
 {"ts": "2026-09-26T12:05:01Z", "session_id": "8ad557a55f562e09eb1caf513f7d410f", "handle": "m1", "smoke": "smoke: pending (U1, U2, U3, U4 not yet written)"}
 {"ts": "2026-09-26T12:36:54Z", "session_id": "8ad557a55f562e09eb1caf513f7d410f", "handle": "m1", "smoke": "smoke: pending (U1, U2, U3, U4 not yet written)"}
+{"ts": "2026-09-26T13:03:03Z", "session_id": "9a7abc58192fbf8530895a4e1c7a2f40", "handle": "m1", "smoke": "smoke all OK: 198/200 rows equal; lint-explained cells A2:2,A3:10"}

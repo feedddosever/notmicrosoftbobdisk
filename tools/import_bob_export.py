@@ -201,8 +201,17 @@ def upsert_row(index_path, row):
         for i in reversed(hits[1:]):
             del lines[i]
     else:
-        last = max(i for i, l in enumerate(lines) if l.startswith("|"))
-        lines.insert(last + 1, new)
+        # Insert in task order (tasks may run out of order, e.g. T04 before T03).
+        task_row = re.compile(r"^\|\s*(T\d{2})\s*\|", re.I)
+        rows_at = [(i, m.group(1).upper()) for i, m in ((i, task_row.match(l)) for i, l in enumerate(lines)) if m]
+        after = [i for i, t in rows_at if t < row["task"]]
+        if after:
+            at = max(after) + 1
+        elif rows_at:
+            at = rows_at[0][0]
+        else:
+            at = max(i for i, l in enumerate(lines) if l.startswith("|")) + 1
+        lines.insert(at, new)
     with open(index_path, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lines))
     return new

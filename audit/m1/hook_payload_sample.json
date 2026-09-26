@@ -154,8 +154,7 @@
  },
  "PreToolUse:read_file": {
   "input_keys": [
-   "path",
-   "range"
+   "path"
   ],
   "tool": "read_file",
   "top_keys": [

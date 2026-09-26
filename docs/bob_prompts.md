@@ -149,6 +149,10 @@ Then re-export the task (same file name pattern), retake the summary screenshot,
 
 - **Expected output:** 4 unit modules with tests, `rater.py` and `tests/test_rater_order.py`. Never re-run T03 just for footage.
 
+> **Result for m1 (Sat 26 Sep, after T04; task cost 4.22, four subagents; commit c1c690d).** The four subagents ran in parallel (U1 about 0.41 coins, U2 0.10, U3 0.24, U4 0.23 at the 1m18s mark; `bob_sessions/sheetshift_misc_t03_subagents_m1.png`) and wrote `units/u1_base.py`, `u2_aop.py`, `u3_hurricane.py`, `u4_final.py` with 213 tests; Bob then rewired `rater.py`. **Hooks fire inside subagents:** `audit/m1/bob_edits.jsonl` records every subagent write and fix (the T00 open question). **The PostToolUse smoke caught a translation bug inside T03:** U2's first run had 182/200 rows equal, 18 wrong `claims_free_flag` cells for a blank claims count (workbook 1, service 0); the subagent switched to `text_eq(claims_3yr, 0)` and the final smoke read 198/200 with A2 and A3 lint-explained. Lint handling as instructed: `ded_factor` keeps the short range with `# SHEETSHIFT-FLAG`, `credit_pct` and `tax` follow the column rule.
+>
+> Full harness on 10,000 policies: **429,988 of 430,000 cells equal; 12 unexplained, all in two spreadsheet-anomaly groups** (A3: row 31, 10 cells; A2: row 17, 2 cells); A1 static-only; **0 translation bugs**. Mutation self-test 51/60 killed (4 by crash); the 9 survivors are all equivalent in this service (labels pending a person). Naive shortcuts would have broken 2,555 (round), 6,524 (bisect_left), 3,525 (case-sensitive text) and 1,110 (MIN blank as 0) of 10,000 quotes; a 20-quote spot check misses naive rounding 0.27% of the time. Traceability: 43 covered, 5 out of scope, 0 uncovered. Certificate RED only for the three pending decisions.
+
 ## T04 — API
 
 - **Mode:** Sheet Translator. **Branch:** `bob/t04-api`. **Est.** 1.5–2.5 coins.

@@ -140,6 +140,14 @@ def test_index_needs_the_screenshot_then_replaces_the_row(sessions):
     assert r["screenshot"] == "teamx_task01_plan_m1_summary.png"
 
 
+def test_rows_are_inserted_in_task_order(sessions):
+    d, raw = sessions
+    for t, desc in (("T04", "api"), ("T01", "plan"), ("T03", "translate")):
+        (d / ("teamx_task%s_%s_m1_summary.png" % (t[1:], desc))).write_bytes(b"\x89PNG\r\n\x1a\n")
+        assert I.main([str(raw), "--task", t, "--desc", desc, "--index"], sessions=str(d)) == 0
+    assert [r["task"] for r in E.parse_index(str(d / "INDEX.md"))] == ["T01", "T03", "T04"]
+
+
 def test_rejects_a_file_that_is_not_an_export(sessions, tmp_path):
     d, _ = sessions
     bad = tmp_path / "bob-task-x.json"
