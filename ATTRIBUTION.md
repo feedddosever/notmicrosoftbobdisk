@@ -61,6 +61,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `.dockerignore` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitattributes` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.github/denylist.sha256` | Claude Code (AI agent), scaffold | – | pending | pending |
+| `.github/workflows/oracle.yml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.github/workflows/pages.yml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.github/workflows/verify.yml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitignore` | Claude Code (AI agent), scaffold | – | pending | pending |
