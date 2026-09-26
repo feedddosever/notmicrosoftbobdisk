@@ -40,7 +40,8 @@ jobs:
         run: |
           # Email addresses: only GitHub/Anthropic noreply addresses are allowed. Bob task exports
           # (bob_sessions/*.json) are checked by tools/check_evidence.py on their decoded strings
-          # (step "Evidence folder"): in raw JSON, Bob's code "\n@app.get(" reads as n@app.get.
+          # (step "Evidence folder"): in raw JSON, a decorator line in Bob's code right after an
+          # escaped newline reads as an address (the "n" of the escape becomes its local part).
           emails=$(git grep -I -h -o -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' -- . ':!*.gz' ':!*.xlsx' ':!*.pdf' ':!bob_sessions/*.json' \
                    | grep -v -i -E '(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$' | sort -u || true)
           if [ -n "$emails" ]; then echo "::error::email addresses in tracked files:"; echo "$emails" | sed -E 's/^(.).*@/\1***@/'; exit 1; fi

@@ -12,8 +12,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import check_evidence as E  # noqa: E402
 import import_bob_export as I  # noqa: E402
 
-# Assembled at run time: CI's personal-data step rejects any literal non-noreply address in the repo.
+# Assembled at run time: CI's personal-data step rejects any literal non-noreply address in the repo,
+# and in the raw source an escaped newline followed by this decorator looks like one.
 FAKE_EMAIL = "jdoe" + "@" + "example.com"
+DECORATOR = "@" + "app.get"
 HEADER = ("| Task | Member | Mode | Subagents | Files changed | Commit | Gauge before | Gauge after "
           "| Screenshot | Export | Status |\n|---|---|---|---|---|---|---|---|---|---|---|\n")
 
@@ -53,7 +55,7 @@ def make_export():
                 _call("5", "spawn_subagent", description="u3", name="general"),
                 _result("5", "spawn_subagent", [{"type": "text", "text": "done"}]),
                 _call("8", "write_file", path="service/sheetshift_ho3/api.py",
-                      content='app = FastAPI()\n\n@app.get("/api/health")\ndef health():\n    return {}\n'),
+                      content="app = FastAPI()\n\n" + DECORATOR + '("/api/health")\ndef health():\n    return {}\n'),
                 _result("8", "write_file", "ok"),
                 _call("6", "read_file", path="C:/Users/jdoe/secret.txt"),
                 _result("6", "read_file", "boom", error=True),
@@ -85,7 +87,7 @@ def test_scrub_removes_every_home_path_form_and_keeps_json():
     assert '"key": "<context cache key>"' in text and "|plan|" not in text
     assert not E.HOME_RE.search(text)
     assert "1+m1@users.noreply.github.com" in text          # noreply addresses stay
-    assert '\\n@app.get(\\"/api/health\\")' in text          # Bob's decorator is code, not an email
+    assert "\\n" + DECORATOR + '(\\"/api/health\\")' in text  # Bob's decorator is code, not an email
     assert I.load_export(text)["tasks"][0]["task"]["id"] == "abc123"
 
 

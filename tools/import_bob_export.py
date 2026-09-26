@@ -49,8 +49,9 @@ def scrub(text):
     """(scrubbed text, home paths replaced, emails replaced, cache keys replaced).
 
     Emails are found in the decoded JSON strings (check_evidence.found_emails), then replaced in
-    the raw text: matching the raw text directly would read Bob's code "\\n@app.get(" as the
-    address n@app.get and break the \\n escape. Raises ValueError if the text is not JSON."""
+    the raw text: matching the raw text directly would read a decorator line in Bob's code right
+    after an escaped newline as an address, and replacing it would break the escape. Raises
+    ValueError if the text is not JSON."""
     text, n_home = EV.HOME_RE.subn("<home>", text)
     text, n_key = CACHE_KEY_RE.subn(r"\1<context cache key>\2", text)
     json.loads(text)

@@ -51,8 +51,8 @@ TRAILER_OK = re.compile(r"^T(\d{2}) \((m[1-4])\)$")
 HOME_RE = re.compile(r"(?i)(/Users/|/home/|\b[a-z]:(\\{1,2}|/)Users(\\{1,2}|/))(?!<home>)[^\\/\s]+")
 NAMING_HELP = ("expected <team>_taskNN_<desc>_<mN>_summary.png (or _history.json / _history.md), e.g. "
                "teamalpha_task01_login_flow_m1_summary.png: lowercase, two-digit task, handle before _summary")
-# The local part starts with a letter or digit: in Bob's exported diffs a decorator line reads
-# "+@app.get(", which would otherwise be the address +@app.get.
+# The local part starts with a letter or digit: in Bob's exported diffs an added decorator line
+# starts with "+" and the decorator, which would otherwise read as an address.
 EMAIL_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 EMAIL_OK = re.compile(r"(@users\.noreply\.github\.com|^noreply@anthropic\.com|^noreply@github\.com)$", re.I)
 
@@ -239,8 +239,8 @@ def _strings(obj):
 
 def found_emails(name, text):
     """Non-noreply email addresses in an export. A JSON export is scanned string by string after
-    decoding, so code that Bob wrote, such as "\\n@app.get(" inside a JSON string, is not read as the
-    address n@app.get; a file that does not parse is scanned as raw text."""
+    decoding, so a decorator line in Bob's code right after an escaped newline is not read as an
+    address (the escape's "n" would be its local part); a file that does not parse is scanned raw."""
     chunks = [text]
     if name.endswith(".json"):
         try:

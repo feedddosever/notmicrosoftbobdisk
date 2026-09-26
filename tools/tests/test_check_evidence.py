@@ -35,11 +35,16 @@ def test_naming_hints():
     assert "teamalpha_task01_login_flow_m1_summary.png" in E.NAMING_HELP
 
 
+# Assembled at run time, like the fake address below: CI's personal-data grep reads the raw
+# source, where an escaped newline followed by this decorator looks like an address.
+DECORATOR = "@" + "app.get"
+
+
 def test_json_exports_are_scanned_for_emails_after_decoding():
-    code = json.dumps({"content": 'app = FastAPI()\n@app.get("/api/health")\n'})
-    assert "n@app.get" in " ".join(E.EMAIL_RE.findall(code))     # the raw text looks like an address
+    code = json.dumps({"content": "app = FastAPI()\n" + DECORATOR + '("/api/health")\n'})
+    assert "n" + DECORATOR in " ".join(E.EMAIL_RE.findall(code))   # the raw text looks like an address
     assert E.found_emails("t_task04_api_m1_history.json", code) == []
-    diff = json.dumps({"diff": '+\n+@app.get("/api/health")\n+def health():\n'})
+    diff = json.dumps({"diff": "+\n+" + DECORATOR + '("/api/health")\n+def health():\n'})
     assert E.found_emails("t_task04_api_m1_history.json", diff) == []   # a diff's added decorator line
     fake = "jdoe" + "@" + "example.com"                           # assembled: CI rejects literal addresses
     real = json.dumps({"content": "line one\n" + fake, "by": "1+m1@users.noreply.github.com"})
