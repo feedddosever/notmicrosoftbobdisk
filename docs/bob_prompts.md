@@ -109,6 +109,8 @@ You are onboarding onto SheetShift. Read @AGENTS.md, @build/sheets/Calc.md, @bui
 
 - **Expected output:** `docs/design/service_plan.md` with FLAGS for A1–A3. A person reviews the FLAGS and applies the accepted AGENTS.md amendments, crediting T01.
 
+> **Result for m1 (Sat 26 Sep, task cost 2.46 by Bob's export; commit 9e2266a).** Plan mode wrote `docs/design/service_plan.md` itself (301 lines). The five `office_read` cells (B2, H2, O2, W2, AF2) match `Calc.md`, and O2 confirms A1's literal `$A$31:$B$35`. The FLAGS table lists A1 (R-205), A2 (R-510) and A3 (R-310) with the correct allowed options, decides none, and quotes the manual correctly (checked against `tools/make_manual.py`; row 31's credits are 33% against the 25% cap). It adds two blank-claims observations (P vs S), both consistent with R-320 and Table 100-F. Of the five AGENTS.md amendments, #4 is applied (one-row exceptions: translate the column rule, `# FLAG <ID>`, never branch on `policy_id`); #1 and #5 are already in `.bob/rules/20-excel-semantics.md`; #2 and #3 live in the plan, which AGENTS.md's map lists. Two tool calls failed harmlessly: `office_read` on the PDF (unsupported; Bob fell back to `read_file`) and `list_files` on `docs/design` before it existed. §10 of the plan names the xlsem helpers `xl_*`; T02 below fixes the names.
+
 ## T02 — Excel semantics, tables, traceability registry
 
 - **Mode:** Sheet Translator. **Branch:** `bob/t02-xlsem`. **Est.** 1.5–2.5 coins.
@@ -119,7 +121,7 @@ Using @.bob/rules/20-excel-semantics.md, @.bob/rules/10-cell-traceability.md, @d
 (1) class XLError(Exception) with attribute .code (for example "#N/A", "#NUM!", "#DIV/0!"); two XLError values are equal when their codes are equal, and repr shows the code;
 (2) STEPS = [], the traceability registry;
 (3) a decorator covers(cell, output_name) that appends {"cell": cell, "name": output_name, "fn": f.__name__, "file": <path of the defining file relative to the repo root, computed from xlsem.py's own location (two directories above it), never from the current directory; forward slashes>, "line": f.__code__.co_firstlineno} to STEPS and returns f unchanged;
-(4) the helpers xround, xroundup, band, exact, text_eq, n0, edate, yearfrac_basis3, datedif_y, iferror; every helper except iferror returns an XLError argument unchanged; iferror(x, alt) returns alt when x is an XLError.
+(4) the helpers xround, xroundup, band, exact, text_eq, n0, edate, yearfrac_basis3, datedif_y, iferror; every helper except iferror returns an XLError argument unchanged; iferror(x, alt) returns alt when x is an XLError. These names win over the xl_* names in section 10 of the plan; list the mapping in xlsem.py's module docstring.
 Write tests/test_xlsem.py with every probe value in the rules file, plus a test that one @covers-decorated function adds exactly one STEPS entry with those five keys and a repo-relative file.
 Copy build/rate_tables.json to service/sheetshift_ho3/data/rate_tables.json with a shell cp. Write service/sheetshift_ho3/tables.py with exactly the API in @docs/CONTRACT.md section 4: table(key) -> {"ref","header","rows"} with keys exactly as in the JSON's "tables" object; rows(ref) for any rectangular range inside one table (resolved through each table's "ref"); column(ref) for a one-column range such as 'RateTables!$B$13:$B$16'; scalar(name). Write tests/test_tables.py asserting the copy is byte-identical to build/rate_tables.json and testing each of the four functions on one range from build/units/U1.md. Run python3 -m pytest -q and show the result.
 ```

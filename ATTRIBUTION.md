@@ -67,7 +67,7 @@ Drafted by Claude Code (AI agent) — scaffold; a member reviews it.
 | `.gitignore` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.gitleaks.toml` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `.vercelignore` | Claude Code (AI agent), scaffold | – | pending | pending |
-| `AGENTS.md` | Claude Code (AI agent) draft; a member reviews and edits | – | pending | pending |
+| `AGENTS.md` | Claude Code (AI agent) draft; a member reviews and edits; the one-row-exception rule applies IBM Bob's onboarding amendment #4 (T01, m1) | – | pending | pending |
 | `ATTRIBUTION.md` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `DATA_SOURCES.md` | Claude Code (AI agent), scaffold | – | pending | pending |
 | `Dockerfile` | Claude Code (AI agent), scaffold | – | pending | pending |

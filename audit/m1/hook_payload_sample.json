@@ -30,6 +30,23 @@
    "tool_use_id"
   ]
  },
+ "PostToolUse:write_file": {
+  "input_keys": [
+   "content",
+   "line_count",
+   "path"
+  ],
+  "tool": "write_file",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_response",
+   "tool_use_id"
+  ]
+ },
  "PreToolUse:apply_diff": {
   "input_keys": [
    "diff",
@@ -75,7 +92,6 @@
  },
  "PreToolUse:grep": {
   "input_keys": [
-   "ignore_case",
    "path",
    "pattern"
   ],
@@ -106,7 +122,8 @@
  "PreToolUse:office_read": {
   "input_keys": [
    "mode",
-   "path"
+   "path",
+   "query"
   ],
   "tool": "office_read",
   "top_keys": [
@@ -148,11 +165,41 @@
    "tool_use_id"
   ]
  },
+ "PreToolUse:update_todo_list": {
+  "input_keys": [
+   "todos"
+  ],
+  "tool": "update_todo_list",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
  "PreToolUse:use_skill": {
   "input_keys": [
    "skill_name"
   ],
   "tool": "use_skill",
+  "top_keys": [
+   "cwd",
+   "hook_event_name",
+   "session_id",
+   "tool_input",
+   "tool_name",
+   "tool_use_id"
+  ]
+ },
+ "PreToolUse:write_file": {
+  "input_keys": [
+   "content",
+   "line_count",
+   "path"
+  ],
+  "tool": "write_file",
   "top_keys": [
    "cwd",
    "hook_event_name",
