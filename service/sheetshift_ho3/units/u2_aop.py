@@ -38,11 +38,10 @@ _roof_vals = tables.column("RateTables!$I$12:$I$16")
 _aoi_keys = tables.column("RateTables!$K$12:$K$18")
 _aoi_vals = tables.column("RateTables!$L$12:$L$18")
 
-# O  ded_factor — VLOOKUP(deductible, RateTables!$A$31:$B$35, 2, TRUE)
-# SHEETSHIFT-FLAG R-205: range RateTables!$A$31:$B$35 stops 1 row(s) short of
-#   RateTables!A31:B36 — translated faithfully per the column rule.
-_ded_keys = tables.column("RateTables!$A$31:$A$35")
-_ded_vals = tables.column("RateTables!$B$31:$B$35")
+# O  ded_factor — D-001 adopt-manual: use full DedBands (RateTables!$A$31:$B$36)
+#   per R-205; workbook range $A$31:$B$35 stopped 1 row short (lint A1 resolved).
+_ded_keys = tables.column("RateTables!$A$31:$A$36")
+_ded_vals = tables.column("RateTables!$B$31:$B$36")
 
 # P  claims_factor — VLOOKUP(MIN(L,3), ClaimsTable, 2, FALSE)
 _claims_keys = tables.column("RateTables!$E$31:$E$34")
@@ -83,8 +82,7 @@ def c_N_aoi_factor(p, c):
 
 @covers("Calc!O", "ded_factor")
 def c_O_ded_factor(p, c):
-    """VLOOKUP(deductible, RateTables!$A$31:$B$35, 2, TRUE)
-    # SHEETSHIFT-FLAG R-205: range stops 1 row short of $A$31:$B$36 — faithful translation.
+    """VLOOKUP(deductible, DedBands, 2, TRUE)  — D-001 adopt-manual (R-205, full range).
     """
     return band(p["deductible"], _ded_keys, _ded_vals)
 
