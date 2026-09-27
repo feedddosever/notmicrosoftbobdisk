@@ -21,22 +21,23 @@ footer: "SheetShift · IBM Bob 2.0 Hackathon · synthetic data for a fictional c
 ---
 
 <!-- _class: lead -->
-<!-- Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Numbers in [brackets] come from reports/*.json only. -->
+<!-- Drafted by Claude Code (AI agent) — scaffold; see ATTRIBUTION.md. Numbers come from reports/certificate.json and bob_sessions/INDEX.md. -->
 
 # SheetShift
 
 Your rating spreadsheet, as code you own, checked cell by cell. Built with **IBM Bob**.
 
-**[C] cells compared · [E] identical · [D] traced to [A] signed decisions · [U] unexplained**
+**430,000 cells compared · 409,539 identical · 20,461 traced to 3 signed decisions · 0 unexplained**
 
 ---
 
 ## The problem
 
 - Premiums are often computed by a **rating workbook**. An engineer re-codes it by hand for the policy system, then spot-checks a few quotes.
-- Translations fail quietly. On our workbook, Python's `round()` instead of Excel's `ROUND` changes **[R0] of 10,000** premiums by a cent, and a 20-quote spot check misses that **[P20]%** of the time.
-- Field audits find errors in most spreadsheets they examine (Panko).
-- Charged premiums that drift from filed rates bring fines and restitution.
+- The dangerous errors are rare. In our workbook a hard-coded tax and a missing credit cap each touch **1 policy in 10,000**: a 20-quote spot check misses each **99.8%** of the time.
+- Python's `round()` instead of Excel's `ROUND` changes **2,552 of 10,000** quotes.
+- Field audits found errors in at least 86% of the spreadsheets they examined (Panko).
+- In May 2026 Washington fined an insurer $55,000 for incorrect charges on 585 policies.
 
 ---
 
@@ -47,10 +48,10 @@ Your rating spreadsheet, as code you own, checked cell by cell. Built with **IBM
 | Map | Formulas → dependency graph, 4 units, 3 lints | Command + skill |
 | Plan | Reads the .xlsx formulas and the PDF manual; flags disagreements | **Plan mode**, native document reading |
 | Translate | 4 units in parallel, every function `@covers` its cells | **Subagents**, Sheet Translator mode |
-| Verify | [C] cells vs the recorded workbook | Sheet Verifier mode, PostToolUse smoke |
-| Triage + briefs | Fix translation bugs; brief each anomaly | **Parallel tasks**, rollback |
+| Verify | 430,000 cells vs the recorded workbook | PostToolUse smoke after every edit, even in subagents |
+| Triage + briefs | Classify groups; brief each anomaly from the PDF | Sheet Triage and Sheet Analyst modes |
 | Decide | A person chooses, citing the manual | Hook blocks Bob from the decision log |
-| Certify | Certificate, traceability, one-page summary | `/review`, HTML summary |
+| Certify | Certificate, traceability, mutation self-test | CI re-runs it on every push |
 
 ---
 
@@ -65,11 +66,11 @@ Your rating spreadsheet, as code you own, checked cell by cell. Built with **IBM
 
 ## Evidence
 
-- Original workbook: **[C]** cells, **[E]** identical, **[D]** in rows traced to **[A]** decisions, **[U]** unexplained.
-- Decision-patched workbook: **[Cp] of [Cp]** cells identical, so no decision hides a translation bug.
-- Mutation self-test: **[K] of [M]** injected bugs caught; [KB] only by boundary rows.
-- Traceability: **[T1] of [T2]** workbook rules mapped to code or declared out of scope.
-- Excel cross-check: [x of y cells equal, Excel version] (or "not run; LibreOffice oracle").
+- Original workbook: **430,000** cells, **409,539** identical, **20,461** in rows traced to **3** decisions, **0** unexplained.
+- Decision-patched workbook: **430,000 of 430,000** cells identical, so no decision hides a translation bug.
+- Mutation self-test: **51 of 60** injected bugs caught; the 9 survivors are labelled by a person (8 cannot change any output, 1 input-domain gap).
+- Traceability: **43 of 43** formula columns mapped to a tagged function; 5 whole-book totals declared out of scope.
+- Oracle: LibreOffice 24.2 with forced recalculation, recorded; not cross-checked against Excel.
 - Limits: sampled inputs, not a formal proof; no macros or volatile functions; anomalies seeded by us.
 
 ---
@@ -78,16 +79,16 @@ Your rating spreadsheet, as code you own, checked cell by cell. Built with **IBM
 
 1. Bob in Plan mode reads a formula whose cached value (99) no longer matches the formula (7.5).
 2. Four subagents translate the rating chain in parallel.
-3. Triage and anomaly briefs run as two Bob tasks at once.
+3. A hook's smoke check catches a translation bug mid-task; the subagent fixes it. A person decides three anomalies; Bob implements them.
 4. Live: pick a workbook cell on `/trace` and see the function; run `/verify` on recorded policies.
 
-**[APP_URL]**
+**https://sheetshift-rho.vercel.app**
 
 ---
 
 ## Business value
 
-- **Buyers:** pricing and actuarial IT at carriers and MGAs. US MGA premium was $114.1B in 2024 (Conning). Confirm before submitting.
+- **Buyers:** pricing and actuarial IT at carriers and MGAs, whose rates live in workbooks.
 - **Why now:** AI made translation cheap. Verification is the bottleneck, and regulators ask for evidence.
 - **Pricing idea:** per workbook migrated, plus per verification run in CI.
 - **Different from the alternatives:** Excel-as-an-API platforms keep you on Excel; spreadsheet copilots edit the sheet. SheetShift gives owned code plus a certificate, traceability and a signed decision log.
@@ -106,8 +107,8 @@ Your rating spreadsheet, as code you own, checked cell by cell. Built with **IBM
 
 ## Who did what
 
-- **IBM Bob:** the rating service, its tests, every `@covers` tag, every translation-bug fix, the anomaly briefs, the page scripts and the run summary. **[Lb] of [Lt]** non-generated lines. **[X]** Bobcoins over **[T]** tasks.
+- **IBM Bob:** the rating service, its API and tests, every `@covers` tag, the translation-bug fix, the service plan, triage note and anomaly briefs, and the decisions' implementation. **4,151 of 16,861** non-generated lines. About **16** Bobcoins over **8** tasks.
 - **Claude Code** (AI coding agent): the grader, the mapping tools, the synthetic workbook and manual, CI, the site shell, and drafts of the Bob pack and these slides.
 - **The builder:** ran and approved every Bob task, decided every anomaly, recorded the video, submitted.
 
-Repository: **[REPO_URL]** · Evidence: `bob_sessions/` · Attribution: `ATTRIBUTION.md`
+Repository: **github.com/feedddosever/notmicrosoftbobdisk** · Evidence: `bob_sessions/` · Attribution: `ATTRIBUTION.md`

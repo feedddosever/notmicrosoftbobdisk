@@ -19,9 +19,9 @@ person has verified it against the source and pasted the verbatim quote here.
 
 | # | Claim | Source | URL | Verbatim quote | Status |
 |---|---|---|---|---|---|
-| S1 | A US state regulator (Washington) fined an insurer $55,000 after it charged incorrect amounts on 585 policies | Insurance Journal, 19 May 2026 | to verify | to verify | to verify |
+| S1 | A US state regulator (Washington) fined an insurer $55,000 after it charged incorrect amounts on 585 policies | Washington Office of the Insurance Commissioner release, 14 May 2026 (GuideOne Elite Insurance Co., order 25-0183); reported by Insurance Journal, 19 May 2026 | https://www.insurance.wa.gov/about-us/news/2026/kuderer-fines-unauthorized-insurer-80000-issues-two-cease-and-desist-orders · https://www.insurancejournal.com/news/west/2026/05/19/869916.htm | "Between 2023 and 2026, the company charged incorrect amounts on 585 policies in Washington." (causes listed: incorrect protection classes, grading credits, construction years, number of stories) | checked by Claude Code via web search, 27 Sep 2026; builder to confirm |
 | S2 | US MGAs wrote $114.1B of premium in 2024 | Conning, via PR Newswire | to verify | to verify | to verify |
-| S3 | Field audits found errors in at least 86% of spreadsheets examined | Panko, "What We Know About Spreadsheet Errors" (cite "via secondary source" unless a copy is fetched) | to verify | to verify | to verify |
+| S3 | Field audits found errors in at least 86% of spreadsheets examined | Panko, "Spreadsheet Errors: What We Know. What We Think We Can Do" (EuSpRIG; arXiv 0802.3457). Other versions of Panko's summary give 88% (113 spreadsheets) and 94% (88 spreadsheets). | https://arxiv.org/pdf/0802.3457 | "The most recent field audits, in contrast, generally used better methodologies and found errors in at least 86% of the spreadsheets audited." | checked by Claude Code via web search, 27 Sep 2026; builder to confirm |
 
 ## Name check
 
